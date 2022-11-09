@@ -1,0 +1,93 @@
+{
+	"name": "vscode-helix",
+	"displayName": "Helix",
+	"description": "Helix-like key emulation for Visual Studio Code",
+	"version": "0.1.0",
+	"license": "MIT",
+	"publisher": "garlandcrow",
+	"keywords": [
+		"vim",
+		"vi",
+		"helix"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/garlandcrow/vscode-helix.git"
+	},
+	"engines": {
+		"vscode": "^1.22.2"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"*"
+	],
+	"main": "./out/extension",
+	"contributes": {
+		"keybindings": [
+			{
+				"key": "shift+5",
+				"command": "editor.action.jumpToBracket",
+				"when": "editorTextFocus && !extension.simpleVim.insertMode"
+			},
+			{
+				"key": "shift+j",
+				"command": "editor.action.joinLines",
+				"when": "editorTextFocus && !extension.simpleVim.insertMode"
+			},
+			{
+				"key": "Escape",
+				"command": "extension.simpleVim.escapeKey",
+				"when": "editorTextFocus"
+			},
+			{
+				"key": "ctrl+f",
+				"command": "extension.simpleVim.scrollDownPage",
+				"when": "editorTextFocus && !extension.simpleVim.insertMode"
+			},
+			{
+				"key": "ctrl+b",
+				"command": "extension.simpleVim.scrollUpPage",
+				"when": "editorTextFocus && !extension.simpleVim.insertMode"
+			}
+		],
+		"configuration": {
+			"type": "object",
+			"title": "SimpleVim Configuration",
+			"properties": {
+				"simpleVim.yankHighlightBackgroundColor": {
+					"type": "string",
+					"default": "#F8F3AB",
+					"description": "Background color that flashes to show the range when yanking."
+				}
+			}
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"package": "vsce package",
+		"publish": "vsce publish",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"postinstall": "node ./node_modules/vscode/bin/install",
+		"lint": "tslint -c tslint.json 'src/**/*.ts' --exclude 'src/test/*.ts'"
+	},
+	"devDependencies": {
+		"@types/http-errors": "^1.8.0",
+		"@types/node": "^12.12.58",
+		"string.prototype.matchall": "^4.0.2",
+		"tslint": "^5.10.0",
+		"typescript": "^4.0.2",
+		"vscode": "^1.1.18"
+	},
+	"dependencies": {
+		"vsce": "^2.11.0"
+	},
+	"__metadata": {
+		"id": "fb57f80d-708d-4ade-b92b-e420c6b5c04a",
+		"publisherDisplayName": "GarlandCrow",
+		"publisherId": "fe4ca483-01fb-4881-9e30-524a40026553",
+		"isPreReleaseVersion": false
+	}
+}
