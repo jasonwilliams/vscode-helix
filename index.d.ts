@@ -1,1 +1,1 @@
-declare module "string.prototype.matchall";
+declare module 'string.prototype.matchall'
