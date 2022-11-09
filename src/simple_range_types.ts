@@ -1,4 +1,4 @@
 export type SimpleRange = {
-  start: number;
-  end: number;
-};
+  start: number
+  end: number
+}

@@ -3,5 +3,5 @@ export enum Mode {
   Normal,
   Visual,
   VisualLine,
-  Occurrence
+  Occurrence,
 }

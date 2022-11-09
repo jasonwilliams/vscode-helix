@@ -1,36 +1,36 @@
-import * as vscode from "vscode";
+import * as vscode from 'vscode'
 
-import { VimState } from "./vim_state_types";
+import { VimState } from './vim_state_types'
 
 export enum ParseKeysStatus {
   YES,
   NO,
-  MORE_INPUT
+  MORE_INPUT,
 }
 
 export type ParseFailure = {
-  kind: "failure";
-  status: ParseKeysStatus;
-};
+  kind: 'failure'
+  status: ParseKeysStatus
+}
 
 export type ParseOperatorPartSuccess = {
-  kind: "success";
-  rest: string[];
-};
+  kind: 'success'
+  rest: string[]
+}
 
 export type ParseOperatorRangeSuccess = {
-  kind: "success";
-  ranges: (vscode.Range | undefined)[];
-  linewise: boolean;
-};
+  kind: 'success'
+  ranges: (vscode.Range | undefined)[]
+  linewise: boolean
+}
 
 export type ParseOperatorSuccess = {
-  kind: "success";
-  motion: OperatorRange | undefined;
-};
+  kind: 'success'
+  motion: OperatorRange | undefined
+}
 
 export type OperatorRange = (
   vimState: VimState,
   keys: string[],
-  editor: vscode.TextEditor
-) => ParseFailure | ParseOperatorRangeSuccess;
+  editor: vscode.TextEditor,
+) => ParseFailure | ParseOperatorRangeSuccess
