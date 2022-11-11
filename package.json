@@ -100,8 +100,7 @@
     "string.prototype.matchall": "^4.0.2",
     "tsup": "^6.2.1",
     "typescript": "^4.7.4",
-    "vsce": "^2.11.0",
-    "vscode": "^1.1.18"
+    "vsce": "^2.11.0"
   },
   "__metadata": {
     "id": "fb57f80d-708d-4ade-b92b-e420c6b5c04a",
