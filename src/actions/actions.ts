@@ -78,11 +78,11 @@ export const actions: Action[] = [
   }),
 
   parseKeysExact([' ', 'i'], [Mode.Normal], (vimState, editor) => {
-    vscode.commands.executeCommand('extension.simpleVim.scrollUpHalfPage')
+    vscode.commands.executeCommand('extension.helixKeymap.scrollUpHalfPage')
   }),
 
   parseKeysExact([' ', 'k'], [Mode.Normal], (vimState, editor) => {
-    vscode.commands.executeCommand('extension.simpleVim.scrollDownHalfPage')
+    vscode.commands.executeCommand('extension.helixKeymap.scrollDownHalfPage')
   }),
 
   // new G actions

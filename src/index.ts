@@ -70,23 +70,23 @@ export function activate(context: vscode.ExtensionContext): void {
       onDidChangeActiveTextEditor(globalVimState, editor),
     ),
     vscode.window.onDidChangeTextEditorSelection((e) => onSelectionChange(globalVimState, e)),
-    vscode.commands.registerCommand('extension.simpleVim.escapeKey', () =>
+    vscode.commands.registerCommand('extension.helixKeymap.escapeKey', () =>
       escapeHandler(globalVimState),
     ),
     vscode.commands.registerCommand(
-      'extension.simpleVim.scrollDownHalfPage',
+      'extension.helixKeymap.scrollDownHalfPage',
       scrollCommands.scrollDownHalfPage,
     ),
     vscode.commands.registerCommand(
-      'extension.simpleVim.scrollUpHalfPage',
+      'extension.helixKeymap.scrollUpHalfPage',
       scrollCommands.scrollUpHalfPage,
     ),
     vscode.commands.registerCommand(
-      'extension.simpleVim.scrollDownPage',
+      'extension.helixKeymap.scrollDownPage',
       scrollCommands.scrollDownPage,
     ),
     vscode.commands.registerCommand(
-      'extension.simpleVim.scrollUpPage',
+      'extension.helixKeymap.scrollUpPage',
       scrollCommands.scrollUpPage,
     ),
   )

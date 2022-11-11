@@ -5,36 +5,36 @@ import { VimState } from './vim_state_types'
 
 export function enterInsertMode(vimState: VimState): void {
   vimState.mode = Mode.Insert
-  setModeContext('extension.simpleVim.insertMode')
+  setModeContext('extension.helixKeymap.insertMode')
 }
 
 export function enterNormalMode(vimState: VimState): void {
   vimState.mode = Mode.Normal
-  setModeContext('extension.simpleVim.normalMode')
+  setModeContext('extension.helixKeymap.normalMode')
 }
 
 export function enterVisualMode(vimState: VimState): void {
   vimState.mode = Mode.Visual
-  setModeContext('extension.simpleVim.visualMode')
+  setModeContext('extension.helixKeymap.visualMode')
 }
 
 export function enterVisualLineMode(vimState: VimState): void {
   vimState.mode = Mode.VisualLine
-  setModeContext('extension.simpleVim.visualLineMode')
+  setModeContext('extension.helixKeymap.visualLineMode')
 }
 
 export function enterOccurrenceMode(vimState: VimState): void {
   vimState.mode = Mode.Occurrence
-  setModeContext('extension.simpleVim.occurrenceMode')
+  setModeContext('extension.helixKeymap.occurrenceMode')
 }
 
 function setModeContext(key: string) {
   const modeKeys = [
-    'extension.simpleVim.insertMode',
-    'extension.simpleVim.normalMode',
-    'extension.simpleVim.visualMode',
-    'extension.simpleVim.visualLineMode',
-    'extension.simpleVim.occurrenceMode',
+    'extension.helixKeymap.insertMode',
+    'extension.helixKeymap.normalMode',
+    'extension.helixKeymap.visualMode',
+    'extension.helixKeymap.visualLineMode',
+    'extension.helixKeymap.occurrenceMode',
   ]
 
   modeKeys.forEach((modeKey) => {

@@ -3,7 +3,7 @@ import * as vscode from 'vscode'
 export function flashYankHighlight(editor: vscode.TextEditor, ranges: vscode.Range[]) {
   const decoration = vscode.window.createTextEditorDecorationType({
     backgroundColor: vscode.workspace
-      .getConfiguration('simpleVim')
+      .getConfiguration('helixKeymap')
       .get('yankHighlightBackgroundColor'),
   })
 
