@@ -1,7 +1,7 @@
 {
   "name": "vscode-helix",
   "version": "0.1.1",
-  "displayName": "Helix",
+  "displayName": "Helix Keymap",
   "description": "Helix-like key emulation for Visual Studio Code",
   "publisher": "garlandcrow",
   "author": "Garland Crow <garlandcrow@protonmail.com>",
