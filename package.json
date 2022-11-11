@@ -1,6 +1,6 @@
 {
   "name": "vscode-helix",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "displayName": "Helix",
   "description": "Helix-like key emulation for Visual Studio Code",
   "publisher": "garlandcrow",
@@ -39,34 +39,34 @@
       {
         "key": "shift+5",
         "command": "editor.action.jumpToBracket",
-        "when": "editorTextFocus && !extension.simpleVim.insertMode"
+        "when": "editorTextFocus && !extension.helixKeymap.insertMode"
       },
       {
         "key": "shift+j",
         "command": "editor.action.joinLines",
-        "when": "editorTextFocus && !extension.simpleVim.insertMode"
+        "when": "editorTextFocus && !extension.helixKeymap.insertMode"
       },
       {
         "key": "Escape",
-        "command": "extension.simpleVim.escapeKey",
+        "command": "extension.helixKeymap.escapeKey",
         "when": "editorTextFocus"
       },
       {
         "key": "ctrl+f",
-        "command": "extension.simpleVim.scrollDownPage",
-        "when": "editorTextFocus && !extension.simpleVim.insertMode"
+        "command": "extension.helixKeymap.scrollDownPage",
+        "when": "editorTextFocus && !extension.helixKeymap.insertMode"
       },
       {
         "key": "ctrl+b",
-        "command": "extension.simpleVim.scrollUpPage",
-        "when": "editorTextFocus && !extension.simpleVim.insertMode"
+        "command": "extension.helixKeymap.scrollUpPage",
+        "when": "editorTextFocus && !extension.helixKeymap.insertMode"
       }
     ],
     "configuration": {
       "type": "object",
-      "title": "SimpleVim Configuration",
+      "title": "Helix Keymap Configuration",
       "properties": {
-        "simpleVim.yankHighlightBackgroundColor": {
+        "helixKeymap.yankHighlightBackgroundColor": {
           "type": "string",
           "default": "#F8F3AB",
           "description": "Background color that flashes to show the range when yanking."
@@ -83,7 +83,7 @@
     "lint": "prettier --check --plugin-search-dir=. src && eslint src",
     "format": "prettier --write --plugin-search-dir=. src",
     "typecheck": "tsc --noEmit",
-    "release": "bumpp && nr publish"
+    "release": "bumpp && npm run publish"
   },
   "devDependencies": {
     "@types/http-errors": "^1.8.0",
