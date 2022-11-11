@@ -1,6 +1,8 @@
 # HelixKeymap
 
-An opinionated Helix-like extension for VSCode that prioritizes simplicity (of use and implementation) and integration with native VSCode features.
+**CAUTION, this is a WIP** This is currently in the process of converting the awesome SimpleVim extension to one that is based on Helix Editor
+
+A Helix-like extension for VSCode that prioritizes simplicity (of use and implementation) and integration with native VSCode features.
 
 Once you enter Insert mode it will be a completely vanilla VSCode experience: the only event HelixKeymap will listen for is the `Escape` key to go back to Normal mode.
 
