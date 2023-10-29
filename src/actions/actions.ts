@@ -1,24 +1,23 @@
 import * as vscode from 'vscode'
-
-import { Mode } from '../modes_types'
 import { Action } from '../action_types'
-import { parseKeysExact, parseKeysRegex } from '../parse_keys'
 import {
   enterInsertMode,
-  enterVisualMode,
-  enterVisualLineMode,
   enterOccurrenceMode,
+  enterVisualLineMode,
+  enterVisualMode,
   setModeCursorStyle,
 } from '../modes'
+import { Mode } from '../modes_types'
+import { parseKeysExact, parseKeysRegex } from '../parse_keys'
 import * as positionUtils from '../position_utils'
+import { putAfter } from '../put_utils/put_after'
+import { putBefore } from '../put_utils/put_before'
 import { removeTypeSubscription } from '../type_subscription'
 import { VimState } from '../vim_state_types'
 import { setVisualLineSelections } from '../visual_line_utils'
 import { flashYankHighlight } from '../yank_highlight'
-import { putAfter } from '../put_utils/put_after'
-import { putBefore } from '../put_utils/put_before'
-import { yank } from './operators'
 import KeyMap from './keymaps'
+import { yank } from './operators'
 
 enum Direction {
   Up,
@@ -27,25 +26,25 @@ enum Direction {
 
 /* eslint @typescript-eslint/no-unused-vars: 0 */
 export const actions: Action[] = [
-  parseKeysExact([':'], [Mode.Normal], (vimState, editor) => {
-    vscode.commands.executeCommand('workbench.action.gotoLine')
-  }),
+  // parseKeysExact([':'], [Mode.Normal], (vimState, editor) => {
+  //   vscode.commands.executeCommand('workbench.action.gotoLine')
+  // }),
 
-  parseKeysExact(['m', 'l'], [Mode.Normal], (vimState, editor) => {
-    vscode.commands.executeCommand('bookmarks.list')
-  }),
+  // parseKeysExact(['m', 'l'], [Mode.Normal], (vimState, editor) => {
+  //   vscode.commands.executeCommand('bookmarks.list')
+  // }),
 
-  parseKeysExact(['m', 'L'], [Mode.Normal], (vimState, editor) => {
-    vscode.commands.executeCommand('bookmarks.listFromAllFiles')
-  }),
+  // parseKeysExact(['m', 'L'], [Mode.Normal], (vimState, editor) => {
+  //   vscode.commands.executeCommand('bookmarks.listFromAllFiles')
+  // }),
 
-  parseKeysExact(['m', 'i'], [Mode.Normal], (vimState, editor) => {
-    vscode.commands.executeCommand('bookmarks.jumpToPrevious')
-  }),
+  // parseKeysExact(['m', 'i'], [Mode.Normal], (vimState, editor) => {
+  //   vscode.commands.executeCommand('bookmarks.jumpToPrevious')
+  // }),
 
-  parseKeysExact(['m', 'k'], [Mode.Normal], (vimState, editor) => {
-    vscode.commands.executeCommand('bookmarks.jumpToNext')
-  }),
+  // parseKeysExact(['m', 'k'], [Mode.Normal], (vimState, editor) => {
+  //   vscode.commands.executeCommand('bookmarks.jumpToNext')
+  // }),
 
   // new space actions
   parseKeysExact([' ', ' '], [Mode.Normal], (vimState, editor) => {
@@ -81,45 +80,72 @@ export const actions: Action[] = [
     vscode.commands.executeCommand('extension.helixKeymap.scrollDownHalfPage')
   }),
 
-  // new G actions
-  parseKeysExact(['g', 'l'], [Mode.Normal], (vimState, editor) => {
+  // G actions
+  // TODO: Goto last accessed file, Goto last modified file don't have any VSCode equivalent.
+  parseKeysExact(['g', '.'], [Mode.Normal], () => {
     vscode.commands.executeCommand('workbench.action.navigateToLastEditLocation')
   }),
 
-  parseKeysExact(['g', 'R'], [Mode.Normal], (vimState, editor) => {
-    vscode.commands.executeCommand('references-view.find')
+  parseKeysExact(['g', 'e'], [Mode.Normal], () => {
+    vscode.commands.executeCommand('cursorBottom')
   }),
 
-  parseKeysExact(['g', 'r'], [Mode.Normal], (vimState, editor) => {
-    vscode.commands.executeCommand('editor.action.referenceSearch.trigger')
+  parseKeysExact(['g', 'g'], [Mode.Normal], () => {
+    vscode.commands.executeCommand('cursorTop')
   }),
 
-  parseKeysExact(['g', 'd'], [Mode.Normal], (vimState, editor) => {
+  parseKeysExact(['g', 'h'], [Mode.Normal], () => {
+    vscode.commands.executeCommand('cursorLineStart')
+  }),
+
+  parseKeysExact(['g', 'l'], [Mode.Normal], () => {
+    vscode.commands.executeCommand('cursorLineEnd')
+  }),
+
+  parseKeysExact(['g', 's'], [Mode.Normal], () => {
+    vscode.commands.executeCommand('cursorHome')
+  }),
+
+  parseKeysExact(['g', 'd'], [Mode.Normal], () => {
     vscode.commands.executeCommand('editor.action.revealDefinition')
   }),
 
-  parseKeysExact(['g', 'D'], [Mode.Normal], (vimState, editor) => {
-    vscode.commands.executeCommand('editor.action.revealDefinitionAside')
+  parseKeysExact(['g', 'y'], [Mode.Normal], () => {
+    vscode.commands.executeCommand('editor.action.goToTypeDefinition')
   }),
 
-  parseKeysExact(['g', 'p'], [Mode.Normal], (vimState, editor) => {
-    vscode.commands.executeCommand('editor.action.peekDefinition')
+  parseKeysExact(['g', 'r'], [Mode.Normal], () => {
+    vscode.commands.executeCommand('editor.action.goToReferences')
   }),
 
-  parseKeysExact(['g', 's'], [Mode.Normal], (vimState, editor) => {
-    vscode.commands.executeCommand('extension.dash.specific')
+  parseKeysExact(['g', 't'], [Mode.Normal], () => {
+    vscode.commands.executeCommand('cursorPageUp')
   }),
 
-  parseKeysExact(['g', 'h'], [Mode.Normal], (vimState, editor) => {
-    vscode.commands.executeCommand('editor.action.showHover')
+  parseKeysExact(['g', 'b'], [Mode.Normal], () => {
+    vscode.commands.executeCommand('cursorPageDown')
   }),
 
-  parseKeysExact(['g', 'U'], [Mode.Normal], (vimState, editor) => {
-    vscode.commands.executeCommand('editor.action.transformToUppercase')
+  parseKeysExact(['g', 'c'], [Mode.Normal], () => {
+    vscode.commands.executeCommand('cursorMove', {
+      to: 'viewPortCenter',
+    })
   }),
 
-  parseKeysExact(['g', 'u'], [Mode.Normal], (vimState, editor) => {
-    vscode.commands.executeCommand('editor.action.transformToLowercase')
+  parseKeysExact(['g', 'k'], [Mode.Normal], () => {
+    vscode.commands.executeCommand('scrollLineUp')
+  }),
+
+  parseKeysExact(['g', 'j'], [Mode.Normal], () => {
+    vscode.commands.executeCommand('scrollLineDown')
+  }),
+
+  parseKeysExact(['g', '.'], [Mode.Normal], () => {
+    vscode.commands.executeCommand('workbench.action.navigateToLastEditLocation')
+  }),
+
+  parseKeysExact(['g', 'a'], [Mode.Normal], () => {
+    vscode.commands.executeCommand('workbench.action.quickOpenNavigatePreviousInEditorPicker')
   }),
 
   // existing
@@ -188,7 +214,7 @@ export const actions: Action[] = [
     setModeCursorStyle(vimState.mode, editor)
   }),
 
-  parseKeysExact(['V'], [Mode.Normal, Mode.Visual], (vimState, editor) => {
+  parseKeysExact(['x'], [Mode.Normal, Mode.Visual], (vimState, editor) => {
     enterVisualLineMode(vimState)
     setModeCursorStyle(vimState.mode, editor)
     setVisualLineSelections(editor)
