@@ -1,14 +1,14 @@
 export default {
   Motions: {
-    MoveLeft: 'j',
+    MoveLeft: 'h',
     MoveRight: 'l',
-    MoveDown: 'k',
-    MoveUp: 'i',
+    MoveDown: 'j',
+    MoveUp: 'k',
     MoveLineEnd: 'o',
     MoveLineStart: 'u',
   },
   Actions: {
-    InsertMode: 'h',
+    InsertMode: 'i',
     InsertAtLineStart: 'U',
     InsertAtLineEnd: 'O',
     NewLineAbove: 'I',

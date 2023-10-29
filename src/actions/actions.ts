@@ -47,10 +47,6 @@ export const actions: Action[] = [
     vscode.commands.executeCommand('bookmarks.jumpToNext')
   }),
 
-  parseKeysExact(['m', 'm'], [Mode.Normal], (vimState, editor) => {
-    vscode.commands.executeCommand('bookmarks.toggle')
-  }),
-
   // new space actions
   parseKeysExact([' ', ' '], [Mode.Normal], (vimState, editor) => {
     enterOccurrenceMode(vimState)
@@ -215,13 +211,9 @@ export const actions: Action[] = [
   parseKeysExact(['P'], [Mode.Normal, Mode.Visual, Mode.VisualLine], putAfter),
   parseKeysExact(['p'], [Mode.Normal], putBefore),
 
-  //   parseKeysExact(
-  //     ["u"],
-  //     [Mode.Normal, Mode.Visual, Mode.VisualLine],
-  //     (vimState, editor) => {
-  //       vscode.commands.executeCommand("undo");
-  //     }
-  //   ),
+  parseKeysExact(['u'], [Mode.Normal, Mode.Visual, Mode.VisualLine], (vimState, editor) => {
+    vscode.commands.executeCommand('undo')
+  }),
 
   parseKeysExact(['d', 'd'], [Mode.Normal], (vimState, editor) => {
     deleteLine(vimState, editor)
@@ -431,9 +423,9 @@ export const actions: Action[] = [
     setModeCursorStyle(vimState.mode, editor)
   }),
 
-  parseKeysExact(['h'], [Mode.Normal], (vimState, editor) => {
-    vscode.commands.executeCommand('deleteLeft')
-  }),
+  // parseKeysExact(['h'], [Mode.Normal], (vimState, editor) => {
+  //   vscode.commands.executeCommand('deleteLeft')
+  // }),
 
   parseKeysExact(['n'], [Mode.Normal], (vimState, editor) => {
     vscode.commands.executeCommand('deleteRight')
