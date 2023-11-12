@@ -29,7 +29,7 @@
     "dist"
   ],
   "engines": {
-    "vscode": "^1.69.0"
+    "vscode": "^1.80.0"
   },
   "activationEvents": [
     "onStartupFinished"
@@ -90,13 +90,13 @@
     "@types/http-errors": "^1.8.0",
     "@types/node": "^20.8.9",
     "@types/vscode": "^1.83.1",
-    "@typescript-eslint/eslint-plugin": "^5.42.1",
-    "@typescript-eslint/parser": "^5.42.1",
+    "@typescript-eslint/eslint-plugin": "^6.10.0",
+    "@typescript-eslint/parser": "^6.10.0",
     "bumpp": "^8.2.1",
     "eslint": "^8.27.0",
-    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-prettier": "^9.0.0",
     "esno": "^0.16.3",
-    "prettier": "^2.7.1",
+    "prettier": "^3.0.3",
     "rimraf": "^3.0.2",
     "string.prototype.matchall": "^4.0.2",
     "typescript": "^5.2.2",

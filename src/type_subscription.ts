@@ -1,18 +1,18 @@
-import * as vscode from 'vscode'
+import * as vscode from 'vscode';
 
-import { VimState } from './vim_state_types'
+import { HelixState } from './helix_state_types';
 
 export function addTypeSubscription(
-  vimState: VimState,
-  typeHandler: (vimState: VimState, char: string) => void,
+  vimState: HelixState,
+  typeHandler: (vimState: HelixState, char: string) => void,
 ): void {
   vimState.typeSubscription = vscode.commands.registerCommand('type', (e) => {
-    typeHandler(vimState, e.text)
-  })
+    typeHandler(vimState, e.text);
+  });
 }
 
-export function removeTypeSubscription(vimState: VimState): void {
+export function removeTypeSubscription(vimState: HelixState): void {
   if (vimState.typeSubscription) {
-    vimState.typeSubscription.dispose()
+    vimState.typeSubscription.dispose();
   }
 }
