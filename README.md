@@ -1,7 +1,7 @@
 # Helix for VS Code
 
-<div style="display: flex; gap: 16px">
-<img src="./docs/img/helixLogo.svg" width=48%>
+<div style="display: flex; gap: 16px; width: 60%; margin: 0 auto; text-align: center">
+<img src="./docs/img/helixLogo.svg" width=48% style="max-width: 150px;">
 <img src="./docs/img/Visual_Studio_Code_1.35_icon.svg" width=48%>
 </div>
 
