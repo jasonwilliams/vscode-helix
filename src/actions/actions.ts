@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { Action } from '../action_types';
+import { HelixState } from '../helix_state_types';
 import {
   enterInsertMode,
   enterOccurrenceMode,
@@ -13,9 +14,9 @@ import * as positionUtils from '../position_utils';
 import { putAfter } from '../put_utils/put_after';
 import { putBefore } from '../put_utils/put_before';
 import { removeTypeSubscription } from '../type_subscription';
-import { HelixState } from '../helix_state_types';
 import { setVisualLineSelections } from '../visual_line_utils';
 import { flashYankHighlight } from '../yank_highlight';
+import { gotoActions } from './gotoMode';
 import KeyMap from './keymaps';
 import { yank } from './operators';
 
@@ -24,7 +25,6 @@ enum Direction {
   Down,
 }
 
-/* eslint @typescript-eslint/no-unused-vars: 0 */
 export const actions: Action[] = [
   // new space actions
   parseKeysExact([' ', ' '], [Mode.Normal], (vimState, editor) => {
@@ -32,111 +32,78 @@ export const actions: Action[] = [
     vscode.commands.executeCommand('editor.action.addSelectionToNextFindMatch');
   }),
 
-  parseKeysExact(['p'], [Mode.Occurrence], (vimState, editor) => {
+  parseKeysExact(['p'], [Mode.Occurrence], () => {
     vscode.commands.executeCommand('editor.action.addSelectionToPreviousFindMatch');
   }),
 
-  parseKeysExact(['n'], [Mode.Occurrence], (vimState, editor) => {
+  parseKeysExact(['n'], [Mode.Occurrence], () => {
     vscode.commands.executeCommand('editor.action.addSelectionToNextFindMatch');
   }),
 
-  parseKeysExact(['a'], [Mode.Occurrence], (vimState, editor) => {
+  parseKeysExact(['a'], [Mode.Occurrence], () => {
     vscode.commands.executeCommand('editor.action.selectHighlights');
   }),
 
-  parseKeysExact([' ', 'z'], [Mode.Normal], (vimState, editor) => {
+  parseKeysExact([' ', 'z'], [Mode.Normal], () => {
     vscode.commands.executeCommand('undo');
   }),
 
-  parseKeysExact([' ', 'r'], [Mode.Normal], (vimState, editor) => {
+  parseKeysExact([' ', 'r'], [Mode.Normal], () => {
     vscode.commands.executeCommand('redo');
   }),
 
-  parseKeysExact([' ', 'i'], [Mode.Normal], (vimState, editor) => {
+  parseKeysExact([' ', 'i'], [Mode.Normal], () => {
     vscode.commands.executeCommand('extension.helixKeymap.scrollUpHalfPage');
   }),
 
-  parseKeysExact([' ', 'k'], [Mode.Normal], (vimState, editor) => {
+  parseKeysExact([' ', 'k'], [Mode.Normal], () => {
     vscode.commands.executeCommand('extension.helixKeymap.scrollDownHalfPage');
   }),
 
-  // G actions
-  parseKeysExact(['g', '.'], [Mode.Normal], () => {
-    vscode.commands.executeCommand('workbench.action.navigateToLastEditLocation');
+  // align view center
+  parseKeysExact(['z', 'c'], [Mode.Normal], (_, editor) => {
+    if (vscode.window.activeTextEditor) {
+      vscode.commands.executeCommand('revealLine', {
+        lineNumber: editor.selection.active.line,
+        at: 'center',
+      });
+    }
   }),
 
-  parseKeysExact(['g', 'e'], [Mode.Normal], () => {
-    vscode.commands.executeCommand('cursorBottom');
+  // align view top
+  parseKeysExact(['z', 't'], [Mode.Normal], (_, editor) => {
+    if (vscode.window.activeTextEditor) {
+      vscode.commands.executeCommand('revealLine', {
+        lineNumber: editor.selection.active.line,
+        at: 'top',
+      });
+    }
   }),
 
-  parseKeysExact(['g', 'g'], [Mode.Normal], () => {
-    vscode.commands.executeCommand('cursorTop');
+  // align view bottom
+  parseKeysExact(['z', 'b'], [Mode.Normal], (_, editor) => {
+    if (vscode.window.activeTextEditor) {
+      vscode.commands.executeCommand('revealLine', {
+        lineNumber: editor.selection.active.line,
+        at: 'bottom',
+      });
+    }
   }),
 
-  parseKeysExact(['g', 'h'], [Mode.Normal], () => {
-    vscode.commands.executeCommand('cursorLineStart');
-  }),
-
-  parseKeysExact(['g', 'l'], [Mode.Normal], () => {
-    vscode.commands.executeCommand('cursorLineEnd');
-  }),
-
-  parseKeysExact(['g', 's'], [Mode.Normal], () => {
-    vscode.commands.executeCommand('cursorHome');
-  }),
-
-  parseKeysExact(['g', 'd'], [Mode.Normal], () => {
-    vscode.commands.executeCommand('editor.action.revealDefinition');
-  }),
-
-  parseKeysExact(['g', 'y'], [Mode.Normal], () => {
-    vscode.commands.executeCommand('editor.action.goToTypeDefinition');
-  }),
-
-  parseKeysExact(['g', 'r'], [Mode.Normal], () => {
-    vscode.commands.executeCommand('editor.action.goToReferences');
-  }),
-
-  parseKeysExact(['g', 't'], [Mode.Normal], () => {
-    vscode.commands.executeCommand('cursorPageUp');
-  }),
-
-  parseKeysExact(['g', 'b'], [Mode.Normal], () => {
-    vscode.commands.executeCommand('cursorPageDown');
-  }),
-
-  parseKeysExact(['g', 'c'], [Mode.Normal], () => {
-    vscode.commands.executeCommand('cursorMove', {
-      to: 'viewPortCenter',
-    });
-  }),
-
-  parseKeysExact(['g', 'k'], [Mode.Normal], () => {
-    vscode.commands.executeCommand('scrollLineUp');
-  }),
-
-  parseKeysExact(['g', 'j'], [Mode.Normal], () => {
+  parseKeysExact(['z', 'j'], [Mode.Normal], () => {
     vscode.commands.executeCommand('scrollLineDown');
   }),
 
-  parseKeysExact(['g', '.'], [Mode.Normal], () => {
-    vscode.commands.executeCommand('workbench.action.navigateToLastEditLocation');
+  parseKeysExact(['z', 'k'], [Mode.Normal], () => {
+    vscode.commands.executeCommand('scrollLineUp');
   }),
 
-  parseKeysExact(['g', 'a'], [Mode.Normal], (helixState) => {
-    // VS Code has no concept of "last accessed file" so instead we'll need to keep track of previous text editors
-    const editor = helixState.editorState.previousEditor;
-    if (!editor) return;
-
-    vscode.window.showTextDocument(editor.document);
+  parseKeysExact(['/'], [Mode.Normal], () => {
+    vscode.commands.executeCommand('actions.find');
   }),
 
-  parseKeysExact(['g', 'm'], [Mode.Normal], (helixState) => {
-    // VS Code has no concept of "last accessed file" so instead we'll need to keep track of previous text editors
-    const document = helixState.editorState.lastModifiedDocument;
-    if (!document) return;
-
-    vscode.window.showTextDocument(document);
+  parseKeysExact(['n'], [Mode.Normal], () => {
+    vscode.commands.executeCommand('editor.action.nextSelectionMatchFindAction');
   }),
 
   // existing
@@ -472,6 +439,7 @@ export const actions: Action[] = [
   parseKeysExact([','], [Mode.Normal], (vimState, editor) => {
     vimState.commaAction(vimState, editor);
   }),
+  ...gotoActions,
 ];
 
 function makeMultiLineSelection(
