@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 
-import { Mode } from './modes_types';
 import { HelixState } from './helix_state_types';
+import { Mode } from './modes_types';
 
 export function enterInsertMode(vimState: HelixState): void {
   vimState.mode = Mode.Insert;
@@ -11,6 +11,11 @@ export function enterInsertMode(vimState: HelixState): void {
 export function enterNormalMode(vimState: HelixState): void {
   vimState.mode = Mode.Normal;
   setModeContext('extension.helixKeymap.normalMode');
+}
+
+export function enterWindowMode(vimState: HelixState): void {
+  vimState.mode = Mode.Window;
+  setModeContext('extension.helixKeymap.windowMode');
 }
 
 export function enterVisualMode(vimState: HelixState): void {

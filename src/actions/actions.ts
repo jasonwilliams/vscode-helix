@@ -19,6 +19,7 @@ import { flashYankHighlight } from '../yank_highlight';
 import { gotoActions } from './gotoMode';
 import KeyMap from './keymaps';
 import { yank } from './operators';
+import { windowActions } from './windowMode';
 
 enum Direction {
   Up,
@@ -440,6 +441,7 @@ export const actions: Action[] = [
     vimState.commaAction(vimState, editor);
   }),
   ...gotoActions,
+  ...windowActions,
 ];
 
 function makeMultiLineSelection(

@@ -1,13 +1,13 @@
 import * as vscode from 'vscode';
 
+import { escapeHandler } from './escape_handler';
+import { onDidChangeActiveTextEditor, onDidChangeTextDocument, onSelectionChange } from './eventHandlers';
+import { HelixState } from './helix_state_types';
+import { enterNormalMode, enterWindowMode } from './modes';
 import { Mode } from './modes_types';
 import * as scrollCommands from './scroll_commands';
-import { enterNormalMode } from './modes';
 import { typeHandler } from './type_handler';
 import { addTypeSubscription, removeTypeSubscription } from './type_subscription';
-import { HelixState } from './helix_state_types';
-import { escapeHandler } from './escape_handler';
-import { onSelectionChange, onDidChangeActiveTextEditor, onDidChangeTextDocument } from './eventHandlers';
 
 const globalhelixState: HelixState = {
   typeSubscription: undefined,
@@ -40,6 +40,9 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand('extension.helixKeymap.scrollUpHalfPage', scrollCommands.scrollUpHalfPage),
     vscode.commands.registerCommand('extension.helixKeymap.scrollDownPage', scrollCommands.scrollDownPage),
     vscode.commands.registerCommand('extension.helixKeymap.scrollUpPage', scrollCommands.scrollUpPage),
+    vscode.commands.registerCommand('extension.helixKeymap.enterWindowMode', () => {
+      enterWindowMode(globalhelixState);
+    }),
   );
 
   enterNormalMode(globalhelixState);

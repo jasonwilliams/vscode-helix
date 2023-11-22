@@ -60,6 +60,11 @@
         "key": "ctrl+b",
         "command": "extension.helixKeymap.scrollUpPage",
         "when": "editorTextFocus && !extension.helixKeymap.insertMode"
+      },
+      {
+        "key": "ctrl+w",
+        "command": "extension.helixKeymap.enterWindowMode",
+        "when": "editorTextFocus && !extension.helixKeymap.insertMode"
       }
     ],
     "configuration": {

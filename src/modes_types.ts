@@ -4,4 +4,5 @@ export enum Mode {
   Visual,
   VisualLine,
   Occurrence,
+  Window,
 }
