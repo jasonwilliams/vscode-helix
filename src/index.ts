@@ -30,10 +30,11 @@ const globalhelixState: HelixState = {
   },
 };
 
+/** This is the main entry point into the Helix VSCode extension */
 export function activate(context: vscode.ExtensionContext): void {
   context.subscriptions.push(
-    vscode.window.onDidChangeActiveTextEditor((editor) => onDidChangeActiveTextEditor(globalhelixState, editor)),
     vscode.window.onDidChangeTextEditorSelection((e) => onSelectionChange(globalhelixState, e)),
+    vscode.window.onDidChangeActiveTextEditor((editor) => onDidChangeActiveTextEditor(globalhelixState, editor)),
     vscode.workspace.onDidChangeTextDocument((e) => onDidChangeTextDocument(globalhelixState, e)),
     vscode.commands.registerCommand('extension.helixKeymap.escapeKey', () => escapeHandler(globalhelixState)),
     vscode.commands.registerCommand('extension.helixKeymap.scrollDownHalfPage', scrollCommands.scrollDownHalfPage),

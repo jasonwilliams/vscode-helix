@@ -19,6 +19,7 @@ import { flashYankHighlight } from '../yank_highlight';
 import { gotoActions } from './gotoMode';
 import KeyMap from './keymaps';
 import { yank } from './operators';
+import { viewActions } from './viewMode';
 import { windowActions } from './windowMode';
 
 enum Direction {
@@ -59,44 +60,6 @@ export const actions: Action[] = [
 
   parseKeysExact([' ', 'k'], [Mode.Normal], () => {
     vscode.commands.executeCommand('extension.helixKeymap.scrollDownHalfPage');
-  }),
-
-  // align view center
-  parseKeysExact(['z', 'c'], [Mode.Normal], (_, editor) => {
-    if (vscode.window.activeTextEditor) {
-      vscode.commands.executeCommand('revealLine', {
-        lineNumber: editor.selection.active.line,
-        at: 'center',
-      });
-    }
-  }),
-
-  // align view top
-  parseKeysExact(['z', 't'], [Mode.Normal], (_, editor) => {
-    if (vscode.window.activeTextEditor) {
-      vscode.commands.executeCommand('revealLine', {
-        lineNumber: editor.selection.active.line,
-        at: 'top',
-      });
-    }
-  }),
-
-  // align view bottom
-  parseKeysExact(['z', 'b'], [Mode.Normal], (_, editor) => {
-    if (vscode.window.activeTextEditor) {
-      vscode.commands.executeCommand('revealLine', {
-        lineNumber: editor.selection.active.line,
-        at: 'bottom',
-      });
-    }
-  }),
-
-  parseKeysExact(['z', 'j'], [Mode.Normal], () => {
-    vscode.commands.executeCommand('scrollLineDown');
-  }),
-
-  parseKeysExact(['z', 'k'], [Mode.Normal], () => {
-    vscode.commands.executeCommand('scrollLineUp');
   }),
 
   parseKeysExact(['/'], [Mode.Normal], () => {
@@ -412,27 +375,6 @@ export const actions: Action[] = [
     vscode.commands.executeCommand('deleteRight');
   }),
 
-  parseKeysExact(['z', KeyMap.Motions.MoveUp], [Mode.Normal], (vimState, editor) => {
-    vscode.commands.executeCommand('revealLine', {
-      lineNumber: editor.selection.active.line,
-      at: 'top',
-    });
-  }),
-
-  parseKeysExact(['z', 'z'], [Mode.Normal], (vimState, editor) => {
-    vscode.commands.executeCommand('revealLine', {
-      lineNumber: editor.selection.active.line,
-      at: 'center',
-    });
-  }),
-
-  parseKeysExact(['z', KeyMap.Motions.MoveDown], [Mode.Normal], (vimState, editor) => {
-    vscode.commands.executeCommand('revealLine', {
-      lineNumber: editor.selection.active.line,
-      at: 'bottom',
-    });
-  }),
-
   parseKeysExact([';'], [Mode.Normal], (vimState, editor) => {
     vimState.semicolonAction(vimState, editor);
   }),
@@ -442,6 +384,7 @@ export const actions: Action[] = [
   }),
   ...gotoActions,
   ...windowActions,
+  ...viewActions,
 ];
 
 function makeMultiLineSelection(
