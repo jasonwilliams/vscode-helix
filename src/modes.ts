@@ -3,43 +3,41 @@ import * as vscode from 'vscode';
 import { HelixState } from './helix_state_types';
 import { Mode } from './modes_types';
 
-export function enterInsertMode(vimState: HelixState): void {
-  vimState.mode = Mode.Insert;
+export function enterInsertMode(helixState: HelixState): void {
+  helixState.mode = Mode.Insert;
   setModeContext('extension.helixKeymap.insertMode');
+  helixState.commandLine.setText('', helixState);
 }
 
-export function enterNormalMode(vimState: HelixState): void {
-  vimState.mode = Mode.Normal;
+export function enterNormalMode(helixState: HelixState): void {
+  helixState.mode = Mode.Normal;
   setModeContext('extension.helixKeymap.normalMode');
+  helixState.commandLine.setText('', helixState);
 }
 
-export function enterSearchMode(vimState: HelixState): void {
-  vimState.mode = Mode.SearchInProgress;
+export function enterSearchMode(helixState: HelixState): void {
+  helixState.mode = Mode.SearchInProgress;
   setModeContext('extension.helixKeymap.searchMode');
+  helixState.commandLine.setText('', helixState);
 }
 
-export function exitSearchMode(vimState: HelixState): void {
-  vimState.mode = Mode.Normal;
-  setModeContext('extension.helixKeymap.normalMode');
-}
-
-export function enterWindowMode(vimState: HelixState): void {
-  vimState.mode = Mode.Window;
+export function enterWindowMode(helixState: HelixState): void {
+  helixState.mode = Mode.Window;
   setModeContext('extension.helixKeymap.windowMode');
 }
 
-export function enterVisualMode(vimState: HelixState): void {
-  vimState.mode = Mode.Visual;
+export function enterVisualMode(helixState: HelixState): void {
+  helixState.mode = Mode.Visual;
   setModeContext('extension.helixKeymap.visualMode');
 }
 
-export function enterVisualLineMode(vimState: HelixState): void {
-  vimState.mode = Mode.VisualLine;
+export function enterVisualLineMode(helixState: HelixState): void {
+  helixState.mode = Mode.VisualLine;
   setModeContext('extension.helixKeymap.visualLineMode');
 }
 
-export function enterOccurrenceMode(vimState: HelixState): void {
-  vimState.mode = Mode.Occurrence;
+export function enterOccurrenceMode(helixState: HelixState): void {
+  helixState.mode = Mode.Occurrence;
   setModeContext('extension.helixKeymap.occurrenceMode');
 }
 

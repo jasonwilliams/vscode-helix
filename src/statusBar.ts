@@ -6,9 +6,6 @@ class StatusBarImpl implements vscode.Disposable {
   // Displays the current state (mode, recording macro, etc.) and messages to the user
   private readonly statusBarItem: vscode.StatusBarItem;
 
-  // Displays the keys you've typed so far when they haven't yet resolved to a command
-  private readonly recordedStateStatusBarItem: vscode.StatusBarItem;
-
   private previousMode: Mode | undefined = undefined;
   private showingDefaultMessage = true;
 
@@ -21,20 +18,12 @@ class StatusBarImpl implements vscode.Disposable {
       Number.MIN_SAFE_INTEGER, // Furthest right on the left
     );
     this.statusBarItem.name = 'Helix Command Line';
+    this.statusBarItem.text = 'NOR';
     this.statusBarItem.show();
-
-    this.recordedStateStatusBarItem = vscode.window.createStatusBarItem(
-      'showcmd',
-      vscode.StatusBarAlignment.Right,
-      Number.MAX_SAFE_INTEGER, // Furthest left on the right
-    );
-    this.recordedStateStatusBarItem.name = 'Helix Pending Command Keys';
-    this.recordedStateStatusBarItem.show();
   }
 
   dispose() {
     this.statusBarItem.dispose();
-    this.recordedStateStatusBarItem.dispose();
   }
 
   /**
@@ -45,7 +34,7 @@ class StatusBarImpl implements vscode.Disposable {
     // Text
     text = text.replace(/\n/g, '^M');
     if (this.statusBarItem.text !== text) {
-      this.statusBarItem.text = text;
+      this.statusBarItem.text = `${this.statusBarPrefix(helixState)} ${text}`;
     }
 
     this.previousMode = helixState.mode;
@@ -74,23 +63,23 @@ class StatusBarImpl implements vscode.Disposable {
     StatusBar.setText(helixState, '');
     this.showingDefaultMessage = true;
   }
+
+  statusBarPrefix(helixState: HelixState) {
+    switch (helixState.mode) {
+      case Mode.Normal:
+        return 'NOR';
+      case Mode.Insert:
+        return 'INS';
+      case Mode.Disabled:
+        return 'DISABLED';
+      case Mode.SearchInProgress:
+        return 'search:';
+      case Mode.CommandlineInProgress:
+        return ':';
+      default:
+        return '';
+    }
+  }
 }
 
 export const StatusBar = new StatusBarImpl();
-
-export function statusBarText(helixState: HelixState) {
-  switch (helixState.mode) {
-    case Mode.Normal:
-      return 'NOR';
-    case Mode.Insert:
-      return 'INS';
-    case Mode.Disabled:
-      return 'DISABLED';
-    case Mode.SearchInProgress:
-      return 'search:';
-    case Mode.CommandlineInProgress:
-      return ':';
-    default:
-      return '';
-  }
-}

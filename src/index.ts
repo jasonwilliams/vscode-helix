@@ -4,7 +4,7 @@ import { commandLine } from './commandLine';
 import { escapeHandler } from './escape_handler';
 import { onDidChangeActiveTextEditor, onDidChangeTextDocument, onSelectionChange } from './eventHandlers';
 import { HelixState } from './helix_state_types';
-import { enterNormalMode, enterSearchMode, enterWindowMode, exitSearchMode } from './modes';
+import { enterNormalMode, enterSearchMode, enterWindowMode } from './modes';
 import { Mode } from './modes_types';
 import * as scrollCommands from './scroll_commands';
 import { searchState } from './search';
@@ -46,7 +46,7 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand('extension.helixKeymap.scrollDownPage', scrollCommands.scrollDownPage),
     vscode.commands.registerCommand('extension.helixKeymap.scrollUpPage', scrollCommands.scrollUpPage),
     vscode.commands.registerCommand('extension.helixKeymap.enterSearchMode', () => enterSearchMode(globalhelixState)),
-    vscode.commands.registerCommand('extension.helixKeymap.exitSearchMode', () => exitSearchMode(globalhelixState)),
+    vscode.commands.registerCommand('extension.helixKeymap.exitSearchMode', () => enterNormalMode(globalhelixState)),
     vscode.commands.registerCommand('extension.helixKeymap.enterWindowMode', () => enterWindowMode(globalhelixState)),
   );
 
