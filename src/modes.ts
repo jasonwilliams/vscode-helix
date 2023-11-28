@@ -13,6 +13,16 @@ export function enterNormalMode(vimState: HelixState): void {
   setModeContext('extension.helixKeymap.normalMode');
 }
 
+export function enterSearchMode(vimState: HelixState): void {
+  vimState.mode = Mode.SearchInProgress;
+  setModeContext('extension.helixKeymap.searchMode');
+}
+
+export function exitSearchMode(vimState: HelixState): void {
+  vimState.mode = Mode.Normal;
+  setModeContext('extension.helixKeymap.normalMode');
+}
+
 export function enterWindowMode(vimState: HelixState): void {
   vimState.mode = Mode.Window;
   setModeContext('extension.helixKeymap.windowMode');
@@ -40,6 +50,7 @@ function setModeContext(key: string) {
     'extension.helixKeymap.visualMode',
     'extension.helixKeymap.visualLineMode',
     'extension.helixKeymap.occurrenceMode',
+    'extension.helixKeymap.searchMode',
   ];
 
   modeKeys.forEach((modeKey) => {

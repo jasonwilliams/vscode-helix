@@ -65,6 +65,16 @@
         "key": "ctrl+w",
         "command": "extension.helixKeymap.enterWindowMode",
         "when": "editorTextFocus && !extension.helixKeymap.insertMode"
+      },
+      {
+        "key": "/",
+        "command": "extension.helixKeymap.enterSearchMode",
+        "when": "editorTextFocus && extension.helixKeymap.normalMode"
+      },
+      {
+        "key": "enter",
+        "command": "extension.helixKeymap.exitSearchMode",
+        "when": "editorTextFocus && extension.helixKeymap.searchMode"
       }
     ],
     "configuration": {

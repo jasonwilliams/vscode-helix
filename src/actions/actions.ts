@@ -62,9 +62,9 @@ export const actions: Action[] = [
     vscode.commands.executeCommand('extension.helixKeymap.scrollDownHalfPage');
   }),
 
-  parseKeysExact(['/'], [Mode.Normal], () => {
-    vscode.commands.executeCommand('actions.find');
-  }),
+  // parseKeysExact(['/'], [Mode.Normal], () => {
+  //   vscode.commands.executeCommand('actions.find');
+  // }),
 
   parseKeysExact(['n'], [Mode.Normal], () => {
     vscode.commands.executeCommand('editor.action.nextSelectionMatchFindAction');
