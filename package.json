@@ -1,7 +1,7 @@
 {
-  "name": "helix",
+  "name": "vscode-helix",
   "version": "0.0.1",
-  "displayName": "Helix Emulator",
+  "displayName": "Helix",
   "description": "Helix emulation for Visual Studio Code",
   "publisher": "jasew",
   "author": "Jason Williams",
