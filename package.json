@@ -1,5 +1,5 @@
 {
-  "name": "vscode-helix",
+  "name": "vscode-helix-emulation",
   "version": "0.0.1",
   "displayName": "Helix",
   "description": "Helix emulation for Visual Studio Code",
