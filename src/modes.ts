@@ -37,18 +37,12 @@ export function enterVisualLineMode(helixState: HelixState): void {
   setModeContext('extension.helixKeymap.visualLineMode');
 }
 
-export function enterOccurrenceMode(helixState: HelixState): void {
-  helixState.mode = Mode.Occurrence;
-  setModeContext('extension.helixKeymap.occurrenceMode');
-}
-
 function setModeContext(key: string) {
   const modeKeys = [
     'extension.helixKeymap.insertMode',
     'extension.helixKeymap.normalMode',
     'extension.helixKeymap.visualMode',
     'extension.helixKeymap.visualLineMode',
-    'extension.helixKeymap.occurrenceMode',
     'extension.helixKeymap.searchMode',
   ];
 

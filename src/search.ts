@@ -11,6 +11,11 @@ export class SearchState {
   /** Index of the current search string in the search history */
   searchHistoryIndex: number = this.searchHistory.length - 1; // Add this line
 
+  clearSearchString(helixState: HelixState): void {
+    this.searchString = '';
+    helixState.commandLine.setText(this.searchString, helixState);
+  }
+
   /** Add character to search string */
   addChar(helixState: HelixState, char: string): void {
     this.searchString += char;

@@ -1,13 +1,7 @@
 import * as vscode from 'vscode';
 import { Action } from '../action_types';
 import { HelixState } from '../helix_state_types';
-import {
-  enterInsertMode,
-  enterOccurrenceMode,
-  enterVisualLineMode,
-  enterVisualMode,
-  setModeCursorStyle,
-} from '../modes';
+import { enterInsertMode, enterSearchMode, enterVisualLineMode, enterVisualMode, setModeCursorStyle } from '../modes';
 import { Mode } from '../modes_types';
 import { parseKeysExact, parseKeysRegex } from '../parse_keys';
 import * as positionUtils from '../position_utils';
@@ -19,6 +13,7 @@ import { flashYankHighlight } from '../yank_highlight';
 import { gotoActions } from './gotoMode';
 import KeyMap from './keymaps';
 import { yank } from './operators';
+import { spaceActions } from './spaceMode';
 import { viewActions } from './viewMode';
 import { windowActions } from './windowMode';
 
@@ -28,12 +23,6 @@ enum Direction {
 }
 
 export const actions: Action[] = [
-  // new space actions
-  parseKeysExact([' ', ' '], [Mode.Normal], (vimState, editor) => {
-    enterOccurrenceMode(vimState);
-    vscode.commands.executeCommand('editor.action.addSelectionToNextFindMatch');
-  }),
-
   parseKeysExact(['p'], [Mode.Occurrence], () => {
     vscode.commands.executeCommand('editor.action.addSelectionToPreviousFindMatch');
   }),
@@ -42,32 +31,17 @@ export const actions: Action[] = [
     vscode.commands.executeCommand('editor.action.selectHighlights');
   }),
 
-  parseKeysExact([' ', 'z'], [Mode.Normal], () => {
-    vscode.commands.executeCommand('undo');
-  }),
-
-  parseKeysExact([' ', 'r'], [Mode.Normal], () => {
-    vscode.commands.executeCommand('redo');
-  }),
-
-  parseKeysExact([' ', 'i'], [Mode.Normal], () => {
-    vscode.commands.executeCommand('extension.helixKeymap.scrollUpHalfPage');
-  }),
-
-  parseKeysExact([' ', 'k'], [Mode.Normal], () => {
-    vscode.commands.executeCommand('extension.helixKeymap.scrollDownHalfPage');
-  }),
-
-  // parseKeysExact(['/'], [Mode.Normal], () => {
-  //   vscode.commands.executeCommand('actions.find');
-  // }),
-
   parseKeysExact(['n'], [Mode.Normal], () => {
     vscode.commands.executeCommand('editor.action.nextMatchFindAction');
   }),
 
   parseKeysExact(['N'], [Mode.Normal], () => {
     vscode.commands.executeCommand('editor.action.previousMatchFindAction');
+  }),
+
+  parseKeysExact(['?'], [Mode.Normal], (helixState) => {
+    enterSearchMode(helixState);
+    helixState.searchState.previousSearchResult(helixState);
   }),
 
   // existing
@@ -381,6 +355,7 @@ export const actions: Action[] = [
   ...gotoActions,
   ...windowActions,
   ...viewActions,
+  ...spaceActions,
 ];
 
 function makeMultiLineSelection(
