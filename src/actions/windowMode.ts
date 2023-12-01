@@ -53,7 +53,7 @@ export const windowActions: Action[] = [
   }),
 
   parseKeysExact(['q'], [Mode.Window], (helixState) => {
-    commands.executeCommand('workbench.action.closeEditorsAndGroup');
+    commands.executeCommand('workbench.action.closeActiveEditor');
     enterNormalMode(helixState);
   }),
 

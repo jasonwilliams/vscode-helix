@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 
 import { commandLine } from './commandLine';
 import { escapeHandler } from './escape_handler';
-import { onDidChangeActiveTextEditor, onDidChangeTextDocument, onSelectionChange } from './eventHandlers';
+import { onDidChangeActiveTextEditor, onDidChangeTextDocument } from './eventHandlers';
 import { HelixState } from './helix_state_types';
 import { enterNormalMode, enterSearchMode, enterWindowMode } from './modes';
 import { Mode } from './modes_types';
@@ -37,7 +37,7 @@ const globalhelixState: HelixState = {
 /** This is the main entry point into the Helix VSCode extension */
 export function activate(context: vscode.ExtensionContext): void {
   context.subscriptions.push(
-    vscode.window.onDidChangeTextEditorSelection((e) => onSelectionChange(globalhelixState, e)),
+    // vscode.window.onDidChangeTextEditorSelection((e) => onSelectionChange(globalhelixState, e)),
     vscode.window.onDidChangeActiveTextEditor((editor) => onDidChangeActiveTextEditor(globalhelixState, editor)),
     vscode.workspace.onDidChangeTextDocument((e) => onDidChangeTextDocument(globalhelixState, e)),
     vscode.commands.registerCommand('extension.helixKeymap.escapeKey', () => escapeHandler(globalhelixState)),
@@ -46,8 +46,19 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand('extension.helixKeymap.scrollDownPage', scrollCommands.scrollDownPage),
     vscode.commands.registerCommand('extension.helixKeymap.scrollUpPage', scrollCommands.scrollUpPage),
     vscode.commands.registerCommand('extension.helixKeymap.enterSearchMode', () => enterSearchMode(globalhelixState)),
-    vscode.commands.registerCommand('extension.helixKeymap.exitSearchMode', () => enterNormalMode(globalhelixState)),
+    vscode.commands.registerCommand('extension.helixKeymap.exitSearchMode', () =>
+      globalhelixState.searchState.enter(globalhelixState),
+    ),
     vscode.commands.registerCommand('extension.helixKeymap.enterWindowMode', () => enterWindowMode(globalhelixState)),
+    vscode.commands.registerCommand('extension.helixKeymap.backspaceSearchMode', () => {
+      globalhelixState.searchState.backspace(globalhelixState);
+    }),
+    vscode.commands.registerCommand('extension.helixKeymap.nextSearchResult', () =>
+      globalhelixState.searchState.nextSearchResult(globalhelixState),
+    ),
+    vscode.commands.registerCommand('extension.helixKeymap.previousSearchResult', () =>
+      globalhelixState.searchState.previousSearchResult(globalhelixState),
+    ),
   );
 
   enterNormalMode(globalhelixState);

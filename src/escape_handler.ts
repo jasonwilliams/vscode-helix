@@ -2,10 +2,10 @@ import * as vscode from 'vscode';
 
 import { HelixState } from './helix_state_types';
 import { enterNormalMode, setModeCursorStyle } from './modes';
-import { addTypeSubscription } from './type_subscription';
-import { typeHandler } from './type_handler';
-import * as positionUtils from './position_utils';
 import { Mode } from './modes_types';
+import * as positionUtils from './position_utils';
+import { typeHandler } from './type_handler';
+import { addTypeSubscription } from './type_subscription';
 
 export function escapeHandler(vimState: HelixState): void {
   const editor = vscode.window.activeTextEditor;
@@ -26,6 +26,8 @@ export function escapeHandler(vimState: HelixState): void {
     if (editor.selections.length > 1) {
       editor.selections = [editor.selections[0]];
     }
+    // There is no way to check if find widget is open, so just close it
+    vscode.commands.executeCommand('closeFindWidget');
   } else if (vimState.mode === Mode.Visual) {
     editor.selections = editor.selections.map((selection) => {
       const newPosition = new vscode.Position(selection.active.line, Math.max(selection.active.character - 1, 0));

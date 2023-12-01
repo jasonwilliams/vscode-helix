@@ -38,10 +38,6 @@ export const actions: Action[] = [
     vscode.commands.executeCommand('editor.action.addSelectionToPreviousFindMatch');
   }),
 
-  parseKeysExact(['n'], [Mode.Occurrence], () => {
-    vscode.commands.executeCommand('editor.action.addSelectionToNextFindMatch');
-  }),
-
   parseKeysExact(['a'], [Mode.Occurrence], () => {
     vscode.commands.executeCommand('editor.action.selectHighlights');
   }),
@@ -67,7 +63,11 @@ export const actions: Action[] = [
   // }),
 
   parseKeysExact(['n'], [Mode.Normal], () => {
-    vscode.commands.executeCommand('editor.action.nextSelectionMatchFindAction');
+    vscode.commands.executeCommand('editor.action.nextMatchFindAction');
+  }),
+
+  parseKeysExact(['N'], [Mode.Normal], () => {
+    vscode.commands.executeCommand('editor.action.previousMatchFindAction');
   }),
 
   // existing
@@ -370,10 +370,6 @@ export const actions: Action[] = [
   // parseKeysExact(['h'], [Mode.Normal], (vimState, editor) => {
   //   vscode.commands.executeCommand('deleteLeft')
   // }),
-
-  parseKeysExact(['n'], [Mode.Normal], (vimState, editor) => {
-    vscode.commands.executeCommand('deleteRight');
-  }),
 
   parseKeysExact([';'], [Mode.Normal], (vimState, editor) => {
     vimState.semicolonAction(vimState, editor);

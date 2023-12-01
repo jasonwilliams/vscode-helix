@@ -72,9 +72,34 @@
         "when": "editorTextFocus && extension.helixKeymap.normalMode"
       },
       {
+        "key": "backspace",
+        "command": "extension.helixKeymap.backspaceSearchMode",
+        "when": "editorTextFocus && extension.helixKeymap.searchMode"
+      },
+      {
         "key": "enter",
         "command": "extension.helixKeymap.exitSearchMode",
         "when": "editorTextFocus && extension.helixKeymap.searchMode"
+      },
+      {
+        "key": "up",
+        "command": "extension.helixKeymap.previousSearchResult",
+        "when": "editorTextFocus && extension.helixKeymap.searchMode"
+      },
+      {
+        "key": "down",
+        "command": "extension.helixKeymap.nextSearchResult",
+        "when": "editorTextFocus && extension.helixKeymap.searchMode"
+      },
+      {
+        "key": "alt+o",
+        "command": "editor.action.smartSelect.expand",
+        "when": "editorTextFocus && extension.helixKeymap.normalMode"
+      },
+      {
+        "key": "alt+i",
+        "command": "editor.action.smartSelect.shrink",
+        "when": "editorTextFocus && extension.helixKeymap.normalMode"
       }
     ],
     "configuration": {

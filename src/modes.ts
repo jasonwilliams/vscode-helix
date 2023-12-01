@@ -24,6 +24,7 @@ export function enterSearchMode(helixState: HelixState): void {
 export function enterWindowMode(helixState: HelixState): void {
   helixState.mode = Mode.Window;
   setModeContext('extension.helixKeymap.windowMode');
+  helixState.commandLine.setText('', helixState);
 }
 
 export function enterVisualMode(helixState: HelixState): void {

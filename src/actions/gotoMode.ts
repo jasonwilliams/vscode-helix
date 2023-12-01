@@ -64,10 +64,6 @@ export const gotoActions: Action[] = [
     commands.executeCommand('scrollLineDown');
   }),
 
-  parseKeysExact(['g', '.'], [Mode.Normal], () => {
-    commands.executeCommand('workbench.action.navigateToLastEditLocation');
-  }),
-
   parseKeysExact(['g', 'a'], [Mode.Normal], (helixState) => {
     // VS Code has no concept of "last accessed file" so instead we'll need to keep track of previous text editors
     const editor = helixState.editorState.previousEditor;
