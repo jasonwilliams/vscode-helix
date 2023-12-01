@@ -1,10 +1,10 @@
 {
   "name": "vscode-helix",
-  "version": "0.1.4",
-  "displayName": "Helix Keymap",
+  "version": "0.0.1",
+  "displayName": "Helix Emulator",
   "description": "Helix-like key emulation for Visual Studio Code",
   "publisher": "jasew",
-  "author": "Garland Crow <garlandcrow@protonmail.com>",
+  "author": "Jason Williams",
   "license": "MIT",
   "homepage": "https://github.com/jasonwilliams/vscode-helix",
   "keywords": [
@@ -24,7 +24,7 @@
     "Keymaps"
   ],
   "main": "./dist/index.js",
-  "icon": "res/icon.png",
+  "icon": "docs/img/helixLogo.png",
   "files": [
     "dist"
   ],
