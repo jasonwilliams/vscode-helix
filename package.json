@@ -29,7 +29,7 @@
     "dist"
   ],
   "engines": {
-    "vscode": "^1.80.0"
+    "vscode": "^1.83.1"
   },
   "activationEvents": [
     "onStartupFinished"
