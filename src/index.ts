@@ -4,7 +4,7 @@ import { commandLine } from './commandLine';
 import { escapeHandler } from './escape_handler';
 import { onDidChangeActiveTextEditor, onDidChangeTextDocument } from './eventHandlers';
 import { HelixState } from './helix_state_types';
-import { enterNormalMode, enterSearchMode, enterWindowMode } from './modes';
+import { enterDisabledMode, enterNormalMode, enterSearchMode, enterWindowMode, setModeCursorStyle } from './modes';
 import { Mode } from './modes_types';
 import * as scrollCommands from './scroll_commands';
 import { searchState } from './search';
@@ -59,12 +59,21 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand('extension.helixKeymap.previousSearchResult', () =>
       globalhelixState.searchState.previousSearchResult(globalhelixState),
     ),
+    vscode.commands.registerCommand('extension.helixKeymap.enterDisabledMode', () => {
+      enterDisabledMode(globalhelixState);
+    }),
+    vscode.commands.registerCommand('extension.helixKeymap.enableHelix', () => {
+      enterNormalMode(globalhelixState);
+      setModeCursorStyle(globalhelixState.mode, vscode.window.activeTextEditor!);
+      addTypeSubscription(globalhelixState, typeHandler);
+    }),
   );
 
   enterNormalMode(globalhelixState);
   addTypeSubscription(globalhelixState, typeHandler);
 
   if (vscode.window.activeTextEditor) {
+    setModeCursorStyle(globalhelixState.mode, vscode.window.activeTextEditor);
     onDidChangeActiveTextEditor(globalhelixState, vscode.window.activeTextEditor);
   }
 }

@@ -35,6 +35,16 @@
     "onStartupFinished"
   ],
   "contributes": {
+    "commands": [
+      {
+        "command": "extension.helixKeymap.enterDisabledMode",
+        "title": "Disable Helix"
+      },
+      {
+        "command": "extension.helixKeymap.enableHelix",
+        "title": "Enable Helix"
+      }
+    ],
     "keybindings": [
       {
         "key": "shift+5",

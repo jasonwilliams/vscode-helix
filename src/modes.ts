@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 
 import { HelixState } from './helix_state_types';
 import { Mode } from './modes_types';
+import { removeTypeSubscription } from './type_subscription';
 
 export function enterInsertMode(helixState: HelixState): void {
   helixState.mode = Mode.Insert;
@@ -37,6 +38,14 @@ export function enterVisualLineMode(helixState: HelixState): void {
   setModeContext('extension.helixKeymap.visualLineMode');
 }
 
+export function enterDisabledMode(helixState: HelixState): void {
+  helixState.mode = Mode.Disabled;
+  setModeCursorStyle(helixState.mode, helixState.editorState.activeEditor!);
+  removeTypeSubscription(helixState);
+  setModeContext('extension.helixKeymap.disabledMode');
+  helixState.commandLine.setText('', helixState);
+}
+
 function setModeContext(key: string) {
   const modeKeys = [
     'extension.helixKeymap.insertMode',
@@ -52,7 +61,7 @@ function setModeContext(key: string) {
 }
 
 export function setModeCursorStyle(mode: Mode, editor: vscode.TextEditor): void {
-  if (mode === Mode.Insert || mode === Mode.Occurrence) {
+  if (mode === Mode.Insert || mode === Mode.Occurrence || mode === Mode.Disabled) {
     editor.options.cursorStyle = vscode.TextEditorCursorStyle.Line;
   } else if (mode === Mode.Normal) {
     editor.options.cursorStyle = vscode.TextEditorCursorStyle.Block;

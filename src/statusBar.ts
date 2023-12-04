@@ -71,9 +71,9 @@ class StatusBarImpl implements vscode.Disposable {
       case Mode.Insert:
         return 'INS';
       case Mode.Disabled:
-        return 'DISABLED';
+        return '-- HELIX DISABLED --';
       case Mode.SearchInProgress:
-        return 'search:';
+        return 'Search:';
       case Mode.Window:
         return 'WIN';
       case Mode.CommandlineInProgress:
