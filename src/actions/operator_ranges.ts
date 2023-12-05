@@ -1,17 +1,17 @@
 import * as vscode from 'vscode';
 
+import { arrayFindLast } from '../array_utils';
+import { blockRange } from '../block_utils';
+import { HelixState } from '../helix_state_types';
+import { indentLevelRange } from '../indent_utils';
+import { paragraphBackward, paragraphForward, paragraphRangeInner, paragraphRangeOuter } from '../paragraph_utils';
 import { createOperatorRangeExactKeys, createOperatorRangeRegex } from '../parse_keys';
 import { OperatorRange } from '../parse_keys_types';
-import { searchForward, searchBackward, searchBackwardBracket, searchForwardBracket } from '../search_utils';
 import * as positionUtils from '../position_utils';
-import { wordRanges, whitespaceWordRanges } from '../word_utils';
-import { paragraphForward, paragraphBackward, paragraphRangeOuter, paragraphRangeInner } from '../paragraph_utils';
-import { HelixState } from '../helix_state_types';
-import { quoteRanges, findQuoteRange } from '../quote_utils';
-import { indentLevelRange } from '../indent_utils';
-import { blockRange } from '../block_utils';
+import { findQuoteRange, quoteRanges } from '../quote_utils';
+import { searchBackward, searchBackwardBracket, searchForward, searchForwardBracket } from '../search_utils';
 import { getTags } from '../tag_utils';
-import { arrayFindLast } from '../array_utils';
+import { whitespaceWordRanges, wordRanges } from '../word_utils';
 // import KeyMap from "./keymap";
 
 export const operatorRanges: OperatorRange[] = [
@@ -214,6 +214,9 @@ export const operatorRanges: OperatorRange[] = [
 
   createOperatorRangeExactKeys(['i', '<'], false, createInnerBracketHandler('<', '>')),
   createOperatorRangeExactKeys(['a', '<'], false, createOuterBracketHandler('<', '>')),
+
+  createOperatorRangeExactKeys(['i', 'm'], false, createInnerMatchHandler()),
+  createOperatorRangeExactKeys(['a', 'm'], false, createOuterMatchHandler()),
 
   createOperatorRangeExactKeys(['i', 't'], false, (vimState, document, position) => {
     const tags = getTags(document);
@@ -494,3 +497,83 @@ function createOuterWordHandler(
     return undefined;
   };
 }
+
+/*
+ * Implements going to nearest matching brackets from the cursor.
+ * This will need to call the other `createInnerBracketHandler` functions and get the smallest range from them.
+ * This should ensure that we're fetching the nearest bracket pair.
+ **/
+function createInnerMatchHandler(): (
+  vimState: HelixState,
+  document: vscode.TextDocument,
+  position: vscode.Position,
+) => vscode.Range | undefined {
+  return (_, document, position) => {
+    // Get all ranges from our position then reduce down to the shortest one
+    const bracketRange = [
+      getBracketRange(document, position, '(', ')'),
+      getBracketRange(document, position, '{', '}'),
+      getBracketRange(document, position, '<', '>'),
+      getBracketRange(document, position, '[', ']'),
+    ].reduce((acc, range) => {
+      if (range) {
+        if (!acc) {
+          return range;
+        } else {
+          return range.contains(acc) ? acc : range;
+        }
+      } else {
+        return acc;
+      }
+    }, undefined);
+
+    return bracketRange?.with(new vscode.Position(bracketRange.start.line, bracketRange.start.character + 1));
+  };
+}
+
+/*
+ * Implements going to nearest matching brackets from the cursor.
+ * This will need to call the other `createInnerBracketHandler` functions and get the smallest range from them.
+ * This should ensure that we're fetching the nearest bracket pair.
+ **/
+function createOuterMatchHandler(): (
+  vimState: HelixState,
+  document: vscode.TextDocument,
+  position: vscode.Position,
+) => vscode.Range | undefined {
+  return (_, document, position) => {
+    // Get all ranges from our position then reduce down to the shortest one
+    const bracketRange = [
+      getBracketRange(document, position, '(', ')'),
+      getBracketRange(document, position, '{', '}'),
+      getBracketRange(document, position, '<', '>'),
+      getBracketRange(document, position, '[', ']'),
+    ].reduce((acc, range) => {
+      if (range) {
+        if (!acc) {
+          return range;
+        } else {
+          return range.contains(acc) ? acc : range;
+        }
+      } else {
+        return acc;
+      }
+    }, undefined);
+
+    return bracketRange?.with(undefined, new vscode.Position(bracketRange.end.line, bracketRange.end.character + 1));
+  };
+}
+
+// function createInnerFunctionHandler(): (
+//   vimState: HelixState,
+//   document: vscode.TextDocument,
+//   position: vscode.Position,
+// ) => void {
+//   return async (vimState, document, position) => {
+//     await vscode.commands.executeCommand('vscode.executeDocumentSymbolProvider', document.uri).then(function (
+//       symbols: unknown,
+//     ) {
+//       console.log(symbols);
+//     });
+//   };
+// }
