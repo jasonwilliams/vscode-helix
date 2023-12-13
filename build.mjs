@@ -1,7 +1,7 @@
-const production = process.argv[2] === '--production'
-import esbuild from 'esbuild'
+const production = process.argv[2] === '--production';
+import esbuild from 'esbuild';
 
-const watch = process.argv[2] === '--watch'
+const watch = process.argv[2] === '--watch';
 const context = await esbuild
   .context({
     entryPoints: ['./src/index.ts'],
@@ -18,23 +18,23 @@ const context = await esbuild
         name: 'watch',
         setup(build) {
           build.onEnd(() => {
-            console.log('build finished')
-          })
+            if (watch) console.log('build finished');
+          });
           build.onStart(() => {
-            console.log('building')
-          })
+            if (watch) console.log('building');
+          });
         },
       },
     ],
   })
   .catch((e) => {
-    console.error(e)
-    process.exit(1)
-  })
+    console.error(e);
+    process.exit(1);
+  });
 
 if (watch) {
-  await context.watch()
+  await context.watch();
 } else {
-  context.rebuild()
-  context.dispose()
+  context.rebuild();
+  context.dispose();
 }
