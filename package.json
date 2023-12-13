@@ -49,12 +49,12 @@
       {
         "key": "shift+5",
         "command": "editor.action.jumpToBracket",
-        "when": "editorTextFocus && !extension.helixKeymap.insertMode"
+        "when": "editorTextFocus && extension.helixKeymap.normalMode"
       },
       {
         "key": "shift+j",
         "command": "editor.action.joinLines",
-        "when": "editorTextFocus && !extension.helixKeymap.insertMode"
+        "when": "editorTextFocus && extension.helixKeymap.normalMode"
       },
       {
         "key": "Escape",
@@ -64,17 +64,17 @@
       {
         "key": "ctrl+f",
         "command": "extension.helixKeymap.scrollDownPage",
-        "when": "editorTextFocus && !extension.helixKeymap.insertMode"
+        "when": "editorTextFocus && extension.helixKeymap.normalMode"
       },
       {
         "key": "ctrl+b",
         "command": "extension.helixKeymap.scrollUpPage",
-        "when": "editorTextFocus && !extension.helixKeymap.insertMode"
+        "when": "editorTextFocus && extension.helixKeymap.normalMode"
       },
       {
         "key": "ctrl+w",
         "command": "extension.helixKeymap.enterWindowMode",
-        "when": "editorTextFocus && !extension.helixKeymap.insertMode"
+        "when": "editorTextFocus && extension.helixKeymap.normalMode"
       },
       {
         "key": "/",
@@ -110,6 +110,26 @@
         "key": "alt+i",
         "command": "editor.action.smartSelect.shrink",
         "when": "editorTextFocus && extension.helixKeymap.normalMode"
+      },
+      {
+        "key": "ctrl+i",
+        "command": "workbench.action.navigateForward",
+        "when": "extension.helixKeymap.normalMode"
+      },
+      {
+        "key": "ctrl+o",
+        "command": "workbench.action.navigateBack",
+        "when": "extension.helixKeymap.normalMode"
+      },
+      {
+        "key": "ctrl+o",
+        "command": "-workbench.action.files.openFile",
+        "when": "true"
+      },
+      {
+        "key": "ctrl+i",
+        "command": "-editor.action.triggerSuggest",
+        "when": "true"
       }
     ],
     "configuration": {
