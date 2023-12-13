@@ -8,6 +8,7 @@ import { enterDisabledMode, enterNormalMode, enterSearchMode, enterWindowMode, s
 import { Mode } from './modes_types';
 import * as scrollCommands from './scroll_commands';
 import { searchState } from './search';
+import { symbolProvider } from './SymbolProvider';
 import { typeHandler } from './type_handler';
 import { addTypeSubscription, removeTypeSubscription } from './type_subscription';
 
@@ -19,6 +20,7 @@ const globalhelixState: HelixState = {
     contentsList: [],
     linewise: true,
   },
+  symbolProvider,
   editorState: {
     activeEditor: undefined,
     previousEditor: undefined,

@@ -564,16 +564,12 @@ function createOuterMatchHandler(): (
   };
 }
 
-// function createInnerFunctionHandler(): (
-//   vimState: HelixState,
-//   document: vscode.TextDocument,
-//   position: vscode.Position,
-// ) => void {
-//   return async (vimState, document, position) => {
-//     await vscode.commands.executeCommand('vscode.executeDocumentSymbolProvider', document.uri).then(function (
-//       symbols: unknown,
-//     ) {
-//       console.log(symbols);
-//     });
-//   };
-// }
+function createInnerFunctionHandler(): (
+  helixState: HelixState,
+  document: vscode.TextDocument,
+  position: vscode.Position,
+) => vscode.Range | undefined {
+  return (helixState, document, position) => {
+    return helixState.symbolProvider.getContainingSymbolRange(position);
+  };
+}

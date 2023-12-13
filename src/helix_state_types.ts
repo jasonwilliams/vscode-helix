@@ -1,5 +1,6 @@
 import type { Disposable, TextDocument } from 'vscode';
 import { Range, TextEditor } from 'vscode';
+import type { SymbolProvider } from './SymbolProvider';
 import { CommandLine } from './commandLine';
 import type { Mode } from './modes_types';
 import { SearchState } from './search';
@@ -13,6 +14,7 @@ export type HelixState = {
     contentsList: (string | undefined)[];
     linewise: boolean;
   };
+  symbolProvider: SymbolProvider;
   editorState: {
     activeEditor: TextEditor | undefined;
     previousEditor: TextEditor | undefined;

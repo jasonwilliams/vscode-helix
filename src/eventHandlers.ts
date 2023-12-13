@@ -7,6 +7,7 @@ import { Mode } from './modes_types';
 /** Currently this handler is used for implementing "g", "m" (go to last modified file) */
 export function onDidChangeTextDocument(HelixState: HelixState, e: TextDocumentChangeEvent) {
   HelixState.editorState.lastModifiedDocument = e.document;
+  HelixState.symbolProvider.refreshTree(e.document.uri);
 }
 
 /** Currently this handler is used for implementing "g", "a" (go to last accessed file) */
@@ -16,6 +17,7 @@ export function onDidChangeActiveTextEditor(helixState: HelixState, editor: Text
   // The user has switched editors, re-set the editor state so we can go back
   helixState.editorState.previousEditor = helixState.editorState.activeEditor;
   helixState.editorState.activeEditor = editor;
+  helixState.symbolProvider.refreshTree(editor.document.uri);
 }
 
 export function onSelectionChange(helixState: HelixState, e: TextEditorSelectionChangeEvent): void {
