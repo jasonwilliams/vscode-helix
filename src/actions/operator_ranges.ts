@@ -218,6 +218,9 @@ export const operatorRanges: OperatorRange[] = [
   createOperatorRangeExactKeys(['i', 'm'], false, createInnerMatchHandler()),
   createOperatorRangeExactKeys(['a', 'm'], false, createOuterMatchHandler()),
 
+  createOperatorRangeExactKeys(['i', 'f'], false, createInnerFunctionHandler()),
+  createOperatorRangeExactKeys(['a', 'f'], false, createInnerFunctionHandler()),
+
   createOperatorRangeExactKeys(['i', 't'], false, (vimState, document, position) => {
     const tags = getTags(document);
 
@@ -569,7 +572,7 @@ function createInnerFunctionHandler(): (
   document: vscode.TextDocument,
   position: vscode.Position,
 ) => vscode.Range | undefined {
-  return (helixState, document, position) => {
+  return (helixState, _, position) => {
     return helixState.symbolProvider.getContainingSymbolRange(position);
   };
 }

@@ -79,4 +79,12 @@ export const gotoActions: Action[] = [
 
     window.showTextDocument(document);
   }),
+
+  parseKeysExact(['g', 'n'], [Mode.Normal], () => {
+    commands.executeCommand('workbench.action.nextEditor');
+  }),
+
+  parseKeysExact(['g', 'p'], [Mode.Normal], () => {
+    commands.executeCommand('workbench.action.previousEditor');
+  }),
 ];

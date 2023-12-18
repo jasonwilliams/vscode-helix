@@ -32,7 +32,7 @@
     "vscode": "^1.83.1"
   },
   "activationEvents": [
-    "onStartupFinished"
+    "*"
   ],
   "contributes": {
     "commands": [
