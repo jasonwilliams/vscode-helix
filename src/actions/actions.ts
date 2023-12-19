@@ -44,6 +44,11 @@ export const actions: Action[] = [
     helixState.searchState.previousSearchResult(helixState);
   }),
 
+  // Implemenent jump to bracket
+  parseKeysExact(['m', 'm'], [Mode.Normal], () => {
+    vscode.commands.executeCommand('editor.action.jumpToBracket');
+  }),
+
   // existing
   parseKeysExact(
     [KeyMap.Actions.InsertMode],
