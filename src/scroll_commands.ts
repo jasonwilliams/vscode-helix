@@ -1,24 +1,26 @@
-import * as vscode from 'vscode'
+import * as vscode from 'vscode';
 
 function editorScroll(to: string, by: string) {
   vscode.commands.executeCommand('editorScroll', {
     to: to,
     by: by,
-  })
+    revealCursor: true,
+    value: 1,
+  });
 }
 
 export function scrollDownHalfPage(): void {
-  editorScroll('down', 'halfPage')
+  editorScroll('down', 'halfPage');
 }
 
 export function scrollUpHalfPage(): void {
-  editorScroll('up', 'halfPage')
+  editorScroll('up', 'halfPage');
 }
 
 export function scrollDownPage(): void {
-  editorScroll('down', 'page')
+  editorScroll('down', 'page');
 }
 
 export function scrollUpPage(): void {
-  editorScroll('up', 'page')
+  editorScroll('up', 'page');
 }

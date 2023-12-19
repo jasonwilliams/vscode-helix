@@ -12,6 +12,7 @@ import { setVisualLineSelections } from '../visual_line_utils';
 import { flashYankHighlight } from '../yank_highlight';
 import { gotoActions } from './gotoMode';
 import KeyMap from './keymaps';
+import { matchActions } from './matchMode';
 import { yank } from './operators';
 import { spaceActions } from './spaceMode';
 import { viewActions } from './viewMode';
@@ -42,11 +43,6 @@ export const actions: Action[] = [
   parseKeysExact(['?'], [Mode.Normal], (helixState) => {
     enterSearchMode(helixState);
     helixState.searchState.previousSearchResult(helixState);
-  }),
-
-  // Implemenent jump to bracket
-  parseKeysExact(['m', 'm'], [Mode.Normal], () => {
-    vscode.commands.executeCommand('editor.action.jumpToBracket');
   }),
 
   // existing
@@ -361,6 +357,7 @@ export const actions: Action[] = [
   ...windowActions,
   ...viewActions,
   ...spaceActions,
+  ...matchActions,
 ];
 
 function makeMultiLineSelection(

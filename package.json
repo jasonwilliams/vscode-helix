@@ -117,6 +117,16 @@
         "when": "extension.helixKeymap.normalMode"
       },
       {
+        "key": "ctrl+d",
+        "command": "extension.helixKeymap.scrollDownHalfPage",
+        "when": "extension.helixKeymap.normalMode"
+      },
+      {
+        "key": "ctrl+u",
+        "command": "extension.helixKeymap.scrollUpHalfPage",
+        "when": "extension.helixKeymap.normalMode"
+      },
+      {
         "key": "ctrl+o",
         "command": "workbench.action.navigateBack",
         "when": "extension.helixKeymap.normalMode"

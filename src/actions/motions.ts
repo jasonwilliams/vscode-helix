@@ -1,21 +1,21 @@
 import * as vscode from 'vscode';
 
-import { Mode } from '../modes_types';
 import { Action } from '../action_types';
+import { HelixState } from '../helix_state_types';
+import { Mode } from '../modes_types';
+import { paragraphBackward, paragraphForward } from '../paragraph_utils';
 import { parseKeysExact, parseKeysRegex } from '../parse_keys';
+import * as positionUtils from '../position_utils';
+import { searchBackward, searchForward } from '../search_utils';
 import {
-  vscodeToVimVisualSelection,
   vimToVscodeVisualLineSelection,
   vimToVscodeVisualSelection,
   vscodeToVimVisualLineSelection,
+  vscodeToVimVisualSelection,
 } from '../selection_utils';
-import * as positionUtils from '../position_utils';
-import { HelixState } from '../helix_state_types';
-import { wordRanges, whitespaceWordRanges } from '../word_utils';
-import { searchForward, searchBackward } from '../search_utils';
-import { paragraphForward, paragraphBackward } from '../paragraph_utils';
 import { setVisualLineSelections } from '../visual_line_utils';
 import { setVisualSelections } from '../visual_utils';
+import { whitespaceWordRanges, wordRanges } from '../word_utils';
 import KeyMap from './keymaps';
 
 export const motions: Action[] = [
@@ -75,6 +75,7 @@ export const motions: Action[] = [
         setVisualSelections(editor, originalSelections);
       });
   }),
+
   parseKeysExact([KeyMap.Motions.MoveDown], [Mode.VisualLine], (vimState, editor) => {
     vscode.commands.executeCommand('cursorMove', { to: 'down', by: 'line', select: true }).then(() => {
       setVisualLineSelections(editor);

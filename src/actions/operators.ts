@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 
 import { Action } from '../action_types';
 import { HelixState } from '../helix_state_types';
-import { enterVisualLineMode, setModeCursorStyle } from '../modes';
+import { setModeCursorStyle } from '../modes';
 import { Mode } from '../modes_types';
 import { parseKeysOperator } from '../parse_keys';
 import { operatorRanges } from './operator_ranges';
@@ -90,7 +90,7 @@ export const operators: Action[] = [
     });
 
     if (linewise) {
-      enterVisualLineMode(vimState);
+      // enterVisualLineMode(vimState);
     } else {
       // enterVisualMode(vimState);
     }
