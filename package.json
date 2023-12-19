@@ -132,6 +132,16 @@
         "when": "extension.helixKeymap.normalMode"
       },
       {
+        "key": "ctrl+n",
+        "command": "workbench.action.quickOpenNavigateNextInFilePicker",
+        "when": "inFilesPicker && inQuickOpen && extension.helixKeymap.normalMode"
+      },
+      {
+        "key": "ctrl+p",
+        "command": "workbench.action.quickOpenNavigatePreviousInFilePicker",
+        "when": "inFilesPicker && inQuickOpen && extension.helixKeymap.normalMode"
+      },
+      {
         "key": "ctrl+o",
         "command": "-workbench.action.files.openFile",
         "when": "true"

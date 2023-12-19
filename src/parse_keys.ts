@@ -1,15 +1,15 @@
 import * as vscode from 'vscode';
 
+import { Action } from './action_types';
 import { HelixState } from './helix_state_types';
 import { Mode } from './modes_types';
 import {
-  ParseKeysStatus,
   OperatorRange,
   ParseFailure,
+  ParseKeysStatus,
   ParseOperatorPartSuccess,
   ParseOperatorRangeSuccess,
 } from './parse_keys_types';
-import { Action } from './action_types';
 
 export function arrayStartsWith<T>(prefix: T[], xs: T[]) {
   if (xs.length < prefix.length) {
@@ -140,7 +140,7 @@ export function parseKeysOperator(
   operator: (
     vimState: HelixState,
     editor: vscode.TextEditor,
-    ranges: readonly (vscode.Range | vscode.Selection[] | undefined)[],
+    ranges: readonly (vscode.Range | undefined)[],
     linewise: boolean,
   ) => void,
 ): Action {
@@ -150,7 +150,7 @@ export function parseKeysOperator(
       return operatorResult.status;
     }
 
-    let ranges: readonly (vscode.Range | vscode.Selection[] | undefined)[];
+    let ranges: readonly (vscode.Range | undefined)[];
     let linewise = true;
     if (vimState.mode === Mode.Normal) {
       if (operatorResult.rest.length === 0) {

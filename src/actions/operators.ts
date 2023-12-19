@@ -2,25 +2,26 @@ import * as vscode from 'vscode';
 
 import { Action } from '../action_types';
 import { HelixState } from '../helix_state_types';
-import { setModeCursorStyle } from '../modes';
+import { enterNormalMode, setModeCursorStyle } from '../modes';
 import { Mode } from '../modes_types';
 import { parseKeysOperator } from '../parse_keys';
 import { operatorRanges } from './operator_ranges';
 
 export const operators: Action[] = [
-  // parseKeysOperator(['d'], operatorRanges, (vimState, editor, ranges, linewise) => {
-  //   if (ranges.every((x) => x === undefined)) return;
+  parseKeysOperator(['d'], operatorRanges, (vimState, editor, ranges, linewise) => {
+    if (ranges.every((x) => x === undefined)) return;
 
-  //   cursorsToRangesStart(editor, ranges);
+    cursorsToRangesStart(editor, ranges);
 
-  //   delete_(editor, ranges, linewise);
+    delete_(editor, ranges, linewise);
 
-  //   if (vimState.mode === Mode.Visual || vimState.mode === Mode.VisualLine) {
-  //     enterNormalMode(vimState);
-  //     setModeCursorStyle(vimState.mode, editor);
-  //   }
-  // }),
-  // parseKeysOperator(['c'], operatorRanges, (vimState, editor, ranges, _linewise) => {
+    if (vimState.mode === Mode.Visual || vimState.mode === Mode.VisualLine) {
+      enterNormalMode(vimState);
+      setModeCursorStyle(vimState.mode, editor);
+    }
+  }),
+
+  // parseKeysOperator(['c'], osperatorRanges, (vimState, editor, ranges, _linewise) => {
   //   if (ranges.every((x) => x === undefined)) return;
 
   //   cursorsToRangesStart(editor, ranges);
@@ -116,10 +117,7 @@ export const operators: Action[] = [
   }),
 ];
 
-function cursorsToRangesStart(
-  editor: vscode.TextEditor,
-  ranges: readonly (vscode.Range | vscode.Selection[] | undefined)[],
-) {
+function cursorsToRangesStart(editor: vscode.TextEditor, ranges: readonly (vscode.Range | undefined)[]) {
   editor.selections = editor.selections.map((selection, i) => {
     const range = ranges[i];
 
@@ -132,11 +130,7 @@ function cursorsToRangesStart(
   });
 }
 
-function delete_(
-  editor: vscode.TextEditor,
-  ranges: (vscode.Range | vscode.Selection[] | undefined)[],
-  linewise: boolean,
-) {
+export function delete_(editor: vscode.TextEditor, ranges: (vscode.Range | undefined)[], linewise: boolean) {
   editor
     .edit((editBuilder) => {
       ranges.forEach((range) => {
