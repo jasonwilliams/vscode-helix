@@ -6,7 +6,7 @@ import { Mode } from './modes_types';
 import { ParseKeysStatus } from './parse_keys_types';
 
 export function typeHandler(helixState: HelixState, char: string): void {
-  if (helixState.mode === Mode.SearchInProgress) {
+  if (helixState.mode === Mode.SearchInProgress || helixState.mode === Mode.Select) {
     helixState.searchState.addChar(helixState, char);
     return;
   }

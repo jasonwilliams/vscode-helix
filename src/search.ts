@@ -1,8 +1,9 @@
 import * as vscode from 'vscode';
 import { HelixState } from './helix_state_types';
 import { enterNormalMode } from './modes';
+import { Mode } from './modes_types';
 
-// class which handles the search functionality
+// class which handles the search & select functionality
 export class SearchState {
   /** Current search string */
   searchString = '';
@@ -18,15 +19,28 @@ export class SearchState {
 
   /** Add character to search string */
   addChar(helixState: HelixState, char: string): void {
+    if (char === '\n') {
+      this.enter(helixState);
+      return;
+    }
     this.searchString += char;
     helixState.commandLine.setText(this.searchString, helixState);
-    this.findInstancesInDocument(helixState, this.searchString);
+    if (helixState.mode === Mode.Select) {
+      this.findInstancesInRange(helixState, this.searchString);
+    } else {
+      this.findInstancesInDocument(helixState, this.searchString);
+    }
   }
 
   /** The "type" event handler doesn't pick up backspace so it needs to be dealt with separately */
   backspace(helixState: HelixState): void {
     this.searchString = this.searchString.slice(0, -1);
     helixState.commandLine.setText(this.searchString, helixState);
+    if (this.searchString && helixState.mode === Mode.Select) {
+      this.findInstancesInRange(helixState, this.searchString);
+    } else if (this.searchString) {
+      this.findInstancesInDocument(helixState, this.searchString);
+    }
   }
 
   /** Clear search string and return to Normal mode */
@@ -34,8 +48,22 @@ export class SearchState {
     this.searchHistory.push(this.searchString);
     this.searchString = '';
     helixState.commandLine.setText(this.searchString, helixState);
+
+    // Upstream Bug
+    // Annoyingly, addSelectionToNextFindMatch actually does 2 things.
+    // For normal search it will put the selection into the search buffer (which is fine)
+    // But for selection (ctrl+d), it will select the next matching selection (which we don't want)
+    // We will need to compare the selections, and if they've changed remove the last one
+    // Cache what we have before calling the commmand
+
     // Add the current selection to the next find match
-    vscode.commands.executeCommand('editor.action.addSelectionToNextFindMatch');
+    if (helixState.mode === Mode.SearchInProgress) {
+      vscode.commands.executeCommand('editor.action.addSelectionToNextFindMatch');
+    }
+
+    if (helixState.mode === Mode.Select) {
+      vscode.commands.executeCommand('toggleFindInSelection');
+    }
     // reset search history index
     this.searchHistoryIndex = this.searchHistory.length - 1;
     enterNormalMode(helixState);
@@ -52,6 +80,25 @@ export class SearchState {
         const startPos = document.positionAt(match.index);
         const endPos = document.positionAt(match.index + match[0].length);
         foundRanges.push(new vscode.Range(startPos, endPos));
+      }
+      editor.selections = foundRanges.map((range) => new vscode.Selection(range.start, range.end));
+    }
+  }
+
+  findInstancesInRange(helixState: HelixState, searchString: string): void {
+    const editor = helixState.editorState.activeEditor;
+    if (editor) {
+      const document = editor.document;
+      const foundRanges: vscode.Range[] = [];
+      const searchRegex = new RegExp(searchString, 'g');
+      let match;
+      while ((match = searchRegex.exec(document.getText()))) {
+        const startPos = document.positionAt(match.index);
+        const endPos = document.positionAt(match.index + match[0].length);
+        const foundRange = new vscode.Range(startPos, endPos);
+        if (helixState.currentSelection?.contains(foundRange)) {
+          foundRanges.push(foundRange);
+        }
       }
       editor.selections = foundRanges.map((range) => new vscode.Selection(range.start, range.end));
     }

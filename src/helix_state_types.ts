@@ -22,6 +22,11 @@ export type HelixState = {
   };
   commandLine: CommandLine;
   searchState: SearchState;
+  /**
+   * The current range we're searching in when calling select
+   * This is better kept on the global state as it's used for multiple things
+   */
+  currentSelection: Range | null;
   semicolonAction: (vimState: HelixState, editor: TextEditor) => void;
   commaAction: (vimState: HelixState, editor: TextEditor) => void;
   lastPutRanges: {

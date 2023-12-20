@@ -22,6 +22,12 @@ export function enterSearchMode(helixState: HelixState): void {
   helixState.commandLine.setText('', helixState);
 }
 
+export function enterSelectMode(helixState: HelixState): void {
+  helixState.mode = Mode.Select;
+  setModeContext('extension.helixKeymap.selectMode');
+  helixState.commandLine.setText('', helixState);
+}
+
 export function enterWindowMode(helixState: HelixState): void {
   helixState.mode = Mode.Window;
   setModeContext('extension.helixKeymap.windowMode');
@@ -53,6 +59,7 @@ function setModeContext(key: string) {
     'extension.helixKeymap.visualMode',
     'extension.helixKeymap.visualLineMode',
     'extension.helixKeymap.searchMode',
+    'extension.helixKeymap.selectMode',
   ];
 
   modeKeys.forEach((modeKey) => {

@@ -8,4 +8,5 @@ export enum Mode {
   Window,
   SearchInProgress,
   CommandlineInProgress,
+  Select,
 }

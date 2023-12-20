@@ -48,7 +48,7 @@
     "keybindings": [
       {
         "key": "shift+5",
-        "command": "editor.action.jumpToBracket",
+        "command": "editor.action.selectAll",
         "when": "editorTextFocus && extension.helixKeymap.normalMode"
       },
       {
@@ -84,22 +84,22 @@
       {
         "key": "backspace",
         "command": "extension.helixKeymap.backspaceSearchMode",
-        "when": "editorTextFocus && extension.helixKeymap.searchMode"
+        "when": "editorTextFocus && (extension.helixKeymap.searchMode || extension.helixKeymap.selectMode)"
       },
       {
         "key": "enter",
         "command": "extension.helixKeymap.exitSearchMode",
-        "when": "editorTextFocus && extension.helixKeymap.searchMode"
+        "when": "editorTextFocus && (extension.helixKeymap.searchMode || extension.helixKeymap.selectMode)"
       },
       {
         "key": "up",
         "command": "extension.helixKeymap.previousSearchResult",
-        "when": "editorTextFocus && extension.helixKeymap.searchMode"
+        "when": "editorTextFocus && (extension.helixKeymap.searchMode || extension.helixKeymap.selectMode)"
       },
       {
         "key": "down",
         "command": "extension.helixKeymap.nextSearchResult",
-        "when": "editorTextFocus && extension.helixKeymap.searchMode"
+        "when": "editorTextFocus && (extension.helixKeymap.searchMode || extension.helixKeymap.selectMode)"
       },
       {
         "key": "alt+o",

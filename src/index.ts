@@ -28,6 +28,7 @@ const globalhelixState: HelixState = {
   },
   commandLine,
   searchState,
+  currentSelection: null,
   semicolonAction: () => undefined,
   commaAction: () => undefined,
   lastPutRanges: {

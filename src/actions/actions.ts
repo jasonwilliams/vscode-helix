@@ -1,7 +1,14 @@
 import * as vscode from 'vscode';
 import { Action } from '../action_types';
 import { HelixState } from '../helix_state_types';
-import { enterInsertMode, enterSearchMode, enterVisualLineMode, enterVisualMode, setModeCursorStyle } from '../modes';
+import {
+  enterInsertMode,
+  enterSearchMode,
+  enterSelectMode,
+  enterVisualLineMode,
+  enterVisualMode,
+  setModeCursorStyle,
+} from '../modes';
 import { Mode } from '../modes_types';
 import { parseKeysExact, parseKeysRegex } from '../parse_keys';
 import * as positionUtils from '../position_utils';
@@ -43,6 +50,18 @@ export const actions: Action[] = [
   parseKeysExact(['?'], [Mode.Normal], (helixState) => {
     enterSearchMode(helixState);
     helixState.searchState.previousSearchResult(helixState);
+  }),
+
+  // Selection Stuff
+  parseKeysExact(['s'], [Mode.Normal], (helixState, editor) => {
+    enterSelectMode(helixState);
+    // if we enter select mode we should save the current selection
+    helixState.currentSelection = editor.selection;
+  }),
+
+  parseKeysExact([','], [Mode.Normal], (_, editor) => {
+    // Keep primary selection only
+    editor.selections = editor.selections.slice(0, 1);
   }),
 
   // existing
