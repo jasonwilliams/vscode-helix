@@ -64,6 +64,10 @@ export const actions: Action[] = [
     editor.selections = editor.selections.slice(0, 1);
   }),
 
+  parseKeysExact(['/'], [Mode.Normal], (helixState) => {
+    enterSearchMode(helixState);
+  }),
+
   // existing
   parseKeysExact(
     [KeyMap.Actions.InsertMode],
@@ -148,8 +152,12 @@ export const actions: Action[] = [
   parseKeysExact(['P'], [Mode.Normal, Mode.Visual, Mode.VisualLine], putAfter),
   parseKeysExact(['p'], [Mode.Normal], putBefore),
 
-  parseKeysExact(['u'], [Mode.Normal, Mode.Visual, Mode.VisualLine], (vimState, editor) => {
+  parseKeysExact(['u'], [Mode.Normal, Mode.Visual, Mode.VisualLine], () => {
     vscode.commands.executeCommand('undo');
+  }),
+
+  parseKeysExact(['U'], [Mode.Normal, Mode.Visual, Mode.VisualLine], () => {
+    vscode.commands.executeCommand('redo');
   }),
 
   parseKeysExact(['d', 'd'], [Mode.Normal], (vimState, editor) => {

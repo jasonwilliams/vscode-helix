@@ -17,7 +17,30 @@ Right now commands are hardcoded to the [default keymap](https://docs.helix-edit
 
 If something doesn't work, please open an issue.
 
+## Performance
+
+For added performance, you can try adding the following [setting](https://github.com/microsoft/vscode/issues/75627#issuecomment-1078827311), and reload/restart VSCode:
+
+```json
+"extensions.experimental.affinity": {
+  "vscodevim.vim": 1
+}
+```
+
 ## Differences
+
+### Window Mode
+
+Due to VS Code having tabs I've needed to add some new windows modes on top of the current Helix ones, these commands are based
+around movements, (i.e moving the editor from one window to another).
+
+| Command          | Description                                             |
+| ---------------- | ------------------------------------------------------- |
+| `ctrl+w + m + v` | Move editor to the next group vertically (to the right) |
+| `ctrl+w + m + s` | Move editor to the next group horizontally (below)      |
+| `ctrl+w + m + p` | Move editor back to the previous group                  |
+| `ctrl+w + m + w` | Move editor out into a new window (experimental)        |
+| `ctrl+w + m + j` | Rejoin editor with main window (experimental)           |
 
 Most of the differences will be related to the fact VSCode doesn't have TreeSitter or have access to an AST. So we often need to find other ways of achieving the same action.
 

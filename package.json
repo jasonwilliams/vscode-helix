@@ -77,11 +77,6 @@
         "when": "editorTextFocus && extension.helixKeymap.normalMode"
       },
       {
-        "key": "/",
-        "command": "extension.helixKeymap.enterSearchMode",
-        "when": "editorTextFocus && extension.helixKeymap.normalMode"
-      },
-      {
         "key": "backspace",
         "command": "extension.helixKeymap.backspaceSearchMode",
         "when": "editorTextFocus && (extension.helixKeymap.searchMode || extension.helixKeymap.selectMode)"

@@ -6,6 +6,32 @@ import { parseKeysExact } from '../parse_keys';
 
 // https://docs.helix-editor.com/keymap.html#window-mode
 export const windowActions: Action[] = [
+  // New window modes (moving existing windows)
+  parseKeysExact(['m', 'v'], [Mode.Window], (helixState) => {
+    commands.executeCommand('workbench.action.moveEditorToNextGroup');
+    enterNormalMode(helixState);
+  }),
+
+  parseKeysExact(['m', 's'], [Mode.Window], (helixState) => {
+    commands.executeCommand('workbench.action.moveEditorToBelowGroup');
+    enterNormalMode(helixState);
+  }),
+
+  parseKeysExact(['m', 'p'], [Mode.Window], (helixState) => {
+    commands.executeCommand('workbench.action.moveEditorToPreviousGroup');
+    enterNormalMode(helixState);
+  }),
+
+  parseKeysExact(['m', 'w'], [Mode.Window], (helixState) => {
+    commands.executeCommand('workbench.action.moveEditorToNewWindow');
+    enterNormalMode(helixState);
+  }),
+
+  parseKeysExact(['m', 'j'], [Mode.Window], (helixState) => {
+    commands.executeCommand('workbench.action.restoreEditorsToMainWindow');
+    enterNormalMode(helixState);
+  }),
+
   // Crtl+w actions
   parseKeysExact(['w'], [Mode.Window], (helixState) => {
     commands.executeCommand('workbench.action.navigateEditorGroups');
@@ -57,6 +83,12 @@ export const windowActions: Action[] = [
     enterNormalMode(helixState);
   }),
 
+  // Alias q (for vim compatibility)
+  parseKeysExact(['c'], [Mode.Window], (helixState) => {
+    commands.executeCommand('workbench.action.closeActiveEditor');
+    enterNormalMode(helixState);
+  }),
+
   parseKeysExact(['o'], [Mode.Window], (helixState) => {
     commands.executeCommand('workbench.action.closeEditorsInOtherGroups');
     enterNormalMode(helixState);
@@ -74,14 +106,6 @@ export const windowActions: Action[] = [
 
   parseKeysExact(['o'], [Mode.Window], (helixState) => {
     commands.executeCommand('workbench.action.closeEditorsInOtherGroups');
-    enterNormalMode(helixState);
-  }),
-  parseKeysExact(['o'], [Mode.Window], (helixState) => {
-    commands.executeCommand('workbench.action.moveActiveEditorGroupDown');
-    enterNormalMode(helixState);
-  }),
-  parseKeysExact(['o'], [Mode.Window], (helixState) => {
-    commands.executeCommand('workbench.action.moveActiveEditorGroupUp');
     enterNormalMode(helixState);
   }),
 ];

@@ -8,6 +8,7 @@ class StatusBarImpl implements vscode.Disposable {
 
   private previousMode: Mode | undefined = undefined;
   private showingDefaultMessage = true;
+  private themeBackgroundColor = new vscode.ThemeColor('statusBarItem.warningBackground');
 
   public lastMessageTime: Date | undefined;
 
@@ -67,15 +68,18 @@ class StatusBarImpl implements vscode.Disposable {
   statusBarPrefix(helixState: HelixState) {
     switch (helixState.mode) {
       case Mode.Normal:
+        this.statusBarItem.backgroundColor = undefined;
         return 'NOR';
       case Mode.Insert:
         return 'INS';
       case Mode.Disabled:
         return '-- HELIX DISABLED --';
       case Mode.SearchInProgress:
-        return 'Search:';
+        this.statusBarItem.backgroundColor = this.themeBackgroundColor;
+        return 'SER:';
       case Mode.Select:
-        return 'Select:';
+        this.statusBarItem.backgroundColor = this.themeBackgroundColor;
+        return 'SEL:';
       case Mode.Window:
         return 'WIN';
       case Mode.CommandlineInProgress:

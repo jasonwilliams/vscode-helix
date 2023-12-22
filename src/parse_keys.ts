@@ -152,6 +152,10 @@ export function parseKeysOperator(
 
     let ranges: readonly (vscode.Range | undefined)[];
     let linewise = true;
+    if (vimState.mode === Mode.Window) {
+      return ParseKeysStatus.NO;
+    }
+
     if (vimState.mode === Mode.Normal) {
       if (operatorResult.rest.length === 0) {
         return ParseKeysStatus.MORE_INPUT;

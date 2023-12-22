@@ -9,9 +9,9 @@ export default {
   },
   Actions: {
     InsertMode: 'i',
-    InsertAtLineStart: 'U',
-    InsertAtLineEnd: 'O',
-    NewLineAbove: 'I',
-    NewLineBelow: 'K',
+    InsertAtLineStart: 'I',
+    InsertAtLineEnd: 'A',
+    NewLineAbove: 'O',
+    NewLineBelow: 'o',
   },
-}
+};
