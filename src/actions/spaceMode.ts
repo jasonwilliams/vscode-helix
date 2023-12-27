@@ -58,4 +58,8 @@ export const spaceActions: Action[] = [
   parseKeysExact([' ', '/'], [Mode.Normal], () => {
     commands.executeCommand('workbench.action.findInFiles');
   }),
+
+  parseKeysExact([' ', '?'], [Mode.Normal], () => {
+    commands.executeCommand('workbench.action.showCommands');
+  }),
 ];
