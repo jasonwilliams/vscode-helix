@@ -1,6 +1,6 @@
 {
   "name": "vscode-helix-emulation",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "displayName": "Helix For VS Code",
   "description": "Helix emulation for Visual Studio Code",
   "publisher": "jasew",
@@ -128,13 +128,13 @@
       },
       {
         "key": "ctrl+n",
-        "command": "workbench.action.quickOpenNavigateNextInFilePicker",
-        "when": "inFilesPicker && inQuickOpen && extension.helixKeymap.normalMode"
+        "command": "workbench.action.quickOpenSelectNext",
+        "when": "inQuickOpen && extension.helixKeymap.normalMode"
       },
       {
         "key": "ctrl+p",
-        "command": "workbench.action.quickOpenNavigatePreviousInFilePicker",
-        "when": "inFilesPicker && inQuickOpen && extension.helixKeymap.normalMode"
+        "command": "workbench.action.quickOpenSelectPrevious",
+        "when": "inQuickOpen && extension.helixKeymap.normalMode"
       },
       {
         "key": "ctrl+o",
