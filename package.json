@@ -1,6 +1,6 @@
 {
   "name": "vscode-helix-emulation",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "displayName": "Helix For VS Code",
   "description": "Helix emulation for Visual Studio Code",
   "publisher": "jasew",
@@ -145,6 +145,26 @@
         "key": "ctrl+i",
         "command": "-editor.action.triggerSuggest",
         "when": "true"
+      },
+      {
+        "key": "down",
+        "command": "-selectNextCodeAction",
+        "when": "codeActionMenuVisible"
+      },
+      {
+        "key": "up",
+        "command": "-selectPrevCodeAction",
+        "when": "codeActionMenuVisible"
+      },
+      {
+        "key": "ctrl+n",
+        "command": "selectNextCodeAction",
+        "when": "codeActionMenuVisible"
+      },
+      {
+        "key": "ctrl+p",
+        "command": "selectPrevCodeAction",
+        "when": "codeActionMenuVisible"
       }
     ],
     "configuration": {
