@@ -72,6 +72,10 @@ export const actions: Action[] = [
     vscode.commands.executeCommand('actions.findWithSelection');
   }),
 
+  parseKeysExact(['d'], [Mode.Normal], (_) => {
+    vscode.commands.executeCommand('deleteRight');
+  }),
+
   // existing
   parseKeysExact(
     [KeyMap.Actions.InsertMode],
