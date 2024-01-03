@@ -147,6 +147,11 @@
         "when": "true"
       },
       {
+        "key": "ctrl+n",
+        "command": "-workbench.action.files.newUntitledFile",
+        "when": "true"
+      },
+      {
         "key": "down",
         "command": "-selectNextCodeAction",
         "when": "codeActionMenuVisible"
@@ -165,6 +170,16 @@
         "key": "ctrl+p",
         "command": "selectPrevCodeAction",
         "when": "codeActionMenuVisible"
+      },
+      {
+        "key": "ctrl+n",
+        "command": "selectNextSuggestion",
+        "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
+      },
+      {
+        "key": "ctrl+p",
+        "command": "selectPrevSuggestion",
+        "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
       }
     ],
     "configuration": {

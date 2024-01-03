@@ -68,6 +68,10 @@ export const actions: Action[] = [
     enterSearchMode(helixState);
   }),
 
+  parseKeysExact(['*'], [Mode.Normal], (_) => {
+    vscode.commands.executeCommand('actions.findWithSelection');
+  }),
+
   // existing
   parseKeysExact(
     [KeyMap.Actions.InsertMode],
