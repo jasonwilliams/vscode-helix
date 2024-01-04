@@ -76,6 +76,14 @@ export const actions: Action[] = [
     vscode.commands.executeCommand('deleteRight');
   }),
 
+  // 	replace
+  parseKeysRegex(/^r(.)/, /^r/, [Mode.Normal], (helixState, editor, match) => {
+    const position = editor.selection.active;
+    editor.edit((builder) => {
+      builder.replace(new vscode.Range(position, position.with({ character: position.character + 1 })), match[1]);
+    });
+  }),
+
   // existing
   parseKeysExact(
     [KeyMap.Actions.InsertMode],
