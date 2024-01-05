@@ -90,7 +90,7 @@ export const windowActions: Action[] = [
   }),
 
   parseKeysExact(['o'], [Mode.Window], (helixState) => {
-    commands.executeCommand('workbench.action.closeEditorsInOtherGroups');
+    commands.executeCommand('workbench.action.closeOtherEditors');
     enterNormalMode(helixState);
   }),
 
@@ -101,11 +101,6 @@ export const windowActions: Action[] = [
 
   parseKeysExact(['L'], [Mode.Window], (helixState) => {
     commands.executeCommand('workbench.action.moveActiveEditorGroupRight');
-    enterNormalMode(helixState);
-  }),
-
-  parseKeysExact(['o'], [Mode.Window], (helixState) => {
-    commands.executeCommand('workbench.action.closeEditorsInOtherGroups');
     enterNormalMode(helixState);
   }),
 ];

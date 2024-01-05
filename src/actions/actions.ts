@@ -15,13 +15,13 @@ import * as positionUtils from '../position_utils';
 import { putAfter } from '../put_utils/put_after';
 import { putBefore } from '../put_utils/put_before';
 import { removeTypeSubscription } from '../type_subscription';
-import { setVisualLineSelections } from '../visual_line_utils';
 import { flashYankHighlight } from '../yank_highlight';
 import { gotoActions } from './gotoMode';
 import KeyMap from './keymaps';
 import { matchActions } from './matchMode';
 import { yank } from './operators';
 import { spaceActions } from './spaceMode';
+import { unimparedActions } from './unimpared';
 import { viewActions } from './viewMode';
 import { windowActions } from './windowMode';
 
@@ -145,10 +145,8 @@ export const actions: Action[] = [
     setModeCursorStyle(vimState.mode, editor);
   }),
 
-  parseKeysExact(['x'], [Mode.Normal, Mode.Visual], (vimState, editor) => {
-    enterVisualLineMode(vimState);
-    setModeCursorStyle(vimState.mode, editor);
-    setVisualLineSelections(editor);
+  parseKeysExact(['x'], [Mode.Normal, Mode.Visual], () => {
+    vscode.commands.executeCommand('expandLineSelection');
   }),
 
   parseKeysExact([KeyMap.Actions.NewLineBelow], [Mode.Normal], (vimState, editor) => {
@@ -401,6 +399,7 @@ export const actions: Action[] = [
   ...viewActions,
   ...spaceActions,
   ...matchActions,
+  ...unimparedActions,
 ];
 
 function makeMultiLineSelection(

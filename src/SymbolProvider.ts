@@ -11,16 +11,13 @@ export class SymbolProvider {
   static checkSymbolKindPermitted(symbolKind: vscode.SymbolKind): boolean {
     // https://code.visualstudio.com/api/references/vscode-api#SymbolKind
     return (
-      symbolKind === vscode.SymbolKind.Class ||
       symbolKind === vscode.SymbolKind.Constructor ||
       symbolKind === vscode.SymbolKind.Enum ||
       symbolKind === vscode.SymbolKind.EnumMember ||
       symbolKind === vscode.SymbolKind.Event ||
       symbolKind === vscode.SymbolKind.Function ||
       symbolKind === vscode.SymbolKind.Interface ||
-      symbolKind === vscode.SymbolKind.Method ||
-      symbolKind === vscode.SymbolKind.Module ||
-      symbolKind === vscode.SymbolKind.Object
+      symbolKind === vscode.SymbolKind.Method
     );
   }
 
@@ -58,60 +55,16 @@ export class SymbolProvider {
     this.dirtyTree = false;
   }
 
-  setSymbolIndex(cursorLine: number, cursorCharacter: number, directionNext: boolean, prevSymbolIndex: number) {
-    let member;
-
-    if (directionNext) {
-      this.symbolIndex = -1;
-      do {
-        this.symbolIndex++;
-        member = this.tree[this.symbolIndex].selectionRange.start;
-      } while (
-        (member.line < cursorLine ||
-          (member.line === cursorLine && member.character <= cursorCharacter) ||
-          this.symbolIndex === prevSymbolIndex) &&
-        this.symbolIndex < this.tree.length - 1
-      );
-    } else {
-      this.symbolIndex = this.tree.length;
-      do {
-        this.symbolIndex--;
-        member = this.tree[this.symbolIndex].selectionRange.start;
-      } while (
-        (member.line > cursorLine ||
-          (member.line === cursorLine && member.character >= cursorCharacter) ||
-          this.symbolIndex === prevSymbolIndex) &&
-        this.symbolIndex > 0
-      );
-    }
-  }
-
-  previousMemberRange(editor: vscode.TextEditor): vscode.Range | undefined {
+  getContainingSymbolIndex(position: vscode.Position): number | undefined {
     if (this.tree.length === 0 || this.dirtyTree) {
       return;
     }
 
-    const activeCursor = editor.selection.active;
-    this.setSymbolIndex(activeCursor.line, activeCursor.character, false, this.symbolIndex);
-    const symbol = this.tree[this.symbolIndex];
+    const symbolIndex = this.tree.findIndex((symbol: vscode.DocumentSymbol) => {
+      return symbol.range.contains(position);
+    });
 
-    if (symbol) {
-      return symbol.range;
-    }
-  }
-
-  previousNextRange(editor: vscode.TextEditor): vscode.Range | undefined {
-    if (this.tree.length === 0 || this.dirtyTree) {
-      return;
-    }
-
-    const activeCursor = editor.selection.active;
-    this.setSymbolIndex(activeCursor.line, activeCursor.character, true, this.symbolIndex);
-    const symbol = this.tree[this.symbolIndex];
-
-    if (symbol) {
-      return symbol.range;
-    }
+    return symbolIndex;
   }
 
   getContainingSymbolRange(position: vscode.Position): vscode.Range | undefined {
@@ -119,10 +72,63 @@ export class SymbolProvider {
       return;
     }
 
-    const symbol = this.tree.find((symbol: vscode.DocumentSymbol) => {
-      return symbol.range.contains(position);
-    });
+    const symbolIndex = this.getContainingSymbolIndex(position);
+    if (symbolIndex === -1 || symbolIndex === undefined) {
+      return;
+    }
 
+    const symbol = this.tree[symbolIndex];
+
+    if (symbol) {
+      return symbol.range;
+    }
+  }
+
+  getNextFunctionRange(editor: vscode.TextEditor): vscode.Range | undefined {
+    if (this.tree.length === 0 || this.dirtyTree) {
+      return;
+    }
+
+    const activeCursor = editor.selection.active;
+    const currentSymbolIndex = this.getContainingSymbolIndex(activeCursor);
+    if (currentSymbolIndex === undefined) {
+      return;
+    }
+
+    // Iterate forward until we find the next function on the same level
+    for (let i = currentSymbolIndex + 1; i < this.tree.length; i++) {
+      if (this.tree[i].kind === vscode.SymbolKind.Function) {
+        this.symbolIndex = i;
+        break;
+      }
+    }
+
+    const symbol = this.tree[this.symbolIndex];
+    if (symbol) {
+      return symbol.range;
+    }
+  }
+
+  getPreviousFunctionRange(editor: vscode.TextEditor): vscode.Range | undefined {
+    if (this.tree.length === 0 || this.dirtyTree) {
+      return;
+    }
+
+    const activeCursor = editor.selection.active;
+    const currentSymbolIndex = this.getContainingSymbolIndex(activeCursor);
+    if (currentSymbolIndex === undefined) {
+      return;
+    }
+
+    // Iterate backwards until we find the previouis function on the same level
+    for (let i = currentSymbolIndex - 1; i > 0; i--) {
+      if (this.tree[i].kind === vscode.SymbolKind.Function) {
+        this.symbolIndex = i;
+        break;
+      }
+    }
+
+    const symbol = this.tree[this.symbolIndex];
     if (symbol) {
       return symbol.range;
     }
