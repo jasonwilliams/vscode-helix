@@ -36,12 +36,12 @@ around movements, (i.e moving the editor from one window to another).
 
 | Command          | Description                                             |
 | ---------------- | ------------------------------------------------------- |
-| `ctrl + w, c`    | Close window (alias to ctrl + w, q)                     |
 | `ctrl + w, m, v` | Move editor to the next group vertically (to the right) |
 | `ctrl + w, m, s` | Move editor to the next group horizontally (below)      |
 | `ctrl + w, m, p` | Move editor back to the previous group                  |
 | `ctrl + w, m, w` | Move editor out into a new window (experimental)        |
 | `ctrl + w, m, j` | Rejoin editor with main window (experimental)           |
+| `ctrl + w, c`    | Close window (alias to ctrl + w, q)                     |
 
 Most of the differences will be related to the fact VSCode doesn't have TreeSitter or have access to an AST. So we often need to find other ways of achieving the same action.
 
