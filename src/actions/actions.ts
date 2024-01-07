@@ -53,13 +53,13 @@ export const actions: Action[] = [
   }),
 
   // Selection Stuff
-  parseKeysExact(['s'], [Mode.Normal], (helixState, editor) => {
+  parseKeysExact(['s'], [Mode.Normal, Mode.Visual], (helixState, editor) => {
     enterSelectMode(helixState);
     // if we enter select mode we should save the current selection
     helixState.currentSelection = editor.selection;
   }),
 
-  parseKeysExact([','], [Mode.Normal], (_, editor) => {
+  parseKeysExact([','], [Mode.Normal, Mode.Visual], (_, editor) => {
     // Keep primary selection only
     editor.selections = editor.selections.slice(0, 1);
   }),

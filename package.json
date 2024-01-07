@@ -174,7 +174,17 @@
       {
         "key": "alt+;",
         "command": "extension.helixKeymap.flipSelection",
-        "when": "extension.helixKeymap.normalMode"
+        "when": "!extension.helixKeymap.insertMode && editorTextFocus"
+      },
+      {
+        "key": "alt+k",
+        "command": "editor.action.moveLinesUpAction",
+        "when": "editorTextFocus && !extension.helixKeymap.insertMode"
+      },
+      {
+        "key": "alt+j",
+        "command": "editor.action.moveLinesDownAction",
+        "when": "editorTextFocus && !extension.helixKeymap.insertMode"
       }
     ],
     "configuration": {
