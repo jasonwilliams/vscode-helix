@@ -16,6 +16,12 @@ const globalhelixState: HelixState = {
   typeSubscription: undefined,
   mode: Mode.Insert,
   keysPressed: [],
+  numbersPressed: [],
+  resolveCount: function () {
+    // We can resolve this lazily as not every function will need it
+    // So we don't want it running on every keystroke or every command
+    return parseInt(this.numbersPressed.join(''), 10) || 1;
+  },
   registers: {
     contentsList: [],
     linewise: true,

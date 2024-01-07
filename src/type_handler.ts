@@ -13,6 +13,12 @@ export function typeHandler(helixState: HelixState, char: string): void {
   const editor = vscode.window.activeTextEditor;
   if (!editor) return;
 
+  // Handle number prefixes
+  if (/[0-9]/.test(char) && helixState.keysPressed.length === 0) {
+    helixState.numbersPressed.push(char);
+    return;
+  }
+
   helixState.keysPressed.push(char);
 
   try {
@@ -30,6 +36,7 @@ export function typeHandler(helixState: HelixState, char: string): void {
 
     if (!could) {
       helixState.keysPressed = [];
+      helixState.numbersPressed = [];
     }
   } catch (error) {
     console.error(error);

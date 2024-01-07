@@ -10,6 +10,8 @@ export type HelixState = {
   typeSubscription: Disposable | undefined;
   mode: Mode;
   keysPressed: string[];
+  numbersPressed: string[];
+  resolveCount: () => number;
   registers: {
     contentsList: (string | undefined)[];
     linewise: boolean;

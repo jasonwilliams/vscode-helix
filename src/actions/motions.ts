@@ -35,6 +35,7 @@ export const motions: Action[] = [
     vscode.commands.executeCommand('cursorMove', {
       to: 'up',
       by: 'wrappedLine',
+      value: _vimState.resolveCount(),
     });
   }),
   parseKeysExact([KeyMap.Motions.MoveUp], [Mode.Visual], (vimState, editor) => {
@@ -45,21 +46,25 @@ export const motions: Action[] = [
         to: 'up',
         by: 'wrappedLine',
         select: true,
+        value: vimState.resolveCount(),
       })
       .then(() => {
         setVisualSelections(editor, originalSelections);
       });
   }),
   parseKeysExact([KeyMap.Motions.MoveUp], [Mode.VisualLine], (vimState, editor) => {
-    vscode.commands.executeCommand('cursorMove', { to: 'up', by: 'line', select: true }).then(() => {
-      setVisualLineSelections(editor);
-    });
+    vscode.commands
+      .executeCommand('cursorMove', { to: 'up', by: 'line', select: true, value: vimState.resolveCount() })
+      .then(() => {
+        setVisualLineSelections(editor);
+      });
   }),
 
   parseKeysExact([KeyMap.Motions.MoveDown], [Mode.Normal], (_vimState, _editor) => {
     vscode.commands.executeCommand('cursorMove', {
       to: 'down',
       by: 'wrappedLine',
+      value: _vimState.resolveCount(),
     });
   }),
   parseKeysExact([KeyMap.Motions.MoveDown], [Mode.Visual], (vimState, editor) => {
@@ -70,6 +75,7 @@ export const motions: Action[] = [
         to: 'down',
         by: 'wrappedLine',
         select: true,
+        value: vimState.resolveCount(),
       })
       .then(() => {
         setVisualSelections(editor, originalSelections);
@@ -91,7 +97,7 @@ export const motions: Action[] = [
   parseKeysExact(['e'], [Mode.Normal, Mode.Visual], createWordEndHandler(wordRanges)),
   parseKeysExact(['E'], [Mode.Normal, Mode.Visual], createWordEndHandler(whitespaceWordRanges)),
 
-  parseKeysRegex(/^f(..)$/, /^(f|f.)$/, [Mode.Normal, Mode.Visual], (vimState, editor, match) => {
+  parseKeysRegex(/^f(.)$/, /^(f|f.)$/, [Mode.Normal, Mode.Visual], (vimState, editor, match) => {
     findForward(vimState, editor, match);
 
     vimState.semicolonAction = (innerVimState, innerEditor) => {
@@ -103,7 +109,7 @@ export const motions: Action[] = [
     };
   }),
 
-  parseKeysRegex(/^F(..)$/, /^(F|F.)$/, [Mode.Normal, Mode.Visual], (vimState, editor, match) => {
+  parseKeysRegex(/^F(.)$/, /^(F|F.)$/, [Mode.Normal, Mode.Visual], (vimState, editor, match) => {
     findBackward(vimState, editor, match);
 
     vimState.semicolonAction = (innerVimState, innerEditor) => {

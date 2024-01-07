@@ -1,4 +1,4 @@
-import { commands, window } from 'vscode';
+import { Selection, commands, window } from 'vscode';
 import { Action } from '../action_types';
 import { Mode } from '../modes_types';
 import { parseKeysExact } from '../parse_keys';
@@ -14,7 +14,15 @@ export const gotoActions: Action[] = [
     commands.executeCommand('cursorBottom');
   }),
 
-  parseKeysExact(['g', 'g'], [Mode.Normal], () => {
+  parseKeysExact(['g', 'g'], [Mode.Normal], (helixState, editor) => {
+    const count = helixState.resolveCount();
+    if (count) {
+      const range = editor.document.lineAt(count - 1).range;
+      editor.selection = new Selection(range.start, range.end);
+      editor.revealRange(range);
+      return;
+    }
+
     commands.executeCommand('cursorTop');
   }),
 
