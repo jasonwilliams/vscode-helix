@@ -170,6 +170,11 @@
         "key": "ctrl+p",
         "command": "selectPrevSuggestion",
         "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
+      },
+      {
+        "key": "alt+;",
+        "command": "extension.helixKeymap.flipSelection",
+        "when": "extension.helixKeymap.normalMode"
       }
     ],
     "configuration": {

@@ -11,6 +11,7 @@ import { searchState } from './search';
 import { symbolProvider } from './SymbolProvider';
 import { typeHandler } from './type_handler';
 import { addTypeSubscription, removeTypeSubscription } from './type_subscription';
+import { flipSelection } from './selection_utils';
 
 const globalhelixState: HelixState = {
   typeSubscription: undefined,
@@ -75,6 +76,9 @@ export function activate(context: vscode.ExtensionContext): void {
       enterNormalMode(globalhelixState);
       setModeCursorStyle(globalhelixState.mode, vscode.window.activeTextEditor!);
       addTypeSubscription(globalhelixState, typeHandler);
+    }),
+    vscode.commands.registerCommand('extension.helixKeymap.flipSelection', () => {
+      flipSelection(vscode.window.activeTextEditor);
     }),
   );
 
