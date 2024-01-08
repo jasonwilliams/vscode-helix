@@ -307,7 +307,7 @@ function execMotion(vimState: HelixState, editor: vscode.TextEditor, motion: (ar
         selectionIndex: i,
         vimState: vimState,
       });
-      return new vscode.Selection(newPosition, newPosition);
+      return new vscode.Selection(selection.active, newPosition);
     } else if (vimState.mode === Mode.Visual) {
       const vimSelection = vscodeToVimVisualSelection(document, selection);
       const motionPosition = motion({
