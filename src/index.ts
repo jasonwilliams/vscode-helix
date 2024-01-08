@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 
+import { symbolProvider } from './SymbolProvider';
 import { commandLine } from './commandLine';
 import { escapeHandler } from './escape_handler';
 import { onDidChangeActiveTextEditor, onDidChangeTextDocument } from './eventHandlers';
@@ -8,10 +9,9 @@ import { enterDisabledMode, enterNormalMode, enterSearchMode, enterWindowMode, s
 import { Mode } from './modes_types';
 import * as scrollCommands from './scroll_commands';
 import { searchState } from './search';
-import { symbolProvider } from './SymbolProvider';
+import { flipSelection } from './selection_utils';
 import { typeHandler } from './type_handler';
 import { addTypeSubscription, removeTypeSubscription } from './type_subscription';
-import { flipSelection } from './selection_utils';
 
 const globalhelixState: HelixState = {
   typeSubscription: undefined,
@@ -79,6 +79,11 @@ export function activate(context: vscode.ExtensionContext): void {
     }),
     vscode.commands.registerCommand('extension.helixKeymap.flipSelection', () => {
       flipSelection(vscode.window.activeTextEditor);
+    }),
+    vscode.commands.registerCommand('extension.helixKeymap.clipboardPasteAction', () => {
+      vscode.env.clipboard.readText().then((text) => {
+        globalhelixState.searchState.addText(globalhelixState, text);
+      });
     }),
   );
 

@@ -195,6 +195,11 @@
         "key": "alt+m",
         "command": "editor.action.moveSelectionToNextFindMatch",
         "when": "editorTextFocus && !extension.helixKeymap.insertMode"
+      },
+      {
+        "key": "ctrl+v",
+        "command": "extension.helixKeymap.clipboardPasteAction",
+        "when": "editorTextFocus && extension.helixKeymap.searchMode"
       }
     ],
     "configuration": {

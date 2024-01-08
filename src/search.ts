@@ -34,6 +34,16 @@ export class SearchState {
     }
   }
 
+  addText(helixState: HelixState, text: string): void {
+    this.searchString += text;
+    helixState.commandLine.setText(this.searchString, helixState);
+    if (helixState.mode === Mode.Select) {
+      this.findInstancesInRange(helixState, this.searchString);
+    } else {
+      this.findInstancesInDocument(helixState, this.searchString);
+    }
+  }
+
   /** The "type" event handler doesn't pick up backspace so it needs to be dealt with separately */
   backspace(helixState: HelixState): void {
     this.searchString = this.searchString.slice(0, -1);
