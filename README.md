@@ -49,10 +49,12 @@ Most of the differences will be related to the fact VSCode doesn't have TreeSitt
 
 ### Movements
 
-| Command   | Description                  |
-| --------- | ---------------------------- |
-| `alt + k` | Move lines or selection up   |
-| `alt + j` | Move lines or selection down |
+| Command   | Description                                   |
+| --------- | --------------------------------------------- |
+| `alt + k` | Move lines or selection up                    |
+| `alt + j` | Move lines or selection down                  |
+| `alt + d` | Add selection to next match (same as ctrl+d)  |
+| `alt + m` | Move selection to next match (same as ctrl+k) |
 
 ## Outstanding
 

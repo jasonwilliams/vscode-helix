@@ -16,7 +16,7 @@ export const gotoActions: Action[] = [
 
   parseKeysExact(['g', 'g'], [Mode.Normal], (helixState, editor) => {
     const count = helixState.resolveCount();
-    if (count) {
+    if (count !== 1) {
       const range = editor.document.lineAt(count - 1).range;
       editor.selection = new Selection(range.start, range.end);
       editor.revealRange(range);

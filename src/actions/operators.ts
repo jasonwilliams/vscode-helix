@@ -76,7 +76,7 @@ export const operators: Action[] = [
   // }),
   // Match Mode
   parseKeysOperator(['m'], operatorRanges, (vimState, editor, ranges, linewise) => {
-    if (ranges.every((x) => x === undefined) || vimState.mode === Mode.Visual || vimState.mode === Mode.VisualLine) {
+    if (ranges.every((x) => x === undefined)) {
       return;
     }
 

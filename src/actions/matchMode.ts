@@ -8,18 +8,18 @@ import { delete_ } from './operators';
 
 export const matchActions: Action[] = [
   // Implemenent jump to bracket
-  parseKeysExact(['m', 'm'], [Mode.Normal], () => {
+  parseKeysExact(['m', 'm'], [Mode.Normal, Mode.Visual], () => {
     vscode.commands.executeCommand('editor.action.jumpToBracket');
   }),
 
   // Delete match
-  parseKeysExact(['d'], [Mode.Normal], (_, editor) => {
+  parseKeysExact(['d'], [Mode.Normal, Mode.Visual], (_, editor) => {
     const ranges = editor.selections.map((selection) => selection.with());
     delete_(editor, ranges, false);
   }),
 
   // edit match
-  parseKeysExact(['c'], [Mode.Normal], (helixState, editor) => {
+  parseKeysExact(['c'], [Mode.Normal, Mode.Visual], (helixState, editor) => {
     const ranges = editor.selections.map((selection) => selection.with());
     delete_(editor, ranges, false);
     enterInsertMode(helixState);

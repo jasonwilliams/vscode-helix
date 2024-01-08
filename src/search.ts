@@ -11,6 +11,8 @@ export class SearchState {
   searchHistory: string[] = [];
   /** Index of the current search string in the search history */
   searchHistoryIndex: number = this.searchHistory.length - 1; // Add this line
+  /** Have we just come out of select mode? */
+  selectModeActive: boolean = false;
 
   clearSearchString(helixState: HelixState): void {
     this.searchString = '';
@@ -62,7 +64,9 @@ export class SearchState {
     }
 
     if (helixState.mode === Mode.Select) {
-      vscode.commands.executeCommand('toggleFindInSelection');
+      // Set a flag to signal we're in select mode, so when we go to search we can search the current selection
+      // This is a mitigation around https://github.com/jasonwilliams/vscode-helix/issues/5
+      this.selectModeActive = true;
     }
     // reset search history index
     this.searchHistoryIndex = this.searchHistory.length - 1;

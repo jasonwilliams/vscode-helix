@@ -39,11 +39,22 @@ export const actions: Action[] = [
     vscode.commands.executeCommand('editor.action.selectHighlights');
   }),
 
-  parseKeysExact(['n'], [Mode.Normal], () => {
+  parseKeysExact(['n'], [Mode.Normal], (helixState) => {
+    if (helixState.searchState.selectModeActive) {
+      vscode.commands.executeCommand('actions.findWithSelection');
+      helixState.searchState.selectModeActive = false;
+      return;
+    }
+
     vscode.commands.executeCommand('editor.action.nextMatchFindAction');
   }),
 
-  parseKeysExact(['N'], [Mode.Normal], () => {
+  parseKeysExact(['N'], [Mode.Normal], (helixState) => {
+    if (helixState.searchState.selectModeActive) {
+      vscode.commands.executeCommand('actions.findWithSelection');
+      helixState.searchState.selectModeActive = false;
+      return;
+    }
     vscode.commands.executeCommand('editor.action.previousMatchFindAction');
   }),
 
@@ -131,16 +142,6 @@ export const actions: Action[] = [
   }),
 
   parseKeysExact(['v'], [Mode.Normal, Mode.VisualLine], (vimState, editor) => {
-    if (vimState.mode === Mode.Normal) {
-      editor.selections = editor.selections.map((selection) => {
-        const lineLength = editor.document.lineAt(selection.active.line).text.length;
-
-        if (lineLength === 0) return selection;
-
-        return new vscode.Selection(selection.active, positionUtils.right(editor.document, selection.active));
-      });
-    }
-
     enterVisualMode(vimState);
     setModeCursorStyle(vimState.mode, editor);
   }),

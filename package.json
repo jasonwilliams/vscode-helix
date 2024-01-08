@@ -185,6 +185,16 @@
         "key": "alt+j",
         "command": "editor.action.moveLinesDownAction",
         "when": "editorTextFocus && !extension.helixKeymap.insertMode"
+      },
+      {
+        "key": "alt+d",
+        "command": "editor.action.addSelectionToNextFindMatch",
+        "when": "editorTextFocus && !extension.helixKeymap.insertMode"
+      },
+      {
+        "key": "alt+m",
+        "command": "editor.action.moveSelectionToNextFindMatch",
+        "when": "editorTextFocus && !extension.helixKeymap.insertMode"
       }
     ],
     "configuration": {

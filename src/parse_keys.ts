@@ -156,7 +156,7 @@ export function parseKeysOperator(
       return ParseKeysStatus.NO;
     }
 
-    if (vimState.mode === Mode.Normal) {
+    if (vimState.mode === Mode.Normal || vimState.mode === Mode.Visual) {
       if (operatorResult.rest.length === 0) {
         return ParseKeysStatus.MORE_INPUT;
       }
