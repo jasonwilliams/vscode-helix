@@ -1,6 +1,6 @@
 {
   "name": "vscode-helix-emulation",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "displayName": "Helix For VS Code",
   "description": "Helix emulation for Visual Studio Code",
   "publisher": "jasew",
@@ -60,6 +60,11 @@
         "key": "Escape",
         "command": "extension.helixKeymap.escapeKey",
         "when": "editorTextFocus"
+      },
+      {
+        "key": "Escape",
+        "command": "closeMarkersNavigation",
+        "when": "editorFocus && markersNavigationVisible"
       },
       {
         "key": "ctrl+f",
@@ -200,6 +205,26 @@
         "key": "ctrl+v",
         "command": "extension.helixKeymap.clipboardPasteAction",
         "when": "editorTextFocus && extension.helixKeymap.searchMode"
+      },
+      {
+        "key": "j",
+        "command": "list.focusDown",
+        "when": "listFocus && !inputFocus && extension.helixKeymap.normalMode"
+      },
+      {
+        "key": "k",
+        "command": "list.focusUp",
+        "when": "listFocus && !inputFocus && extension.helixKeymap.normalMode"
+      },
+      {
+        "key": "l",
+        "command": "list.expand",
+        "when": "listFocus && !inputFocus && extension.helixKeymap.normalMode"
+      },
+      {
+        "key": "h",
+        "command": "list.collapse",
+        "when": "listFocus && !inputFocus && extension.helixKeymap.normalMode"
       }
     ],
     "configuration": {
