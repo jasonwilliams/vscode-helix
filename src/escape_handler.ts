@@ -49,6 +49,8 @@ export function escapeHandler(vimState: HelixState): void {
   } else if (vimState.mode === Mode.SearchInProgress || vimState.mode === Mode.Select) {
     enterNormalMode(vimState);
     vimState.searchState.clearSearchString(vimState);
+  } else if (vimState.mode === Mode.View) {
+    enterNormalMode(vimState);
   }
 
   vimState.keysPressed = [];

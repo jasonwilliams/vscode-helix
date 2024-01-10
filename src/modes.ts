@@ -44,6 +44,12 @@ export function enterVisualLineMode(helixState: HelixState): void {
   setModeContext('extension.helixKeymap.visualLineMode');
 }
 
+export function enterViewMode(helixState: HelixState): void {
+  helixState.mode = Mode.View;
+  setModeContext('extension.helixKeymap.viewMode');
+  helixState.commandLine.setText('', helixState);
+}
+
 export function enterDisabledMode(helixState: HelixState): void {
   helixState.mode = Mode.Disabled;
   setModeCursorStyle(helixState.mode, helixState.editorState.activeEditor!);
@@ -60,6 +66,7 @@ function setModeContext(key: string) {
     'extension.helixKeymap.visualLineMode',
     'extension.helixKeymap.searchMode',
     'extension.helixKeymap.selectMode',
+    'extension.helixKeymap.viewMode',
   ];
 
   modeKeys.forEach((modeKey) => {

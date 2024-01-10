@@ -84,6 +84,8 @@ class StatusBarImpl implements vscode.Disposable {
         return 'WIN';
       case Mode.CommandlineInProgress:
         return ':';
+      case Mode.View:
+        return 'VIEW';
       default:
         return '';
     }

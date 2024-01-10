@@ -9,4 +9,5 @@ export enum Mode {
   SearchInProgress,
   CommandlineInProgress,
   Select,
+  View,
 }
