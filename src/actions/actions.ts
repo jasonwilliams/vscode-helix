@@ -389,12 +389,10 @@ export const actions: Action[] = [
   // }),
 
   parseKeysExact([';'], [Mode.Normal], (vimState, editor) => {
-    vimState.semicolonAction(vimState, editor);
+    const active = editor.selection.active;
+    editor.selection = new vscode.Selection(active, active);
   }),
 
-  parseKeysExact([','], [Mode.Normal], (vimState, editor) => {
-    vimState.commaAction(vimState, editor);
-  }),
   ...gotoActions,
   ...windowActions,
   ...viewActions,

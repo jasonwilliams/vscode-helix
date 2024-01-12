@@ -225,6 +225,11 @@
         "key": "h",
         "command": "list.collapse",
         "when": "listFocus && !inputFocus && extension.helixKeymap.normalMode"
+      },
+      {
+        "key": "alt+.",
+        "command": "extension.helixKeymap.repeatLastMotion",
+        "when": "editorTextFocus && extension.helixKeymap.normalMode"
       }
     ],
     "configuration": {

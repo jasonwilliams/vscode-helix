@@ -1,7 +1,6 @@
 import { Selection, TextEditorRevealType, commands } from 'vscode';
 import { Action } from '../action_types';
 import { Mode } from '../modes_types';
-import { selectNextParagraph, selectPreviousParagraph } from '../paragraph_utils';
 import { parseKeysExact } from '../parse_keys';
 
 export const unimparedActions: Action[] = [
@@ -34,22 +33,6 @@ export const unimparedActions: Action[] = [
     if (range) {
       editor.revealRange(range, TextEditorRevealType.InCenter);
       editor.selection = new Selection(range.start, range.end);
-    }
-  }),
-
-  parseKeysExact([']', 'p'], [Mode.Normal], (_, editor) => {
-    const range = selectNextParagraph(editor);
-    if (range) {
-      editor.revealRange(range, TextEditorRevealType.InCenter);
-      editor.selection = new Selection(range.start, range.end);
-    }
-  }),
-
-  parseKeysExact(['[', 'p'], [Mode.Normal], (_, editor) => {
-    const range = selectPreviousParagraph(editor);
-    if (range) {
-      editor.revealRange(range, TextEditorRevealType.InCenter);
-      editor.selection = new Selection(range.end, range.start);
     }
   }),
 ];

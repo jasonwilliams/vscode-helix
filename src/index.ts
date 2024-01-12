@@ -36,8 +36,7 @@ const globalhelixState: HelixState = {
   commandLine,
   searchState,
   currentSelection: null,
-  semicolonAction: () => undefined,
-  commaAction: () => undefined,
+  repeatLastMotion: () => undefined,
   lastPutRanges: {
     ranges: [],
     linewise: true,
@@ -84,6 +83,9 @@ export function activate(context: vscode.ExtensionContext): void {
       vscode.env.clipboard.readText().then((text) => {
         globalhelixState.searchState.addText(globalhelixState, text);
       });
+    }),
+    vscode.commands.registerCommand('extension.helixKeymap.repeatLastMotion', () => {
+      globalhelixState.repeatLastMotion(globalhelixState, vscode.window.activeTextEditor!);
     }),
   );
 

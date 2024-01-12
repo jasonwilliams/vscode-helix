@@ -100,48 +100,32 @@ export const motions: Action[] = [
   parseKeysRegex(/^f(.)$/, /^(f|f.)$/, [Mode.Normal, Mode.Visual], (vimState, editor, match) => {
     findForward(vimState, editor, match);
 
-    vimState.semicolonAction = (innerVimState, innerEditor) => {
+    vimState.repeatLastMotion = (innerVimState, innerEditor) => {
       findForward(innerVimState, innerEditor, match);
-    };
-
-    vimState.commaAction = (innerVimState, innerEditor) => {
-      findBackward(innerVimState, innerEditor, match);
     };
   }),
 
   parseKeysRegex(/^F(.)$/, /^(F|F.)$/, [Mode.Normal, Mode.Visual], (vimState, editor, match) => {
     findBackward(vimState, editor, match);
 
-    vimState.semicolonAction = (innerVimState, innerEditor) => {
+    vimState.repeatLastMotion = (innerVimState, innerEditor) => {
       findBackward(innerVimState, innerEditor, match);
-    };
-
-    vimState.commaAction = (innerVimState, innerEditor) => {
-      findForward(innerVimState, innerEditor, match);
     };
   }),
 
   parseKeysRegex(/^t(.)$/, /^t$/, [Mode.Normal, Mode.Visual], (vimState, editor, match) => {
     tillForward(vimState, editor, match);
 
-    vimState.semicolonAction = (innerVimState, innerEditor) => {
+    vimState.repeatLastMotion = (innerVimState, innerEditor) => {
       tillForward(innerVimState, innerEditor, match);
-    };
-
-    vimState.commaAction = (innerVimState, innerEditor) => {
-      tillBackward(innerVimState, innerEditor, match);
     };
   }),
 
   parseKeysRegex(/^T(.)$/, /^T$/, [Mode.Normal, Mode.Visual], (vimState, editor, match) => {
     tillBackward(vimState, editor, match);
 
-    vimState.semicolonAction = (innerVimState, innerEditor) => {
+    vimState.repeatLastMotion = (innerVimState, innerEditor) => {
       tillBackward(innerVimState, innerEditor, match);
-    };
-
-    vimState.commaAction = (innerVimState, innerEditor) => {
-      tillForward(innerVimState, innerEditor, match);
     };
   }),
 
@@ -151,7 +135,19 @@ export const motions: Action[] = [
     });
   }),
 
+  parseKeysExact([']', 'p'], [Mode.Normal, Mode.Visual, Mode.VisualLine], (vimState, editor) => {
+    execMotion(vimState, editor, ({ document, position }) => {
+      return new vscode.Position(paragraphForward(document, position.line), 0);
+    });
+  }),
+
   parseKeysExact(['{'], [Mode.Normal, Mode.Visual, Mode.VisualLine], (vimState, editor) => {
+    execMotion(vimState, editor, ({ document, position }) => {
+      return new vscode.Position(paragraphBackward(document, position.line), 0);
+    });
+  }),
+
+  parseKeysExact(['[', 'p'], [Mode.Normal, Mode.Visual, Mode.VisualLine], (vimState, editor) => {
     execMotion(vimState, editor, ({ document, position }) => {
       return new vscode.Position(paragraphBackward(document, position.line), 0);
     });
@@ -347,7 +343,7 @@ function findForward(vimState: HelixState, editor: vscode.TextEditor, outerMatch
     const result = searchForward(document, match[1], fromPosition);
 
     if (result) {
-      return result;
+      return result.with({ character: result.character + 1 });
     } else {
       return position;
     }
@@ -369,11 +365,11 @@ function findBackward(vimState: HelixState, editor: vscode.TextEditor, outerMatc
 
 function tillForward(vimState: HelixState, editor: vscode.TextEditor, outerMatch: RegExpMatchArray): void {
   execRegexMotion(vimState, editor, outerMatch, ({ document, position, match }) => {
-    const lineText = document.lineAt(position.line).text;
-    const result = lineText.indexOf(match[1], position.character + 1);
+    const fromPosition = position.with({ character: position.character + 1 });
+    const result = searchForward(document, match[1], fromPosition);
 
-    if (result >= 0) {
-      return position.with({ character: result });
+    if (result) {
+      return result.with({ character: result.character });
     } else {
       return position;
     }
@@ -382,11 +378,11 @@ function tillForward(vimState: HelixState, editor: vscode.TextEditor, outerMatch
 
 function tillBackward(vimState: HelixState, editor: vscode.TextEditor, outerMatch: RegExpMatchArray): void {
   execRegexMotion(vimState, editor, outerMatch, ({ document, position, match }) => {
-    const lineText = document.lineAt(position.line).text;
-    const result = lineText.lastIndexOf(match[1], position.character - 1);
+    const fromPosition = positionLeftWrap(document, position);
+    const result = searchBackward(document, match[1], fromPosition);
 
-    if (result >= 0) {
-      return position.with({ character: result });
+    if (result) {
+      return result;
     } else {
       return position;
     }

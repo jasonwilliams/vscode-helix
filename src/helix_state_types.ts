@@ -29,8 +29,7 @@ export type HelixState = {
    * This is better kept on the global state as it's used for multiple things
    */
   currentSelection: Range | null;
-  semicolonAction: (vimState: HelixState, editor: TextEditor) => void;
-  commaAction: (vimState: HelixState, editor: TextEditor) => void;
+  repeatLastMotion: (vimState: HelixState, editor: TextEditor) => void;
   lastPutRanges: {
     ranges: (Range | undefined)[];
     linewise: boolean;
