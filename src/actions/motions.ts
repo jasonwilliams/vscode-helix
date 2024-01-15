@@ -21,13 +21,13 @@ import KeyMap from './keymaps';
 export const motions: Action[] = [
   parseKeysExact([KeyMap.Motions.MoveRight], [Mode.Normal, Mode.Visual], (vimState, editor) => {
     execMotion(vimState, editor, ({ document, position }) => {
-      return positionUtils.rightNormal(document, position);
+      return positionUtils.rightNormal(document, position, vimState.resolveCount());
     });
   }),
 
   parseKeysExact([KeyMap.Motions.MoveLeft], [Mode.Normal, Mode.Visual], (vimState, editor) => {
     execMotion(vimState, editor, ({ position }) => {
-      return positionUtils.left(position);
+      return positionUtils.left(position, vimState.resolveCount());
     });
   }),
 

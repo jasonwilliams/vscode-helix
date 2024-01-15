@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 
 import { Action } from '../action_types';
 import { HelixState } from '../helix_state_types';
-import { enterNormalMode, enterVisualMode, setModeCursorStyle } from '../modes';
+import { enterNormalMode, setModeCursorStyle } from '../modes';
 import { Mode } from '../modes_types';
 import { parseKeysOperator } from '../parse_keys';
 import { operatorRanges } from './operator_ranges';
@@ -21,61 +21,8 @@ export const operators: Action[] = [
     }
   }),
 
-  // parseKeysOperator(['c'], osperatorRanges, (vimState, editor, ranges, _linewise) => {
-  //   if (ranges.every((x) => x === undefined)) return;
-
-  //   cursorsToRangesStart(editor, ranges);
-
-  //   editor.edit((editBuilder) => {
-  //     ranges.forEach((range) => {
-  //       if (!range) return;
-  //       editBuilder.delete(range);
-  //     });
-  //   });
-
-  //   enterInsertMode(vimState);
-  //   setModeCursorStyle(vimState.mode, editor);
-  //   removeTypeSubscription(vimState);
-  // }),
-  // parseKeysOperator(['y'], operatorRanges, (vimState, editor, ranges, linewise) => {
-  //   if (ranges.every((x) => x === undefined)) return;
-
-  //   yank(vimState, editor, ranges, linewise);
-
-  //   if (vimState.mode === Mode.Visual || vimState.mode === Mode.VisualLine) {
-  //     // Move cursor to start of yanked text
-  //     editor.selections = editor.selections.map((selection) => {
-  //       return new vscode.Selection(selection.start, selection.start);
-  //     });
-
-  //     enterNormalMode(vimState);
-  //     setModeCursorStyle(vimState.mode, editor);
-  //   } else {
-  //     // Yank highlight
-  //     const highlightRanges: vscode.Range[] = [];
-  //     ranges.forEach((range) => {
-  //       if (range) {
-  //         highlightRanges.push(new vscode.Range(range.start, range.end));
-  //       }
-  //     });
-  //     flashYankHighlight(editor, highlightRanges);
-  //   }
-  // }),
-  // parseKeysOperator(['r'], operatorRanges, (vimState, editor, ranges, linewise) => {
-  //   if (ranges.every((x) => x === undefined)) return;
-
-  //   cursorsToRangesStart(editor, ranges);
-
-  //   yank(vimState, editor, ranges, linewise);
-  //   delete_(editor, ranges, linewise);
-
-  //   if (vimState.mode === Mode.Visual || vimState.mode === Mode.VisualLine) {
-  //     enterNormalMode(vimState);
-  //     setModeCursorStyle(vimState.mode, editor);
-  //   }
-  // }),
   // Match Mode
-  parseKeysOperator(['m'], operatorRanges, (vimState, editor, ranges, linewise) => {
+  parseKeysOperator(['m'], operatorRanges, (vimState, editor, ranges) => {
     if (ranges.every((x) => x === undefined)) {
       return;
     }
@@ -89,12 +36,6 @@ export const operators: Action[] = [
         return editor.selections[i];
       }
     });
-
-    if (linewise) {
-      // enterVisualLineMode(vimState);
-    } else {
-      enterVisualMode(vimState);
-    }
 
     setModeCursorStyle(vimState.mode, editor);
   }),

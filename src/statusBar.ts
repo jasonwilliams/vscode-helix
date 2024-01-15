@@ -70,6 +70,8 @@ class StatusBarImpl implements vscode.Disposable {
       case Mode.Normal:
         this.statusBarItem.backgroundColor = undefined;
         return 'NOR';
+      case Mode.Visual:
+        return 'NOR (V)';
       case Mode.Insert:
         return 'INS';
       case Mode.Disabled:

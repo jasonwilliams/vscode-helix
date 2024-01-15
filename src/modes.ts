@@ -37,6 +37,7 @@ export function enterWindowMode(helixState: HelixState): void {
 export function enterVisualMode(helixState: HelixState): void {
   helixState.mode = Mode.Visual;
   setModeContext('extension.helixKeymap.visualMode');
+  helixState.commandLine.setText('', helixState);
 }
 
 export function enterVisualLineMode(helixState: HelixState): void {

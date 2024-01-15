@@ -1,6 +1,6 @@
 {
   "name": "vscode-helix-emulation",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "displayName": "Helix For VS Code",
   "description": "Helix emulation for Visual Studio Code",
   "publisher": "jasew",
@@ -49,12 +49,12 @@
       {
         "key": "shift+5",
         "command": "editor.action.selectAll",
-        "when": "editorTextFocus && extension.helixKeymap.normalMode"
+        "when": "editorTextFocus && (extension.helixKeymap.normalMode || extension.helixKeymap.visualMode)"
       },
       {
         "key": "shift+j",
         "command": "editor.action.joinLines",
-        "when": "editorTextFocus && extension.helixKeymap.normalMode"
+        "when": "editorTextFocus && (extension.helixKeymap.normalMode || extension.helixKeymap.visualMode)"
       },
       {
         "key": "Escape",
@@ -69,17 +69,17 @@
       {
         "key": "ctrl+f",
         "command": "extension.helixKeymap.scrollDownPage",
-        "when": "editorTextFocus && extension.helixKeymap.normalMode"
+        "when": "editorTextFocus && (extension.helixKeymap.normalMode || extension.helixKeymap.visualMode)"
       },
       {
         "key": "ctrl+b",
         "command": "extension.helixKeymap.scrollUpPage",
-        "when": "editorTextFocus && extension.helixKeymap.normalMode"
+        "when": "editorTextFocus && (extension.helixKeymap.normalMode || extension.helixKeymap.visualMode)"
       },
       {
         "key": "ctrl+w",
         "command": "extension.helixKeymap.enterWindowMode",
-        "when": "editorTextFocus && extension.helixKeymap.normalMode"
+        "when": "editorTextFocus && (extension.helixKeymap.normalMode || extension.helixKeymap.visualMode)"
       },
       {
         "key": "backspace",
@@ -104,42 +104,42 @@
       {
         "key": "alt+o",
         "command": "editor.action.smartSelect.expand",
-        "when": "editorTextFocus && extension.helixKeymap.normalMode"
+        "when": "editorTextFocus && (extension.helixKeymap.normalMode || extension.helixKeymap.visualMode)"
       },
       {
         "key": "alt+i",
         "command": "editor.action.smartSelect.shrink",
-        "when": "editorTextFocus && extension.helixKeymap.normalMode"
+        "when": "editorTextFocus && (extension.helixKeymap.normalMode || extension.helixKeymap.visualMode)"
       },
       {
         "key": "ctrl+i",
         "command": "workbench.action.navigateForward",
-        "when": "extension.helixKeymap.normalMode"
+        "when": "(extension.helixKeymap.normalMode || extension.helixKeymap.visualMode)"
       },
       {
         "key": "ctrl+d",
         "command": "extension.helixKeymap.scrollDownHalfPage",
-        "when": "extension.helixKeymap.normalMode"
+        "when": "(extension.helixKeymap.normalMode || extension.helixKeymap.visualMode)"
       },
       {
         "key": "ctrl+u",
         "command": "extension.helixKeymap.scrollUpHalfPage",
-        "when": "extension.helixKeymap.normalMode"
+        "when": "(extension.helixKeymap.normalMode || extension.helixKeymap.visualMode)"
       },
       {
         "key": "ctrl+o",
         "command": "workbench.action.navigateBack",
-        "when": "extension.helixKeymap.normalMode"
+        "when": "(extension.helixKeymap.normalMode || extension.helixKeymap.visualMode)"
       },
       {
         "key": "ctrl+n",
         "command": "workbench.action.quickOpenSelectNext",
-        "when": "inQuickOpen && extension.helixKeymap.normalMode"
+        "when": "inQuickOpen && (extension.helixKeymap.normalMode || extension.helixKeymap.visualMode)"
       },
       {
         "key": "ctrl+p",
         "command": "workbench.action.quickOpenSelectPrevious",
-        "when": "inQuickOpen && extension.helixKeymap.normalMode"
+        "when": "inQuickOpen && (extension.helixKeymap.normalMode || extension.helixKeymap.visualMode)"
       },
       {
         "key": "ctrl+o",
@@ -209,27 +209,27 @@
       {
         "key": "j",
         "command": "list.focusDown",
-        "when": "listFocus && !inputFocus && extension.helixKeymap.normalMode"
+        "when": "listFocus && !inputFocus && (extension.helixKeymap.normalMode || extension.helixKeymap.visualMode)"
       },
       {
         "key": "k",
         "command": "list.focusUp",
-        "when": "listFocus && !inputFocus && extension.helixKeymap.normalMode"
+        "when": "listFocus && !inputFocus && (extension.helixKeymap.normalMode || extension.helixKeymap.visualMode)"
       },
       {
         "key": "l",
         "command": "list.expand",
-        "when": "listFocus && !inputFocus && extension.helixKeymap.normalMode"
+        "when": "listFocus && !inputFocus && (extension.helixKeymap.normalMode || extension.helixKeymap.visualMode)"
       },
       {
         "key": "h",
         "command": "list.collapse",
-        "when": "listFocus && !inputFocus && extension.helixKeymap.normalMode"
+        "when": "listFocus && !inputFocus && (extension.helixKeymap.normalMode || extension.helixKeymap.visualMode)"
       },
       {
         "key": "alt+.",
         "command": "extension.helixKeymap.repeatLastMotion",
-        "when": "editorTextFocus && extension.helixKeymap.normalMode"
+        "when": "editorTextFocus && (extension.helixKeymap.normalMode || extension.helixKeymap.visualMode)"
       },
       {
         "key": "ctrl+w",

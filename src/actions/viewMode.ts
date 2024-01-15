@@ -1,17 +1,17 @@
 import { commands } from 'vscode';
 import { Action } from '../action_types';
+import { enterViewMode } from '../modes';
 import { Mode } from '../modes_types';
 import { parseKeysExact } from '../parse_keys';
-import { enterViewMode } from '../modes';
 
 // https://docs.helix-editor.com/keymap.html#view-mode
 export const viewActions: Action[] = [
-  parseKeysExact(['Z'], [Mode.Normal], (helixState) => {
+  parseKeysExact(['Z'], [Mode.Normal, Mode.Visual], (helixState) => {
     enterViewMode(helixState);
   }),
 
   // align view center
-  parseKeysExact(['z', 'c'], [Mode.Normal], (_, editor) => {
+  parseKeysExact(['z', 'c'], [Mode.Normal, Mode.Visual], (_, editor) => {
     commands.executeCommand('revealLine', {
       lineNumber: editor.selection.active.line,
       at: 'center',
@@ -26,7 +26,7 @@ export const viewActions: Action[] = [
   }),
 
   // align view top
-  parseKeysExact(['z', 't'], [Mode.Normal], (_, editor) => {
+  parseKeysExact(['z', 't'], [Mode.Normal, Mode.Visual], (_, editor) => {
     commands.executeCommand('revealLine', {
       lineNumber: editor.selection.active.line,
       at: 'top',
@@ -41,7 +41,7 @@ export const viewActions: Action[] = [
   }),
 
   // align view bottom
-  parseKeysExact(['z', 'b'], [Mode.Normal], (_, editor) => {
+  parseKeysExact(['z', 'b'], [Mode.Normal, Mode.Visual], (_, editor) => {
     commands.executeCommand('revealLine', {
       lineNumber: editor.selection.active.line,
       at: 'bottom',
@@ -55,7 +55,7 @@ export const viewActions: Action[] = [
     });
   }),
 
-  parseKeysExact(['z', 't'], [Mode.Normal], (_, editor) => {
+  parseKeysExact(['z', 't'], [Mode.Normal, Mode.Visual], (_, editor) => {
     commands.executeCommand('revealLine', {
       lineNumber: editor.selection.active.line,
       at: 'top',
@@ -69,7 +69,7 @@ export const viewActions: Action[] = [
     });
   }),
 
-  parseKeysExact(['z', 'j'], [Mode.Normal], () => {
+  parseKeysExact(['z', 'j'], [Mode.Normal, Mode.Visual], () => {
     commands.executeCommand('scrollLineDown');
   }),
 
@@ -77,7 +77,7 @@ export const viewActions: Action[] = [
     commands.executeCommand('scrollLineDown');
   }),
 
-  parseKeysExact(['z', 'k'], [Mode.Normal], () => {
+  parseKeysExact(['z', 'k'], [Mode.Normal, Mode.Visual], () => {
     commands.executeCommand('scrollLineUp');
   }),
 
@@ -85,7 +85,7 @@ export const viewActions: Action[] = [
     commands.executeCommand('scrollLineUp');
   }),
 
-  parseKeysExact(['z', 'z'], [Mode.Normal], (_, editor) => {
+  parseKeysExact(['z', 'z'], [Mode.Normal, Mode.Visual], (_, editor) => {
     commands.executeCommand('revealLine', {
       lineNumber: editor.selection.active.line,
       at: 'center',
