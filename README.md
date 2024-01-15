@@ -7,7 +7,7 @@
 <img src="./docs/img/Visual_Studio_Code_1.35_icon.png" width=18%>
 </div>
 <br />
-This is a Visual Studio Code implementation of [Helix](https://docs.helix-editor.com) Keybindings and Commands. I created this because I wanted to use Helix in VS Code and was frustrated with the built-in commands not being ergonomic. I didn't want to move fully unto helix and lose the benefits of VS Code, so I decided to create this extension.
+This is a Visual Studio Code implementation of Helix Keybindings and Commands. I created this because I wanted to use Helix in VS Code and was frustrated with the built-in commands not being ergonomic. I didn't want to move fully unto helix and lose the benefits of VS Code, so I decided to create this extension.
 
 It is a work in progress, feel free to raise issues or contribute on the issue tracker.
 
