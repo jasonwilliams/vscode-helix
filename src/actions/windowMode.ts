@@ -103,4 +103,9 @@ export const windowActions: Action[] = [
     commands.executeCommand('workbench.action.moveActiveEditorGroupRight');
     enterNormalMode(helixState);
   }),
+
+  parseKeysExact(['n'], [Mode.Window], (helixState) => {
+    commands.executeCommand('workbench.action.files.newUntitledFile');
+    enterNormalMode(helixState);
+  }),
 ];

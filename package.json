@@ -1,6 +1,6 @@
 {
   "name": "vscode-helix-emulation",
-  "version": "0.4.3",
+  "version": "0.5.0",
   "displayName": "Helix For VS Code",
   "description": "Helix emulation for Visual Studio Code",
   "publisher": "jasew",
@@ -230,6 +230,41 @@
         "key": "alt+.",
         "command": "extension.helixKeymap.repeatLastMotion",
         "when": "editorTextFocus && extension.helixKeymap.normalMode"
+      },
+      {
+        "key": "ctrl+w",
+        "command": "deleteWordLeft",
+        "when": "editorTextFocus && extension.helixKeymap.insertMode"
+      },
+      {
+        "key": "alt+d",
+        "command": "deleteWordRight",
+        "when": "editorTextFocus && extension.helixKeymap.insertMode"
+      },
+      {
+        "key": "alt+d",
+        "command": "deleteWordRight",
+        "when": "editorTextFocus && extension.helixKeymap.insertMode"
+      },
+      {
+        "key": "ctrl+u",
+        "command": "deleteAllLeft",
+        "when": "editorTextFocus && extension.helixKeymap.insertMode"
+      },
+      {
+        "key": "ctrl+l",
+        "command": "deleteAllRight",
+        "when": "editorTextFocus && extension.helixKeymap.insertMode"
+      },
+      {
+        "key": "ctrl+d",
+        "command": "deleteRight",
+        "when": "editorTextFocus && extension.helixKeymap.insertMode"
+      },
+      {
+        "key": "ctrl+h",
+        "command": "deleteLeft",
+        "when": "editorTextFocus && extension.helixKeymap.insertMode"
       }
     ],
     "configuration": {

@@ -7,7 +7,9 @@
 <img src="./docs/img/Visual_Studio_Code_1.35_icon.png" width=18%>
 </div>
 <br />
-This is a fork of an older Helix extension which in itself was a fork of the VSCode Vim extension. So there are still a lot of references to Vim in this source code. It is a work in progress.
+This is a Visual Studio Code implementation of [Helix](https://docs.helix-editor.com) Keybindings and Commands. I created this because I wanted to use Helix in VS Code and was frustrated with the built-in commands not being ergonomic. I didn't want to move fully unto helix and lose the benefits of VS Code, so I decided to create this extension.
+
+It is a work in progress, feel free to raise issues or contribute on the issue tracker.
 
 ## Commands
 
@@ -29,6 +31,12 @@ For added performance, you can try adding the following [setting](https://github
 
 ## Differences
 
+There will be some differences between this extension and native Helix, these will be due:
+
+- Both are visually different and offer different features (such as VS Code having multiple windows and tabs rather than buffers)
+- VS Code not having TreeSitter or an AST, so we need to find other ways of achieving the same action.
+- Additional keybindings to match more how VS Code works
+
 ### Window Mode
 
 Due to VS Code having tabs I've needed to add some new windows modes on top of the current Helix ones, these commands are based
@@ -42,6 +50,7 @@ around movements, (i.e moving the editor from one window to another).
 | `ctrl + w, m, w` | Move editor out into a new window (experimental)        |
 | `ctrl + w, m, j` | Rejoin editor with main window (experimental)           |
 | `ctrl + w, c`    | Close window (alias to ctrl + w, q)                     |
+| `ctrl + w, n`    | New untitled editor (prev ctrl+n/cmd+n in VS Code)      |
 
 Most of the differences will be related to the fact VSCode doesn't have TreeSitter or have access to an AST. So we often need to find other ways of achieving the same action.
 
@@ -62,3 +71,7 @@ Feel free to pick up any of these if you wanted to contribute.
 
 - [#3](https://github.com/jasonwilliams/vscode-helix/issues/3) Commit checkpoints, extensions don't have access to VS Code's back/forward stack. So it would need to have its own stack in memory which can be manipulated.
 - [#4](https://github.com/jasonwilliams/vscode-helix/issues/4) Custom keymaps, currently keymaps are matching Helix
+
+## Insert Mode
+
+- `ctrl + k` (delete to end of line) needs to be `ctrl + l` instead due to it conflicting with VS Code's chord mode which extensions can't turn off.
