@@ -8,8 +8,12 @@ import { delete_ } from './operators';
 
 export const matchActions: Action[] = [
   // Implemenent jump to bracket
-  parseKeysExact(['m', 'm'], [Mode.Normal, Mode.Visual], () => {
+  parseKeysExact(['m', 'm'], [Mode.Normal], () => {
     vscode.commands.executeCommand('editor.action.jumpToBracket');
+  }),
+
+  parseKeysExact(['m', 'm'], [Mode.Visual], () => {
+    vscode.commands.executeCommand('editor.action.selectToBracket');
   }),
 
   // Delete match
