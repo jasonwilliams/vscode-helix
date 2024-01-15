@@ -60,4 +60,9 @@ export function flipSelection(editor: vscode.TextEditor | undefined) {
   }
 
   editor.selections = editor.selections.map((s) => new vscode.Selection(s.active, s.anchor));
+  // When flipping selection the new active position may be off screen, so reveal line to the active location
+  vscode.commands.executeCommand('revealLine', {
+    lineNumber: editor.selection.active.line,
+    at: 'center',
+  });
 }
