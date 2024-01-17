@@ -1,5 +1,3 @@
-<a href="https://marketplace.visualstudio.com/items?itemName=jasew.vscode-helix-emulation">![alt text](https://vsmarketplacebadges.dev/version/jasew.vscode-helix-emulation.svg)</a>
-
 # Helix for VS Code
 
 <div style="display: flex;" align="center">
