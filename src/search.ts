@@ -104,7 +104,7 @@ export class SearchState {
 
     // Add the current selection to the next find match
     if (helixState.mode === Mode.SearchInProgress) {
-      vscode.commands.executeCommand('editor.action.addSelectionToNextFindMatch');
+      vscode.commands.executeCommand('actions.findWithSelection');
     }
 
     if (helixState.mode === Mode.Select) {
