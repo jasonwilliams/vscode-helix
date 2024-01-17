@@ -13,6 +13,29 @@ export class SearchState {
   searchHistoryIndex: number = this.searchHistory.length - 1; // Add this line
   /** Have we just come out of select mode? */
   selectModeActive: boolean = false;
+  /** Last active position before search */
+  lastActivePosition: vscode.Position | undefined;
+
+  // https://github.com/helix-editor/helix/issues/4978
+  getFlags(): string {
+    if (this.searchString.startsWith('(?i)')) {
+      return 'gi';
+    } else if (this.searchString.startsWith('(?-i)')) {
+      return 'g';
+    }
+
+    return this.searchString === this.searchString.toLowerCase() ? 'gi' : 'g';
+  }
+
+  getNormalisedSearchString(): string {
+    if (this.searchString.startsWith('(?i)')) {
+      return this.searchString.slice(4);
+    } else if (this.searchString.startsWith('(?-i)')) {
+      return this.searchString.slice(5);
+    }
+
+    return this.searchString;
+  }
 
   clearSearchString(helixState: HelixState): void {
     this.searchString = '';
@@ -25,22 +48,33 @@ export class SearchState {
       this.enter(helixState);
       return;
     }
+
+    // If we've just started a search, set a marker where we were so we can go back on escape
+    if (this.searchString === '') {
+      this.lastActivePosition = helixState.editorState.activeEditor?.selection.active;
+    }
+
     this.searchString += char;
     helixState.commandLine.setText(this.searchString, helixState);
     if (helixState.mode === Mode.Select) {
-      this.findInstancesInRange(helixState, this.searchString);
+      this.findInstancesInRange(helixState);
     } else {
-      this.findInstancesInDocument(helixState, this.searchString);
+      this.findInstancesInDocument(helixState);
     }
   }
 
   addText(helixState: HelixState, text: string): void {
+    // If we've just started a search, set a marker where we were so we can go back on escape
+    if (this.searchString === '') {
+      this.lastActivePosition = helixState.editorState.activeEditor?.selection.active;
+    }
+
     this.searchString += text;
     helixState.commandLine.setText(this.searchString, helixState);
     if (helixState.mode === Mode.Select) {
-      this.findInstancesInRange(helixState, this.searchString);
+      this.findInstancesInRange(helixState);
     } else {
-      this.findInstancesInDocument(helixState, this.searchString);
+      this.findInstancesInDocument(helixState);
     }
   }
 
@@ -49,9 +83,9 @@ export class SearchState {
     this.searchString = this.searchString.slice(0, -1);
     helixState.commandLine.setText(this.searchString, helixState);
     if (this.searchString && helixState.mode === Mode.Select) {
-      this.findInstancesInRange(helixState, this.searchString);
+      this.findInstancesInRange(helixState);
     } else if (this.searchString) {
-      this.findInstancesInDocument(helixState, this.searchString);
+      this.findInstancesInDocument(helixState);
     }
   }
 
@@ -83,28 +117,38 @@ export class SearchState {
     enterNormalMode(helixState);
   }
 
-  findInstancesInDocument(helixState: HelixState, searchString: string): void {
+  findInstancesInDocument(helixState: HelixState): void {
     const editor = helixState.editorState.activeEditor;
     if (editor) {
       const document = editor.document;
-      const foundRanges: vscode.Range[] = [];
-      const searchRegex = new RegExp(searchString, 'g');
+      const flags = this.getFlags();
+      const searchRegex = new RegExp(this.getNormalisedSearchString(), flags);
       const match = searchRegex.exec(document.getText());
+      let startPos: vscode.Position | undefined;
+      let endPos: vscode.Position | undefined;
       if (match) {
-        const startPos = document.positionAt(match.index);
-        const endPos = document.positionAt(match.index + match[0].length);
-        foundRanges.push(new vscode.Range(startPos, endPos));
+        startPos = document.positionAt(match.index);
+        endPos = document.positionAt(match.index + match[0].length);
+        editor.selection = new vscode.Selection(startPos, endPos);
+        // We should also move the viewport to our match if there is one
+        editor.revealRange(new vscode.Range(startPos, endPos));
+      } else {
+        // If we can't find a match view the last saved position
+        if (this.lastActivePosition) {
+          editor.selection = new vscode.Selection(this.lastActivePosition, this.lastActivePosition);
+          editor.revealRange(new vscode.Range(this.lastActivePosition, this.lastActivePosition));
+        }
       }
-      editor.selections = foundRanges.map((range) => new vscode.Selection(range.start, range.end));
     }
   }
 
-  findInstancesInRange(helixState: HelixState, searchString: string): void {
+  findInstancesInRange(helixState: HelixState): void {
     const editor = helixState.editorState.activeEditor;
     if (editor) {
       const document = editor.document;
       const foundRanges: vscode.Range[] = [];
-      const searchRegex = new RegExp(searchString, 'g');
+      const flags = this.getFlags();
+      const searchRegex = new RegExp(this.getNormalisedSearchString(), flags);
       let match;
       while ((match = searchRegex.exec(document.getText()))) {
         const startPos = document.positionAt(match.index);
@@ -124,7 +168,7 @@ export class SearchState {
       this.searchString = this.searchHistory[this.searchHistoryIndex] || '';
       this.searchHistoryIndex = Math.max(this.searchHistoryIndex - 1, 0); // Add this line
       helixState.commandLine.setText(this.searchString, helixState);
-      this.findInstancesInDocument(helixState, this.searchString);
+      this.findInstancesInDocument(helixState);
     }
   }
 
@@ -133,7 +177,7 @@ export class SearchState {
       this.searchString = this.searchHistory[this.searchHistoryIndex] || '';
       this.searchHistoryIndex = Math.min(this.searchHistoryIndex + 1, this.searchHistory.length - 1); // Add this line
       helixState.commandLine.setText(this.searchString, helixState);
-      this.findInstancesInDocument(helixState, this.searchString);
+      this.findInstancesInDocument(helixState);
     }
   }
 }

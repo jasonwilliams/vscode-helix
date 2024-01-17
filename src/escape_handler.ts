@@ -49,6 +49,17 @@ export function escapeHandler(vimState: HelixState): void {
   } else if (vimState.mode === Mode.SearchInProgress || vimState.mode === Mode.Select) {
     enterNormalMode(vimState);
     vimState.searchState.clearSearchString(vimState);
+    // To match Helix UI go back to the last active position on escape
+    if (vimState.searchState.lastActivePosition) {
+      editor.selection = new vscode.Selection(
+        vimState.searchState.lastActivePosition,
+        vimState.searchState.lastActivePosition,
+      );
+      vimState.editorState.activeEditor?.revealRange(
+        editor.selection,
+        vscode.TextEditorRevealType.InCenterIfOutsideViewport,
+      );
+    }
   } else if (vimState.mode === Mode.View) {
     enterNormalMode(vimState);
   }

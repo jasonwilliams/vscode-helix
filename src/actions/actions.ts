@@ -87,6 +87,18 @@ export const actions: Action[] = [
     vscode.commands.executeCommand('deleteRight');
   }),
 
+  parseKeysExact(['>'], [Mode.Normal, Mode.Visual], (_) => {
+    vscode.commands.executeCommand('editor.action.indentLines');
+  }),
+
+  parseKeysExact(['<'], [Mode.Normal, Mode.Visual], (_) => {
+    vscode.commands.executeCommand('editor.action.outdentLines');
+  }),
+
+  parseKeysExact(['='], [Mode.Normal, Mode.Visual], (_) => {
+    vscode.commands.executeCommand('editor.action.formatSelection');
+  }),
+
   // 	replace
   parseKeysRegex(/^r(.)/, /^r/, [Mode.Normal], (helixState, editor, match) => {
     const position = editor.selection.active;
