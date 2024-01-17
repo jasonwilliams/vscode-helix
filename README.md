@@ -1,3 +1,5 @@
+<a href="https://marketplace.visualstudio.com/items?itemName=jasew.vscode-helix-emulation">![alt text](https://vsmarketplacebadges.dev/version/jasew.vscode-helix-emulation.svg)</a>
+
 # Helix for VS Code
 
 <div style="display: flex;" align="center">
@@ -10,6 +12,10 @@
 This is a Visual Studio Code implementation of Helix Keybindings and Commands. I created this because I wanted to use Helix in VS Code and was frustrated with the built-in commands not being ergonomic. I didn't want to move fully unto helix and lose the benefits of VS Code, so I decided to create this extension.
 
 It is a work in progress, feel free to raise issues or contribute on the issue tracker.
+
+## Installation
+
+You can find the extension on the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=jasew.vscode-helix-emulation).
 
 ## Commands
 
