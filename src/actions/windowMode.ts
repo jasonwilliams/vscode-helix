@@ -108,4 +108,9 @@ export const windowActions: Action[] = [
     commands.executeCommand('workbench.action.files.newUntitledFile');
     enterNormalMode(helixState);
   }),
+
+  parseKeysExact(['b'], [Mode.Window], (helixState) => {
+    commands.executeCommand('workbench.action.toggleSidebarVisibility');
+    enterNormalMode(helixState);
+  }),
 ];

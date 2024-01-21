@@ -48,7 +48,7 @@ export const matchActions: Action[] = [
   }),
 
   // implement match replace to selection
-  parseKeysRegex(/^mr(.)(.)$/, /^mr?(.)?/, [Mode.Normal, Mode.Visual], (helixState, editor, match) => {
+  parseKeysRegex(/^mr(.)(.)$/, /^mr(.)?/, [Mode.Normal, Mode.Visual], (helixState, editor, match) => {
     const original = match[1];
     const replacement = match[2];
     const [startCharOrig, endCharOrig] = getMatchPairs(original);
@@ -75,7 +75,7 @@ export const matchActions: Action[] = [
   }),
 
   // implement match delete character
-  parseKeysRegex(/^md(.)$/, /^md?/, [Mode.Normal, Mode.Visual], (helixState, editor, match) => {
+  parseKeysRegex(/^md(.)$/, /^md/, [Mode.Normal, Mode.Visual], (helixState, editor, match) => {
     const char = match[1];
     const [startChar, endChar] = getMatchPairs(char);
     const num = helixState.resolveCount();

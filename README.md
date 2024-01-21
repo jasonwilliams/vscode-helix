@@ -55,6 +55,7 @@ around movements, (i.e moving the editor from one window to another).
 | `ctrl + w, m, j` | Rejoin editor with main window (experimental)           |
 | `ctrl + w, c`    | Close window (alias to ctrl + w, q)                     |
 | `ctrl + w, n`    | New untitled editor (prev ctrl+n/cmd+n in VS Code)      |
+| `ctrl + w, b`    | Toggle sidebar visibility (prev ctrl+b in VS Code)      |
 
 Most of the differences will be related to the fact VSCode doesn't have TreeSitter or have access to an AST. So we often need to find other ways of achieving the same action.
 
