@@ -1,6 +1,6 @@
 {
   "name": "vscode-helix-emulation",
-  "version": "0.5.6",
+  "version": "0.5.7",
   "displayName": "Helix For VS Code",
   "description": "Helix emulation for Visual Studio Code",
   "publisher": "jasew",
@@ -24,6 +24,7 @@
     "Keymaps"
   ],
   "main": "./dist/index.js",
+  "browser": "./dist/browser.js",
   "icon": "docs/img/helixLogo.png",
   "files": [
     "dist"
@@ -32,7 +33,7 @@
     "vscode": "^1.83.1"
   },
   "activationEvents": [
-    "*"
+    "onStartupFinished"
   ],
   "contributes": {
     "commands": [
