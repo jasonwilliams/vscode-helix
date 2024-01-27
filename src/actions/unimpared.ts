@@ -20,6 +20,18 @@ export const unimparedActions: Action[] = [
     commands.executeCommand('editor.action.marker.prevInFiles');
   }),
 
+  parseKeysExact(['[', 'g'], [Mode.Normal], () => {
+    // There is no way to check if we're in compare editor mode or not so i need to call both commands
+    commands.executeCommand('workbench.action.compareEditor.previousChange');
+    commands.executeCommand('workbench.action.editor.previousChange');
+  }),
+
+  parseKeysExact([']', 'g'], [Mode.Normal], () => {
+    // There is no way to check if we're in compare editor mode or not so i need to call both commands
+    commands.executeCommand('workbench.action.compareEditor.nextChange');
+    commands.executeCommand('workbench.action.editor.nextChange');
+  }),
+
   parseKeysExact([']', 'f'], [Mode.Normal], (helixState, editor) => {
     const range = helixState.symbolProvider.getNextFunctionRange(editor);
     if (range) {

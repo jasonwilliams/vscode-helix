@@ -68,6 +68,7 @@ function setModeContext(key: string) {
     'extension.helixKeymap.searchMode',
     'extension.helixKeymap.selectMode',
     'extension.helixKeymap.viewMode',
+    'extension.helixKeymap.disabledMode',
   ];
 
   modeKeys.forEach((modeKey) => {

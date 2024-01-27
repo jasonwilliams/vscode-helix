@@ -39,11 +39,13 @@
     "commands": [
       {
         "command": "extension.helixKeymap.enterDisabledMode",
-        "title": "Disable Helix"
+        "title": "Disable Helix",
+        "enablement": "!extension.helixKeymap.disabledMode"
       },
       {
         "command": "extension.helixKeymap.enableHelix",
-        "title": "Enable Helix"
+        "title": "Enable Helix",
+        "enablement": "extension.helixKeymap.disabledMode"
       }
     ],
     "keybindings": [
@@ -266,6 +268,11 @@
         "key": "ctrl+h",
         "command": "deleteLeft",
         "when": "editorTextFocus && extension.helixKeymap.insertMode"
+      },
+      {
+        "key": "ctrl+x",
+        "command": "acceptSelectedSuggestion",
+        "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && extension.helixKeymap.insertMode"
       }
     ],
     "configuration": {
