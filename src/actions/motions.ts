@@ -19,16 +19,24 @@ import { whitespaceWordRanges, wordRanges } from '../word_utils';
 import KeyMap from './keymaps';
 
 export const motions: Action[] = [
-  parseKeysExact([KeyMap.Motions.MoveRight], [Mode.Normal, Mode.Visual], (vimState, editor) => {
+  parseKeysExact([KeyMap.Motions.MoveRight], [Mode.Visual], (vimState, editor) => {
     execMotion(vimState, editor, ({ document, position }) => {
       return positionUtils.rightNormal(document, position, vimState.resolveCount());
     });
   }),
 
-  parseKeysExact([KeyMap.Motions.MoveLeft], [Mode.Normal, Mode.Visual], (vimState, editor) => {
+  parseKeysExact([KeyMap.Motions.MoveLeft], [Mode.Visual], (vimState, editor) => {
     execMotion(vimState, editor, ({ position }) => {
       return positionUtils.left(position, vimState.resolveCount());
     });
+  }),
+
+  parseKeysExact([KeyMap.Motions.MoveRight], [Mode.Normal], () => {
+    vscode.commands.executeCommand('cursorRight');
+  }),
+
+  parseKeysExact([KeyMap.Motions.MoveLeft], [Mode.Normal], () => {
+    vscode.commands.executeCommand('cursorLeft');
   }),
 
   parseKeysExact([KeyMap.Motions.MoveUp], [Mode.Normal], (_vimState, _editor) => {
