@@ -4,12 +4,14 @@ import { HelixState } from './helix_state_types';
 import { Mode } from './modes_types';
 import { removeTypeSubscription } from './type_subscription';
 
-export function enterInsertMode(helixState: HelixState): void {
+export function enterInsertMode(helixState: HelixState, before = true): void {
   // To fix https://github.com/jasonwilliams/vscode-helix/issues/14 we should clear selections on entering insert mode
   // Helix doesn't clear selections on insert but doesn't overwrite the selection either, so our best option is to just clear them
   const editor = helixState.editorState.activeEditor!;
-  const activeSelection = editor.selection.active;
-  editor.selections = [new vscode.Selection(activeSelection, activeSelection)];
+  editor.selections = editor.selections.map((selection) => {
+    const position = before ? selection.anchor : selection.active;
+    return new vscode.Selection(position, position);
+  });
 
   helixState.mode = Mode.Insert;
   setModeContext('extension.helixKeymap.insertMode');

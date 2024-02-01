@@ -131,12 +131,7 @@ export const actions: Action[] = [
   }),
 
   parseKeysExact(['a'], [Mode.Normal], (vimState, editor) => {
-    editor.selections = editor.selections.map((selection) => {
-      const newPosition = positionUtils.right(editor.document, selection.active);
-      return new vscode.Selection(newPosition, newPosition);
-    });
-
-    enterInsertMode(vimState);
+    enterInsertMode(vimState, false);
     setModeCursorStyle(vimState.mode, editor);
     removeTypeSubscription(vimState);
   }),
