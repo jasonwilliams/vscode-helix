@@ -273,6 +273,11 @@
         "key": "ctrl+x",
         "command": "acceptSelectedSuggestion",
         "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && extension.helixKeymap.insertMode"
+      },
+      {
+        "key": "alt+OEM_8",
+        "command": "extension.helixKeymap.switchToUppercase",
+        "when": "true"
       }
     ],
     "configuration": {

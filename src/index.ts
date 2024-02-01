@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 
 import { symbolProvider } from './SymbolProvider';
+import { switchToUppercase } from './actions/actions';
 import { commandLine } from './commandLine';
 import { escapeHandler } from './escape_handler';
 import { onDidChangeActiveTextEditor, onDidChangeTextDocument } from './eventHandlers';
@@ -86,6 +87,9 @@ export function activate(context: vscode.ExtensionContext): void {
     }),
     vscode.commands.registerCommand('extension.helixKeymap.repeatLastMotion', () => {
       globalhelixState.repeatLastMotion(globalhelixState, vscode.window.activeTextEditor!);
+    }),
+    vscode.commands.registerCommand('extension.helixKeymap.switchToUppercase', () => {
+      switchToUppercase(vscode.window.activeTextEditor!);
     }),
   );
 

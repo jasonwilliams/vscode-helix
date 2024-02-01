@@ -99,6 +99,29 @@ export const actions: Action[] = [
     vscode.commands.executeCommand('editor.action.formatSelection');
   }),
 
+  parseKeysExact(['`'], [Mode.Normal], (vimState, editor) => {
+    // Take the selection and make it all lowercase
+    editor.edit((editBuilder) => {
+      editor.selections.forEach((selection) => {
+        const text = editor.document.getText(selection);
+        editBuilder.replace(selection, text.toLowerCase());
+      });
+    });
+  }),
+
+  parseKeysExact(['~'], [Mode.Normal], (vimState, editor) => {
+    // Switch the case of the selection (so if upper case make lower case and vice versa)
+    editor.edit((editBuilder) => {
+      editor.selections.forEach((selection) => {
+        const text = editor.document.getText(selection);
+        editBuilder.replace(
+          selection,
+          text.replace(/./g, (c) => (c === c.toUpperCase() ? c.toLowerCase() : c.toUpperCase())),
+        );
+      });
+    });
+  }),
+
   // 	replace
   parseKeysRegex(/^r(.)/, /^r/, [Mode.Normal], (helixState, editor, match) => {
     const position = editor.selection.active;
@@ -430,4 +453,13 @@ function yankLine(vimState: HelixState, editor: vscode.TextEditor): void {
     }),
     linewise: true,
   };
+}
+
+export function switchToUppercase(editor: vscode.TextEditor): void {
+  editor.edit((editBuilder) => {
+    editor.selections.forEach((selection) => {
+      const text = editor.document.getText(selection);
+      editBuilder.replace(selection, text.toUpperCase());
+    });
+  });
 }
