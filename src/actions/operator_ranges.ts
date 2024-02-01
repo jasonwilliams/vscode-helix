@@ -304,8 +304,9 @@ function createInnerBracketHandler(
   openingChar: string,
   closingChar: string,
 ): (vimState: HelixState, document: vscode.TextDocument, position: vscode.Position) => vscode.Range | undefined {
-  return (vimState, document, position) => {
-    const bracketRange = getBracketRange(document, position, openingChar, closingChar);
+  return (helixState, document, position) => {
+    const count = helixState.resolveCount();
+    const bracketRange = getBracketRange(document, position, openingChar, closingChar, count);
 
     if (bracketRange) {
       return new vscode.Range(
@@ -324,8 +325,9 @@ function createOuterBracketHandler(
   openingChar: string,
   closingChar: string,
 ): (vimState: HelixState, document: vscode.TextDocument, position: vscode.Position) => vscode.Range | undefined {
-  return (vimState, document, position) => {
-    const bracketRange = getBracketRange(document, position, openingChar, closingChar);
+  return (helixState, document, position) => {
+    const count = helixState.resolveCount();
+    const bracketRange = getBracketRange(document, position, openingChar, closingChar, count);
 
     if (bracketRange) {
       return new vscode.Range(bracketRange.start, bracketRange.end.with({ character: bracketRange.end.character + 1 }));
@@ -340,6 +342,7 @@ function getBracketRange(
   position: vscode.Position,
   openingChar: string,
   closingChar: string,
+  offset?: number,
 ): vscode.Range | undefined {
   const lineText = document.lineAt(position.line).text;
   const currentChar = lineText[position.character];
@@ -348,13 +351,19 @@ function getBracketRange(
   let end;
   if (currentChar === openingChar) {
     start = position;
-    end = searchForwardBracket(document, openingChar, closingChar, positionUtils.rightWrap(document, position));
+    end = searchForwardBracket(document, openingChar, closingChar, positionUtils.rightWrap(document, position), offset);
   } else if (currentChar === closingChar) {
-    start = searchBackwardBracket(document, openingChar, closingChar, positionUtils.leftWrap(document, position));
+    start = searchBackwardBracket(
+      document,
+      openingChar,
+      closingChar,
+      positionUtils.leftWrap(document, position),
+      offset,
+    );
     end = position;
   } else {
-    start = searchBackwardBracket(document, openingChar, closingChar, position);
-    end = searchForwardBracket(document, openingChar, closingChar, position);
+    start = searchBackwardBracket(document, openingChar, closingChar, position, offset);
+    end = searchForwardBracket(document, openingChar, closingChar, position, offset);
   }
 
   if (start && end) {
@@ -507,17 +516,18 @@ function createOuterWordHandler(
  * This should ensure that we're fetching the nearest bracket pair.
  **/
 function createInnerMatchHandler(): (
-  vimState: HelixState,
+  helixState: HelixState,
   document: vscode.TextDocument,
   position: vscode.Position,
 ) => vscode.Range | undefined {
-  return (_, document, position) => {
+  return (helixState, document, position) => {
+    const count = helixState.resolveCount();
     // Get all ranges from our position then reduce down to the shortest one
     const bracketRange = [
-      getBracketRange(document, position, '(', ')'),
-      getBracketRange(document, position, '{', '}'),
-      getBracketRange(document, position, '<', '>'),
-      getBracketRange(document, position, '[', ']'),
+      getBracketRange(document, position, '(', ')', count),
+      getBracketRange(document, position, '{', '}', count),
+      getBracketRange(document, position, '<', '>', count),
+      getBracketRange(document, position, '[', ']', count),
     ].reduce((acc, range) => {
       if (range) {
         if (!acc) {

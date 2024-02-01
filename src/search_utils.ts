@@ -55,15 +55,18 @@ export function searchForwardBracket(
   openingChar: string,
   closingChar: string,
   fromPosition: vscode.Position,
+  offset?: number,
 ): vscode.Position | undefined {
-  let n = 0;
+  let n = offset ? offset - 1 : 0;
 
   for (let i = fromPosition.line; i < document.lineCount; ++i) {
     const lineText = document.lineAt(i).text;
     const fromIndex = i === fromPosition.line ? fromPosition.character : 0;
 
     for (let j = fromIndex; j < lineText.length; ++j) {
-      if (lineText[j] === openingChar) {
+      // If closing and opening are the same, don't bother deducting n
+      // However if they are different, we need to deduct n when we see an opening char
+      if (lineText[j] === openingChar && openingChar !== closingChar) {
         ++n;
       } else if (lineText[j] === closingChar) {
         if (n === 0) {
@@ -83,15 +86,18 @@ export function searchBackwardBracket(
   openingChar: string,
   closingChar: string,
   fromPosition: vscode.Position,
+  offset?: number,
 ): vscode.Position | undefined {
-  let n = 0;
+  let n = offset ? offset - 1 : 0;
 
   for (let i = fromPosition.line; i >= 0; --i) {
     const lineText = document.lineAt(i).text;
     const fromIndex = i === fromPosition.line ? fromPosition.character : lineText.length - 1;
 
     for (let j = fromIndex; j >= 0; --j) {
-      if (lineText[j] === closingChar) {
+      // If closing and opening are the same, don't bother deducting n
+      // However if they are different, we need to deduct n when we see an opening char
+      if (lineText[j] === closingChar && closingChar !== openingChar) {
         ++n;
       } else if (lineText[j] === openingChar) {
         if (n === 0) {

@@ -3,6 +3,7 @@ import { Action } from '../action_types';
 import { enterInsertMode, setModeCursorStyle } from '../modes';
 import { Mode } from '../modes_types';
 import { parseKeysExact, parseKeysRegex } from '../parse_keys';
+import { searchBackwardBracket, searchForwardBracket } from '../search_utils';
 import { removeTypeSubscription } from '../type_subscription';
 import { delete_ } from './operators';
 
@@ -55,8 +56,20 @@ export const matchActions: Action[] = [
     const [startCharNew, endCharNew] = getMatchPairs(replacement);
     const num = helixState.resolveCount();
 
-    const forwardPosition = searchFowardForChar(endCharOrig, editor.selection.active, num);
-    const backwardPosition = searchBackwardForChar(startCharOrig, editor.selection.active, num);
+    const forwardPosition = searchForwardBracket(
+      editor.document,
+      startCharOrig,
+      endCharOrig,
+      editor.selection.active,
+      num,
+    );
+    const backwardPosition = searchBackwardBracket(
+      editor.document,
+      startCharOrig,
+      endCharOrig,
+      editor.selection.active,
+      num,
+    );
 
     if (forwardPosition === undefined || backwardPosition === undefined) return;
 
@@ -80,8 +93,8 @@ export const matchActions: Action[] = [
     const [startChar, endChar] = getMatchPairs(char);
     const num = helixState.resolveCount();
 
-    const forwardPosition = searchFowardForChar(endChar, editor.selection.active, num);
-    const backwardPosition = searchBackwardForChar(startChar, editor.selection.active, num);
+    const forwardPosition = searchForwardBracket(editor.document, startChar, endChar, editor.selection.active, num);
+    const backwardPosition = searchBackwardBracket(editor.document, startChar, endChar, editor.selection.active, num);
 
     if (forwardPosition === undefined || backwardPosition === undefined) return;
 
@@ -97,58 +110,6 @@ export const matchActions: Action[] = [
     });
   }),
 ];
-
-const searchFowardForChar = (char: string, fromPosition: vscode.Position, num: number): vscode.Position | undefined => {
-  const editor = vscode.window.activeTextEditor;
-  if (!editor) return;
-  const document = editor.document;
-  // num starts at 1 so we should drop down to 0, as 1 is the default
-  // even if count wasn't specified
-  let count = --num;
-
-  for (let i = fromPosition.line; i < document.lineCount; ++i) {
-    const lineText = document.lineAt(i).text;
-    const fromIndex = i === fromPosition.line ? fromPosition.character : 0;
-
-    for (let j = fromIndex; j < lineText.length; ++j) {
-      if (lineText[j] === char && count === 0) {
-        return new vscode.Position(i, j);
-      } else if (lineText[j] === char) {
-        --count;
-      }
-    }
-  }
-
-  return undefined;
-};
-
-const searchBackwardForChar = (
-  char: string,
-  fromPosition: vscode.Position,
-  num: number,
-): vscode.Position | undefined => {
-  const editor = vscode.window.activeTextEditor;
-  if (!editor) return;
-  const document = editor.document;
-  // num starts at 1 so we should drop down to 0, as 1 is the default
-  // even if count wasn't specified
-  let count = --num;
-
-  for (let i = fromPosition.line; i >= 0; --i) {
-    const lineText = document.lineAt(i).text;
-    const fromIndex = i === fromPosition.line ? fromPosition.character : lineText.length - 1;
-
-    for (let j = fromIndex; j >= 0; --j) {
-      if (lineText[j] === char && count === 0) {
-        return new vscode.Position(i, j);
-      } else if (lineText[j] === char) {
-        --count;
-      }
-    }
-  }
-
-  return undefined;
-};
 
 const getMatchPairs = (char: string) => {
   let startChar: string;
