@@ -277,7 +277,17 @@
       {
         "key": "alt+OEM_8",
         "command": "extension.helixKeymap.switchToUppercase",
-        "when": "true"
+        "when": "(extension.helixKeymap.normalMode || extension.helixKeymap.visualMode)"
+      },
+      {
+        "key": "ctrl+a",
+        "command": "extension.helixKeymap.increment",
+        "when": "(extension.helixKeymap.normalMode || extension.helixKeymap.visualMode)"
+      },
+      {
+        "key": "ctrl+x",
+        "command": "extension.helixKeymap.decrement",
+        "when": "(extension.helixKeymap.normalMode || extension.helixKeymap.visualMode)"
       }
     ],
     "configuration": {

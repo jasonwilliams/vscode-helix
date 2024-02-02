@@ -463,3 +463,33 @@ export function switchToUppercase(editor: vscode.TextEditor): void {
     });
   });
 }
+
+export function incremenet(editor: vscode.TextEditor): void {
+  // Move the cursor to the first number and incremene the number
+  // If the cursor is not on a number, then do nothing
+  editor.edit((editBuilder) => {
+    editor.selections.forEach((selection) => {
+      const translatedSelection = selection.with(selection.start, selection.start.translate(0, 1));
+      const text = editor.document.getText(translatedSelection);
+      const number = parseInt(text, 10);
+      if (!isNaN(number)) {
+        editBuilder.replace(translatedSelection, (number + 1).toString());
+      }
+    });
+  });
+}
+
+export function decrement(editor: vscode.TextEditor): void {
+  // Move the cursor to the first number and incremene the number
+  // If the cursor is not on a number, then do nothing
+  editor.edit((editBuilder) => {
+    editor.selections.forEach((selection) => {
+      const translatedSelection = selection.with(selection.start, selection.start.translate(0, 1));
+      const text = editor.document.getText(translatedSelection);
+      const number = parseInt(text, 10);
+      if (!isNaN(number)) {
+        editBuilder.replace(translatedSelection, (number - 1).toString());
+      }
+    });
+  });
+}
