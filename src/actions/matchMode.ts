@@ -5,7 +5,7 @@ import { Mode } from '../modes_types';
 import { parseKeysExact, parseKeysRegex } from '../parse_keys';
 import { searchBackwardBracket, searchForwardBracket } from '../search_utils';
 import { removeTypeSubscription } from '../type_subscription';
-import { delete_ } from './operators';
+import { delete_, yank } from './operators';
 
 export const matchActions: Action[] = [
   // Implemenent jump to bracket
@@ -18,8 +18,9 @@ export const matchActions: Action[] = [
   }),
 
   // Delete match
-  parseKeysExact(['d'], [Mode.Normal, Mode.Visual], (_, editor) => {
+  parseKeysExact(['d'], [Mode.Normal, Mode.Visual], (helixState, editor) => {
     const ranges = editor.selections.map((selection) => selection.with());
+    yank(helixState, editor, ranges, false);
     delete_(editor, ranges, false);
   }),
 

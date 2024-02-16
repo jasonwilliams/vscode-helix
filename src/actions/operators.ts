@@ -73,6 +73,11 @@ function cursorsToRangesStart(editor: vscode.TextEditor, ranges: readonly (vscod
 }
 
 export function delete_(editor: vscode.TextEditor, ranges: (vscode.Range | undefined)[], linewise: boolean) {
+  if (ranges.length === 1 && ranges[0] && isEmptyRange(ranges[0])) {
+    vscode.commands.executeCommand('deleteRight');
+    return;
+  }
+
   editor
     .edit((editBuilder) => {
       ranges.forEach((range) => {
@@ -132,4 +137,16 @@ export function yank(
     }),
     linewise: linewise,
   };
+}
+
+// detect if a range is covering just a single character
+function isEmptyRange(range: vscode.Range) {
+  return range.start.line === range.end.line && range.start.character === range.end.character;
+}
+
+// detect if the range spans a whole line and only one line
+// Theres a weird issue where the cursor jumps to the next line when doing expand line selection
+// https://github.com/microsoft/vscode/issues/118015#issuecomment-854964022
+export function isSingleLineRange(range: vscode.Range): boolean {
+  return range.start.line === range.end.line && range.start.character === 0 && range.end.character === 0;
 }

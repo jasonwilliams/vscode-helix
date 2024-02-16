@@ -3,6 +3,7 @@ import { Action } from '../action_types';
 import { HelixState } from '../helix_state_types';
 import {
   enterInsertMode,
+  enterNormalMode,
   enterSearchMode,
   enterSelectMode,
   enterVisualLineMode,
@@ -19,7 +20,7 @@ import { flashYankHighlight } from '../yank_highlight';
 import { gotoActions } from './gotoMode';
 import KeyMap from './keymaps';
 import { matchActions } from './matchMode';
-import { yank } from './operators';
+import { isSingleLineRange, yank } from './operators';
 import { spaceActions } from './spaceMode';
 import { unimparedActions } from './unimpared';
 import { viewActions } from './viewMode';
@@ -81,10 +82,6 @@ export const actions: Action[] = [
 
   parseKeysExact(['*'], [Mode.Normal], (_) => {
     vscode.commands.executeCommand('actions.findWithSelection');
-  }),
-
-  parseKeysExact(['d'], [Mode.Normal], (_) => {
-    vscode.commands.executeCommand('deleteRight');
   }),
 
   parseKeysExact(['>'], [Mode.Normal, Mode.Visual], (_) => {
@@ -306,8 +303,14 @@ export const actions: Action[] = [
   parseKeysExact(['y'], [Mode.Normal, Mode.Visual], (vimState, editor) => {
     // Yank highlight
     const highlightRanges = editor.selections.map((selection) => selection.with());
+
+    // We need to detect if the ranges are lines because we need to handle them differently
+    highlightRanges.every((range) => isSingleLineRange(range));
     yank(vimState, editor, highlightRanges, false);
     flashYankHighlight(editor, highlightRanges);
+    if (vimState.mode === Mode.Visual) {
+      enterNormalMode(vimState);
+    }
   }),
 
   parseKeysExact(['q', 'q'], [Mode.Normal, Mode.Visual], () => {
