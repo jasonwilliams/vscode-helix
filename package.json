@@ -245,11 +245,6 @@
         "when": "editorTextFocus && extension.helixKeymap.insertMode"
       },
       {
-        "key": "alt+d",
-        "command": "deleteWordRight",
-        "when": "editorTextFocus && extension.helixKeymap.insertMode"
-      },
-      {
         "key": "ctrl+u",
         "command": "deleteAllLeft",
         "when": "editorTextFocus && extension.helixKeymap.insertMode"
@@ -313,6 +308,17 @@
     "format": "prettier --write --plugin-search-dir=. src",
     "typecheck": "tsc --noEmit",
     "release": "bumpp && npm run publish"
+  },
+  "dependencies": {
+    "parsimmon": "^1.18.1",
+    "path-browserify": "1.0.1",
+    "os-browserify": "0.3.0",
+    "untildify": "4.0.0",
+    "process": "0.11.10",
+    "util": "0.12.5",
+    "lodash": "^4.17.21",
+    "diff-match-patch": "^1.0.5",
+    "queue": "^7.0.0"
   },
   "devDependencies": {
     "@types/http-errors": "^1.8.0",

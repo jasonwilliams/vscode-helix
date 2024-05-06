@@ -9,6 +9,11 @@
     "strictNullChecks": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "skipDefaultLibCheck": true
+    "skipDefaultLibCheck": true,
+    "experimentalDecorators": true,
+    "baseUrl": ".",
+    "paths": {
+      "platform/*": ["src/platform/node/*"]
+    }
   }
 }
