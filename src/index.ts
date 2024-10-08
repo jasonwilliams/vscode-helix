@@ -63,6 +63,9 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand('extension.helixKeymap.backspaceSearchMode', () => {
       globalhelixState.searchState.backspace(globalhelixState);
     }),
+    vscode.commands.registerCommand('extension.helixKeymap.backspaceCommandMode', () => {
+      globalhelixState.commandLine.backspace(globalhelixState);
+    }),
     vscode.commands.registerCommand('extension.helixKeymap.nextSearchResult', () =>
       globalhelixState.searchState.nextSearchResult(globalhelixState),
     ),
