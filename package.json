@@ -26,9 +26,6 @@
   "main": "./dist/index.js",
   "browser": "./dist/browser.js",
   "icon": "docs/img/helixLogo.png",
-  "files": [
-    "dist"
-  ],
   "engines": {
     "vscode": "^1.83.1"
   },
