@@ -90,6 +90,11 @@
         "when": "editorTextFocus && (extension.helixKeymap.searchMode || extension.helixKeymap.selectMode)"
       },
       {
+        "key": "backspace",
+        "command": "extension.helixKeymap.backspaceCommandMode",
+        "when": "extension.helixKeymap.commandMode"
+      },
+      {
         "key": "enter",
         "command": "extension.helixKeymap.exitSearchMode",
         "when": "editorTextFocus && (extension.helixKeymap.searchMode || extension.helixKeymap.selectMode)"

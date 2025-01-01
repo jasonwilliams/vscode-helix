@@ -5,6 +5,7 @@ import {
   enterInsertMode,
   enterNormalMode,
   enterSearchMode,
+  enterCommandMode,
   enterSelectMode,
   enterVisualLineMode,
   enterVisualMode,
@@ -78,6 +79,10 @@ export const actions: Action[] = [
 
   parseKeysExact(['/'], [Mode.Normal], (helixState) => {
     enterSearchMode(helixState);
+  }),
+
+  parseKeysExact([':'], [Mode.Normal], (helixState) => {
+    enterCommandMode(helixState);
   }),
 
   parseKeysExact(['*'], [Mode.Normal], (_) => {

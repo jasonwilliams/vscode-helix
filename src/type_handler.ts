@@ -10,6 +10,10 @@ export function typeHandler(helixState: HelixState, char: string): void {
     helixState.searchState.addChar(helixState, char);
     return;
   }
+  if (helixState.mode == Mode.CommandlineInProgress){
+    helixState.commandLine.addChar(helixState, char);
+    return;
+  }
   const editor = vscode.window.activeTextEditor;
   if (!editor) return;
 

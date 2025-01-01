@@ -6,6 +6,7 @@ import { Mode } from './modes_types';
 import * as positionUtils from './position_utils';
 import { typeHandler } from './type_handler';
 import { addTypeSubscription } from './type_subscription';
+import { commandLine } from './commandLine';
 
 export function escapeHandler(vimState: HelixState): void {
   const editor = vscode.window.activeTextEditor;
@@ -60,8 +61,9 @@ export function escapeHandler(vimState: HelixState): void {
         vscode.TextEditorRevealType.InCenterIfOutsideViewport,
       );
     }
-  } else if (vimState.mode === Mode.View) {
-    enterNormalMode(vimState);
+  } else if (vimState.mode === Mode.View || vimState.mode === Mode.CommandlineInProgress) {
+      commandLine.clearCommandString(vimState);
+      enterNormalMode(vimState);
   }
 
   vimState.keysPressed = [];
