@@ -9,11 +9,15 @@ import { delete_, yank } from './operators';
 
 export const matchActions: Action[] = [
   // Implemenent jump to bracket
-  parseKeysExact(['m', 'm'], [Mode.Normal], () => {
+  parseKeysExact(['m', 'm'], [Mode.Normal], (_, editor) => {
+    const cursor = editor.selection.active;
+    editor.selection = new vscode.Selection(cursor, cursor);
     vscode.commands.executeCommand('editor.action.jumpToBracket');
   }),
 
-  parseKeysExact(['m', 'm'], [Mode.Visual], () => {
+  parseKeysExact(['m', 'm'], [Mode.Visual], (_, editor) => {
+    const cursor = editor.selection.active;
+    editor.selection = new vscode.Selection(cursor, cursor);
     vscode.commands.executeCommand('editor.action.selectToBracket');
   }),
 

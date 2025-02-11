@@ -11,21 +11,21 @@ export function whitespaceWordRanges(text: string): { start: number; end: number
   const ranges = []
 
   for (let i = 0; i < text.length; ++i) {
-    const char = text[i]
+    const char = text[i];
 
     if (state === State.Whitespace) {
       if (!isWhitespaceCharacter(char)) {
-        startIndex = i
-        state = State.Word
+        startIndex = i;
+        state = State.Word;
       }
     } else {
       if (isWhitespaceCharacter(char)) {
         ranges.push({
           start: startIndex,
           end: i - 1,
-        })
+        });
 
-        state = State.Whitespace
+        state = State.Whitespace;
       }
     }
   }
