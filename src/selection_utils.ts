@@ -20,6 +20,10 @@ export function vimToVscodeVisualSelection(
   if (vimSelection.active.isBefore(vimSelection.anchor)) {
     return new vscode.Selection(vimSelection.anchor, vimSelection.active);
   } else {
+    const lineLength = document.lineAt(vimSelection.active.line).text.length;
+    if (vimSelection.active.character >= lineLength && vimSelection.active.line < document.lineCount - 1) {
+      return new vscode.Selection(vimSelection.anchor, new vscode.Position(vimSelection.active.line + 1, 0));
+    }
     return new vscode.Selection(vimSelection.anchor, positionUtils.right(document, vimSelection.active));
   }
 }

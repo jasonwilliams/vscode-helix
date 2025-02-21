@@ -137,7 +137,6 @@ export const actions: Action[] = [
     [KeyMap.Actions.InsertMode],
     [Mode.Normal, Mode.Visual, Mode.VisualLine, Mode.Occurrence],
     (vimState, editor) => {
-      // In visual mode, move cursor to start of selection before entering insert mode
       if (vimState.mode === Mode.Visual || vimState.mode === Mode.VisualLine) {
         editor.selections = editor.selections.map((selection) => {
           const start = selection.start.isBeforeOrEqual(selection.end) ? selection.start : selection.end;
@@ -180,18 +179,9 @@ export const actions: Action[] = [
     enterVisualMode(vimState);
     setModeCursorStyle(vimState.mode, editor);
   }),
-  parseKeysExact(['x'], [Mode.Normal, Mode.Visual], (vimState, editor) => {
-    editor.selections = editor.selections.map((selection) => {
-      const line = editor.document.lineAt(selection.active.line);
-      return new vscode.Selection(
-        new vscode.Position(selection.active.line, 0),
-        new vscode.Position(selection.active.line, line.text.length),
-      );
-    });
-    enterVisualLineMode(vimState);
-    setModeCursorStyle(vimState.mode, editor);
+  parseKeysExact(['x'], [Mode.Normal, Mode.Visual, Mode.VisualLine], () => {
+    vscode.commands.executeCommand('expandLineSelection');
   }),
-
   parseKeysExact([KeyMap.Actions.NewLineBelow], [Mode.Normal], (vimState, editor) => {
     enterInsertMode(vimState);
     vscode.commands.executeCommand('editor.action.insertLineAfter');

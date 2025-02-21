@@ -21,13 +21,12 @@ import KeyMap from './keymaps';
 export const motions: Action[] = [
   parseKeysExact([KeyMap.Motions.MoveRight], [Mode.Visual], (vimState, editor) => {
     execMotion(vimState, editor, ({ document, position }) => {
-      return positionUtils.rightNormal(document, position, vimState.resolveCount());
+      return positionUtils.rightWrap(document, position);
     });
   }),
-
   parseKeysExact([KeyMap.Motions.MoveLeft], [Mode.Visual], (vimState, editor) => {
-    execMotion(vimState, editor, ({ position }) => {
-      return positionUtils.left(position, vimState.resolveCount());
+    execMotion(vimState, editor, ({ document, position }) => {
+      return positionUtils.leftWrap(document, position);
     });
   }),
 
@@ -46,20 +45,17 @@ export const motions: Action[] = [
       value: _vimState.resolveCount(),
     });
   }),
-  parseKeysExact([KeyMap.Motions.MoveUp], [Mode.Visual], (vimState, editor) => {
-    const originalSelections = editor.selections;
 
-    vscode.commands
-      .executeCommand('cursorMove', {
-        to: 'up',
-        by: 'wrappedLine',
-        select: true,
-        value: vimState.resolveCount(),
-      })
-      .then(() => {
-        setVisualSelections(editor, originalSelections);
-      });
+  parseKeysExact([KeyMap.Motions.MoveUp], [Mode.Visual], (vimState, editor) => {
+    execMotion(vimState, editor, ({ document, position }) => {
+      if (position.line === 0) {
+        return position;
+      }
+      const prevLine = document.lineAt(position.line - 1);
+      return new vscode.Position(position.line - 1, Math.min(position.character, prevLine.text.length));
+    });
   }),
+
   parseKeysExact([KeyMap.Motions.MoveUp], [Mode.VisualLine], (vimState, editor) => {
     vscode.commands
       .executeCommand('cursorMove', { to: 'up', by: 'line', select: true, value: vimState.resolveCount() })
@@ -75,6 +71,7 @@ export const motions: Action[] = [
       value: _vimState.resolveCount(),
     });
   }),
+
   parseKeysExact([KeyMap.Motions.MoveDown], [Mode.Visual], (vimState, editor) => {
     const originalSelections = editor.selections;
 
@@ -278,7 +275,7 @@ export const motions: Action[] = [
 
   parseKeysExact([KeyMap.Motions.MoveLeft], [Mode.VisualLine], (vimState, editor) => {
     execMotion(vimState, editor, ({ position }) => {
-      return positionUtils.left(position, vimState.resolveCount());
+      return positionUtils.leftNormal(position, vimState.resolveCount());
     });
   }),
 ];
@@ -433,13 +430,18 @@ function createWordForwardHandler(
       const result = ranges.find((x) => x.start > position.character);
 
       if (result) {
-        if (vimState.mode === Mode.Visual) {
-          return position.with({ character: result.start - 1 });
+        return position.with({ character: result.start });
+      } else if (position.line < document.lineCount - 1) {
+        const nextLineText = document.lineAt(position.line + 1).text;
+        const nextLineRanges = wordRangesFunction(nextLineText);
+
+        if (nextLineRanges.length > 0) {
+          return new vscode.Position(position.line + 1, nextLineRanges[0].start);
         } else {
-          return position.with({ character: result.start });
+          return new vscode.Position(position.line + 1, 0);
         }
       } else {
-        return position.with({ character: lineText.length - 1 });
+        return position.with({ character: Math.max(lineText.length - 1, 0) });
       }
     });
   };
@@ -458,11 +460,7 @@ function createWordBackwardHandler(
         const result = ranges.reverse().find((x) => x.start < character);
 
         if (result) {
-          if (vimState.mode === Mode.Visual) {
-            return position.with({ character: result.start, line: i });
-          } else {
-            return position.with({ character: result.start, line: i });
-          }
+          return position.with({ character: result.start, line: i });
         }
 
         character = Infinity;
@@ -484,6 +482,15 @@ function createWordEndHandler(
 
       if (result) {
         return position.with({ character: result.end });
+      } else if (position.line < document.lineCount - 1) {
+        const nextLineText = document.lineAt(position.line + 1).text;
+        const nextLineRanges = wordRangesFunction(nextLineText);
+
+        if (nextLineRanges.length > 0) {
+          return new vscode.Position(position.line + 1, nextLineRanges[0].end);
+        } else {
+          return new vscode.Position(position.line + 1, 0);
+        }
       } else {
         return position.with({ character: Math.max(lineText.length - 1, 0) });
       }
