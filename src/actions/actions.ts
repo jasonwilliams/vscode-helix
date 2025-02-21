@@ -137,12 +137,17 @@ export const actions: Action[] = [
     [KeyMap.Actions.InsertMode],
     [Mode.Normal, Mode.Visual, Mode.VisualLine, Mode.Occurrence],
     (vimState, editor) => {
+      if (vimState.mode === Mode.Visual || vimState.mode === Mode.VisualLine) {
+        editor.selections = editor.selections.map((selection) => {
+          const start = selection.start.isBeforeOrEqual(selection.end) ? selection.start : selection.end;
+          return new vscode.Selection(start, start);
+        });
+      }
       enterInsertMode(vimState);
       setModeCursorStyle(vimState.mode, editor);
       removeTypeSubscription(vimState);
     },
   ),
-
   parseKeysExact([KeyMap.Actions.InsertAtLineStart], [Mode.Normal], (vimState, editor) => {
     editor.selections = editor.selections.map((selection) => {
       const character = editor.document.lineAt(selection.active.line).firstNonWhitespaceCharacterIndex;
@@ -154,13 +159,11 @@ export const actions: Action[] = [
     setModeCursorStyle(vimState.mode, editor);
     removeTypeSubscription(vimState);
   }),
-
   parseKeysExact(['a'], [Mode.Normal], (vimState, editor) => {
     enterInsertMode(vimState, false);
     setModeCursorStyle(vimState.mode, editor);
     removeTypeSubscription(vimState);
   }),
-
   parseKeysExact([KeyMap.Actions.InsertAtLineEnd], [Mode.Normal], (vimState, editor) => {
     editor.selections = editor.selections.map((selection) => {
       const lineLength = editor.document.lineAt(selection.active.line).text.length;
@@ -172,16 +175,13 @@ export const actions: Action[] = [
     setModeCursorStyle(vimState.mode, editor);
     removeTypeSubscription(vimState);
   }),
-
   parseKeysExact(['v'], [Mode.Normal, Mode.VisualLine], (vimState, editor) => {
     enterVisualMode(vimState);
     setModeCursorStyle(vimState.mode, editor);
   }),
-
-  parseKeysExact(['x'], [Mode.Normal, Mode.Visual], () => {
+  parseKeysExact(['x'], [Mode.Normal, Mode.Visual, Mode.VisualLine], () => {
     vscode.commands.executeCommand('expandLineSelection');
   }),
-
   parseKeysExact([KeyMap.Actions.NewLineBelow], [Mode.Normal], (vimState, editor) => {
     enterInsertMode(vimState);
     vscode.commands.executeCommand('editor.action.insertLineAfter');

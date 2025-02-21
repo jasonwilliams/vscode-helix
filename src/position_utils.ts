@@ -17,6 +17,16 @@ export function right(
   })
 }
 
+export function leftNormal(position: vscode.Position, count = 1): vscode.Position {
+  if (position.character === 0) {
+    return position.with({ character: 0 });
+  } else {
+    return position.with({
+      character: Math.max(position.character - count, 0),
+    });
+  }
+}
+
 export function rightNormal(
   document: vscode.TextDocument,
   position: vscode.Position,
@@ -53,16 +63,16 @@ export function rightWrap(
   document: vscode.TextDocument,
   position: vscode.Position,
 ): vscode.Position {
-  const lineLength = document.lineAt(position.line).text.length
+  const currentLineLength = document.lineAt(position.line).text.length;
 
-  if (position.character >= lineLength) {
+  if (position.character >= currentLineLength) {
     if (position.line >= document.lineCount - 1) {
-      return position
+      return position;
     } else {
-      return new vscode.Position(position.line + 1, 0)
+      return new vscode.Position(position.line + 1, 0);
     }
   } else {
-    return position.with({ character: position.character + 1 })
+    return position.with({ character: position.character + 1 });
   }
 }
 

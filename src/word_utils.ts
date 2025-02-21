@@ -1,4 +1,4 @@
-const NON_WORD_CHARACTERS = '/\\()"\':,.;<>~!@#$%^&*|+=[]{}`?-'
+const NON_WORD_CHARACTERS = '/\\()"\':,.;<>~!@#$%^&*|+=[]{}`?-';
 
 export function whitespaceWordRanges(text: string): { start: number; end: number }[] {
   enum State {
@@ -6,26 +6,26 @@ export function whitespaceWordRanges(text: string): { start: number; end: number
     Word,
   }
 
-  let state = State.Whitespace
-  let startIndex = 0
-  const ranges = []
+  let state = State.Whitespace;
+  let startIndex = 0;
+  const ranges = [];
 
   for (let i = 0; i < text.length; ++i) {
-    const char = text[i]
+    const char = text[i];
 
     if (state === State.Whitespace) {
       if (!isWhitespaceCharacter(char)) {
-        startIndex = i
-        state = State.Word
+        startIndex = i;
+        state = State.Word;
       }
     } else {
       if (isWhitespaceCharacter(char)) {
         ranges.push({
           start: startIndex,
           end: i - 1,
-        })
+        });
 
-        state = State.Whitespace
+        state = State.Whitespace;
       }
     }
   }
@@ -34,10 +34,10 @@ export function whitespaceWordRanges(text: string): { start: number; end: number
     ranges.push({
       start: startIndex,
       end: text.length - 1,
-    })
+    });
   }
 
-  return ranges
+  return ranges;
 }
 
 export function wordRanges(text: string): { start: number; end: number }[] {
@@ -47,44 +47,44 @@ export function wordRanges(text: string): { start: number; end: number }[] {
     NonWord,
   }
 
-  let state = State.Whitespace
-  let startIndex = 0
-  const ranges = []
+  let state = State.Whitespace;
+  let startIndex = 0;
+  const ranges = [];
 
   for (let i = 0; i < text.length; ++i) {
-    const char = text[i]
+    const char = text[i];
 
     if (state === State.Whitespace) {
       if (!isWhitespaceCharacter(char)) {
-        startIndex = i
-        state = isWordCharacter(char) ? State.Word : State.NonWord
+        startIndex = i;
+        state = isWordCharacter(char) ? State.Word : State.NonWord;
       }
     } else if (state === State.Word) {
       if (!isWordCharacter(char)) {
         ranges.push({
           start: startIndex,
-          end: i - 1,
-        })
+          end: i,
+        });
 
         if (isWhitespaceCharacter(char)) {
-          state = State.Whitespace
+          state = State.Whitespace;
         } else {
-          state = State.NonWord
-          startIndex = i
+          state = State.NonWord;
+          startIndex = i;
         }
       }
     } else {
       if (!isNonWordCharacter(char)) {
         ranges.push({
           start: startIndex,
-          end: i - 1,
-        })
+          end: i,
+        });
 
         if (isWhitespaceCharacter(char)) {
-          state = State.Whitespace
+          state = State.Whitespace;
         } else {
-          state = State.Word
-          startIndex = i
+          state = State.Word;
+          startIndex = i;
         }
       }
     }
@@ -93,21 +93,21 @@ export function wordRanges(text: string): { start: number; end: number }[] {
   if (state !== State.Whitespace) {
     ranges.push({
       start: startIndex,
-      end: text.length - 1,
-    })
+      end: text.length,
+    });
   }
 
-  return ranges
+  return ranges;
 }
 
 function isNonWordCharacter(char: string): boolean {
-  return NON_WORD_CHARACTERS.includes(char)
+  return NON_WORD_CHARACTERS.includes(char);
 }
 
 function isWhitespaceCharacter(char: string): boolean {
-  return char === ' ' || char === '\t'
+  return char === ' ' || char === '\t';
 }
 
 function isWordCharacter(char: string): boolean {
-  return !isWhitespaceCharacter(char) && !isNonWordCharacter(char)
+  return !isWhitespaceCharacter(char) && !isNonWordCharacter(char);
 }

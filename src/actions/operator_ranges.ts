@@ -415,9 +415,10 @@ function createWordForwardHandler(
     const result = ranges.find((x) => x.start > position.character);
 
     if (result) {
-      return new vscode.Range(position, position.with({ character: result.start }));
+      // Include the character under cursor in the range
+      return new vscode.Range(position, position.with({ character: result.start - 1 }));
     } else {
-      return new vscode.Range(position, position.with({ character: lineText.length }));
+      return new vscode.Range(position, position.with({ character: lineText.length - 1 }));
     }
   };
 }
@@ -432,6 +433,7 @@ function createWordBackwardHandler(
     const result = ranges.reverse().find((x) => x.start < position.character);
 
     if (result) {
+      // Include the character under cursor in the range
       return new vscode.Range(position.with({ character: result.start }), position);
     } else {
       return undefined;
@@ -449,7 +451,8 @@ function createWordEndHandler(
     const result = ranges.find((x) => x.end > position.character);
 
     if (result) {
-      return new vscode.Range(position, positionUtils.right(document, position.with({ character: result.end })));
+      // Include the character under cursor in the range
+      return new vscode.Range(position, position.with({ character: result.end }));
     } else {
       return undefined;
     }

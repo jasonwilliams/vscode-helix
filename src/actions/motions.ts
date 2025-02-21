@@ -21,13 +21,12 @@ import KeyMap from './keymaps';
 export const motions: Action[] = [
   parseKeysExact([KeyMap.Motions.MoveRight], [Mode.Visual], (vimState, editor) => {
     execMotion(vimState, editor, ({ document, position }) => {
-      return positionUtils.rightNormal(document, position, vimState.resolveCount());
+      return positionUtils.rightWrap(document, position);
     });
   }),
-
   parseKeysExact([KeyMap.Motions.MoveLeft], [Mode.Visual], (vimState, editor) => {
-    execMotion(vimState, editor, ({ position }) => {
-      return positionUtils.left(position, vimState.resolveCount());
+    execMotion(vimState, editor, ({ document, position }) => {
+      return positionUtils.leftWrap(document, position);
     });
   }),
 
@@ -46,20 +45,17 @@ export const motions: Action[] = [
       value: _vimState.resolveCount(),
     });
   }),
-  parseKeysExact([KeyMap.Motions.MoveUp], [Mode.Visual], (vimState, editor) => {
-    const originalSelections = editor.selections;
 
-    vscode.commands
-      .executeCommand('cursorMove', {
-        to: 'up',
-        by: 'wrappedLine',
-        select: true,
-        value: vimState.resolveCount(),
-      })
-      .then(() => {
-        setVisualSelections(editor, originalSelections);
-      });
+  parseKeysExact([KeyMap.Motions.MoveUp], [Mode.Visual], (vimState, editor) => {
+    execMotion(vimState, editor, ({ document, position }) => {
+      if (position.line === 0) {
+        return position;
+      }
+      const prevLine = document.lineAt(position.line - 1);
+      return new vscode.Position(position.line - 1, Math.min(position.character, prevLine.text.length));
+    });
   }),
+
   parseKeysExact([KeyMap.Motions.MoveUp], [Mode.VisualLine], (vimState, editor) => {
     vscode.commands
       .executeCommand('cursorMove', { to: 'up', by: 'line', select: true, value: vimState.resolveCount() })
@@ -75,6 +71,7 @@ export const motions: Action[] = [
       value: _vimState.resolveCount(),
     });
   }),
+
   parseKeysExact([KeyMap.Motions.MoveDown], [Mode.Visual], (vimState, editor) => {
     const originalSelections = editor.selections;
 
@@ -214,7 +211,7 @@ export const motions: Action[] = [
       by: 'line',
     });
   }),
-  parseKeysExact(['M'], [Mode.Visual], (vimState, editor) => {
+  parseKeysExact(['M'], [Mode.Visual], (_vimState, editor) => {
     const originalSelections = editor.selections;
 
     vscode.commands
@@ -227,7 +224,7 @@ export const motions: Action[] = [
         setVisualSelections(editor, originalSelections);
       });
   }),
-  parseKeysExact(['M'], [Mode.VisualLine], (vimState, editor) => {
+  parseKeysExact(['M'], [Mode.VisualLine], (_vimState, editor) => {
     vscode.commands
       .executeCommand('cursorMove', {
         to: 'viewPortCenter',
@@ -268,6 +265,18 @@ export const motions: Action[] = [
       .then(() => {
         setVisualLineSelections(editor);
       });
+  }),
+
+  parseKeysExact([KeyMap.Motions.MoveRight], [Mode.VisualLine], (vimState, editor) => {
+    execMotion(vimState, editor, ({ document, position }) => {
+      return positionUtils.rightNormal(document, position, vimState.resolveCount());
+    });
+  }),
+
+  parseKeysExact([KeyMap.Motions.MoveLeft], [Mode.VisualLine], (vimState, editor) => {
+    execMotion(vimState, editor, ({ position }) => {
+      return positionUtils.leftNormal(position, vimState.resolveCount());
+    });
   }),
 ];
 
@@ -415,25 +424,25 @@ function createWordForwardHandler(
 ): (vimState: HelixState, editor: vscode.TextEditor) => void {
   return (vimState, editor) => {
     execMotion(vimState, editor, ({ document, position }) => {
-      let character = position.character;
-      // Try the current line and if we're at the end go to the next line
-      // This way we're only keeping one line of text in memory at a time
-      // i is representing the relative line number we're on from where we started
-      for (let i = 0; i < document.lineCount; i++) {
-        const lineText = document.lineAt(position.line + i).text;
-        const ranges = wordRangesFunction(lineText);
+      const lineText = document.lineAt(position.line).text;
+      const ranges = wordRangesFunction(lineText);
 
-        const result = ranges.find((x) => x.start > character);
+      const result = ranges.find((x) => x.start > position.character);
 
-        if (result) {
-          return position.with({ character: result.start, line: position.line + i });
+      if (result) {
+        return position.with({ character: result.start });
+      } else if (position.line < document.lineCount - 1) {
+        const nextLineText = document.lineAt(position.line + 1).text;
+        const nextLineRanges = wordRangesFunction(nextLineText);
+
+        if (nextLineRanges.length > 0) {
+          return new vscode.Position(position.line + 1, nextLineRanges[0].start);
+        } else {
+          return new vscode.Position(position.line + 1, 0);
         }
-        // If we don't find anything on this line, search the next and reset the character to 0
-        character = 0;
+      } else {
+        return position.with({ character: Math.max(lineText.length - 1, 0) });
       }
-
-      // We may be at the end of the document or nothing else matches
-      return position;
     });
   };
 }
@@ -444,9 +453,6 @@ function createWordBackwardHandler(
   return (vimState, editor) => {
     execMotion(vimState, editor, ({ document, position }) => {
       let character = position.character;
-      // Try the current line and if we're at the end go to the next line
-      // This way we're only keeping one line of text in memory at a time
-      // i is representing the relative line number we're on from where we started
       for (let i = position.line; i >= 0; i--) {
         const lineText = document.lineAt(i).text;
         const ranges = wordRangesFunction(lineText);
@@ -457,10 +463,8 @@ function createWordBackwardHandler(
           return position.with({ character: result.start, line: i });
         }
 
-        // If we don't find anything on this line, search the next and reset the character to 0
         character = Infinity;
       }
-      // We may be at the end of the document or nothing else matches
       return position;
     });
   };
@@ -478,8 +482,17 @@ function createWordEndHandler(
 
       if (result) {
         return position.with({ character: result.end });
+      } else if (position.line < document.lineCount - 1) {
+        const nextLineText = document.lineAt(position.line + 1).text;
+        const nextLineRanges = wordRangesFunction(nextLineText);
+
+        if (nextLineRanges.length > 0) {
+          return new vscode.Position(position.line + 1, nextLineRanges[0].end);
+        } else {
+          return new vscode.Position(position.line + 1, 0);
+        }
       } else {
-        return position;
+        return position.with({ character: Math.max(lineText.length - 1, 0) });
       }
     });
   };

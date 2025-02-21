@@ -7,7 +7,7 @@ export function vscodeToVimVisualSelection(
   vscodeSelection: vscode.Selection,
 ): vscode.Selection {
   if (vscodeSelection.active.isBefore(vscodeSelection.anchor)) {
-    return new vscode.Selection(positionUtils.left(vscodeSelection.anchor), vscodeSelection.active);
+    return new vscode.Selection(vscodeSelection.anchor, vscodeSelection.active);
   } else {
     return new vscode.Selection(vscodeSelection.anchor, positionUtils.left(vscodeSelection.active));
   }
@@ -18,8 +18,12 @@ export function vimToVscodeVisualSelection(
   vimSelection: vscode.Selection,
 ): vscode.Selection {
   if (vimSelection.active.isBefore(vimSelection.anchor)) {
-    return new vscode.Selection(positionUtils.right(document, vimSelection.anchor), vimSelection.active);
+    return new vscode.Selection(vimSelection.anchor, vimSelection.active);
   } else {
+    const lineLength = document.lineAt(vimSelection.active.line).text.length;
+    if (vimSelection.active.character >= lineLength && vimSelection.active.line < document.lineCount - 1) {
+      return new vscode.Selection(vimSelection.anchor, new vscode.Position(vimSelection.active.line + 1, 0));
+    }
     return new vscode.Selection(vimSelection.anchor, positionUtils.right(document, vimSelection.active));
   }
 }
