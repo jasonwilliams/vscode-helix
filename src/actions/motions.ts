@@ -426,7 +426,11 @@ function createWordForwardHandler(
         const result = ranges.find((x) => x.start > character);
 
         if (result) {
-          return position.with({ character: result.start, line: position.line + i });
+          if (vimState.mode === Mode.Normal) {
+            return position.with({ character: result.start, line: position.line + i });
+          } else {
+            return position.with({ character: result.start-1, line: position.line + i });
+          }
         }
         // If we don't find anything on this line, search the next and reset the character to 0
         character = 0;
@@ -477,7 +481,11 @@ function createWordEndHandler(
       const result = ranges.find((x) => x.end > position.character);
 
       if (result) {
-        return position.with({ character: result.end });
+        if (vimState.mode === Mode.Normal) {
+          return position.with({ character: result.end + 1 });
+        } else {
+          return position.with({ character: result.end });
+        }
       } else {
         return position;
       }
