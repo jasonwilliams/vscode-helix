@@ -74,6 +74,10 @@ export const gotoActions: Action[] = [
     commands.executeCommand('editor.action.revealDefinition');
   }),
 
+  parseKeysExact(['g', 'i'], [Mode.Normal], () => {
+    commands.executeCommand('editor.action.goToImplementation');
+  }),
+
   parseKeysExact(['g', 'y'], [Mode.Normal], () => {
     commands.executeCommand('editor.action.goToTypeDefinition');
   }),
