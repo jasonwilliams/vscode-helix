@@ -70,10 +70,7 @@ function normalModeCharacterwise(
   editor: vscode.TextEditor,
   registerContentsList: (string | undefined)[],
 ) {
-  const insertPositions = editor.selections.map((selection) => {
-    return positionUtils.right(editor.document, selection.active);
-  });
-
+  const insertPositions = editor.selections.map((selection) => selection.end);
   const adjustedInsertPositions = adjustInsertPositions(insertPositions, registerContentsList);
   const insertRanges = getInsertRangesFromBeginning(adjustedInsertPositions, registerContentsList);
 
