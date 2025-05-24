@@ -70,24 +70,25 @@ function normalModeCharacterwise(
   editor: vscode.TextEditor,
   registerContentsList: (string | undefined)[],
 ) {
-  const insertPositions = editor.selections.map((selection) => selection.end);
+  const insertPositions = editor.selections.map((selection: vscode.Selection) => {
+    return positionUtils.right(editor.document, selection.end);
+  });
+
   const adjustedInsertPositions = adjustInsertPositions(insertPositions, registerContentsList);
   const insertRanges = getInsertRangesFromBeginning(adjustedInsertPositions, registerContentsList);
 
   editor
-    .edit((editBuilder) => {
-      insertPositions.forEach((insertPosition, i) => {
+    .edit((editBuilder: vscode.TextEditorEdit) => {
+      insertPositions.forEach((insertPosition: vscode.Position, i: number) => {
         const registerContents = registerContentsList[i];
         if (registerContents === undefined) return;
-
         editBuilder.insert(insertPosition, registerContents);
       });
     })
     .then(() => {
-      editor.selections = editor.selections.map((selection, i) => {
+      editor.selections = editor.selections.map((selection: vscode.Selection, i: number) => {
         const range = insertRanges[i];
         if (range === undefined) return selection;
-
         const position = positionUtils.left(range.end);
         return new vscode.Selection(position, position);
       });
