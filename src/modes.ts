@@ -6,10 +6,11 @@ import { removeTypeSubscription } from './type_subscription';
 
 export function enterInsertMode(helixState: HelixState, before = true): void {
   // To fix https://github.com/jasonwilliams/vscode-helix/issues/14 we should clear selections on entering insert mode
-  // Helix doesn't clear selections on insert but doesn't overwrite the selection either, so our best option is to just clear them
+  // Helix doesn't clear selections on insert but doesn't overwrite the selection either, so our best option is to
+  // just clear them
   const editor = helixState.editorState.activeEditor!;
   editor.selections = editor.selections.map((selection) => {
-    const position = before ? selection.anchor : selection.active;
+    const position = before ? selection.start : selection.end;
     return new vscode.Selection(position, position);
   });
 
