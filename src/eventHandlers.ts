@@ -22,7 +22,6 @@ export function onDidChangeActiveTextEditor(helixState: HelixState, editor: Text
   // Ensure new editors always have the correct cursor style and line numbering
   // applied according to the current mode
   setModeCursorStyle(helixState.mode, editor);
-  setRelativeLineNumbers(helixState.mode, editor);
 }
 
 export function onSelectionChange(helixState: HelixState, e: TextEditorSelectionChangeEvent): void {
