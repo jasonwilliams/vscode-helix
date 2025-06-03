@@ -1,14 +1,14 @@
 import * as vscode from 'vscode';
 
-import * as positionUtils from '../position_utils';
 import { HelixState } from '../helix_state_types';
+import { enterNormalMode, setModeCursorStyle, setRelativeLineNumbers } from '../modes';
 import { Mode } from '../modes_types';
-import { enterNormalMode, setModeCursorStyle } from '../modes';
+import * as positionUtils from '../position_utils';
 import {
-  getRegisterContentsList,
   adjustInsertPositions,
   getInsertRangesFromBeginning,
   getInsertRangesFromEnd,
+  getRegisterContentsList,
 } from './common';
 
 export function putAfter(vimState: HelixState, editor: vscode.TextEditor) {
@@ -135,6 +135,7 @@ function visualMode(vimState: HelixState, editor: vscode.TextEditor, registerCon
 
   enterNormalMode(vimState);
   setModeCursorStyle(vimState.mode, editor);
+  setRelativeLineNumbers(vimState.mode, editor);
 }
 
 function visualLineMode(vimState: HelixState, editor: vscode.TextEditor, registerContentsList: (string | undefined)[]) {
@@ -159,5 +160,6 @@ function visualLineMode(vimState: HelixState, editor: vscode.TextEditor, registe
 
       enterNormalMode(vimState);
       setModeCursorStyle(vimState.mode, editor);
+      setRelativeLineNumbers(vimState.mode, editor);
     });
 }

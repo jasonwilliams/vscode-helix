@@ -1,12 +1,12 @@
 import * as vscode from 'vscode';
 
+import { commandLine } from './commandLine';
 import { HelixState } from './helix_state_types';
-import { enterNormalMode, setModeCursorStyle } from './modes';
+import { enterNormalMode, setModeCursorStyle, setRelativeLineNumbers } from './modes';
 import { Mode } from './modes_types';
 import * as positionUtils from './position_utils';
 import { typeHandler } from './type_handler';
 import { addTypeSubscription } from './type_subscription';
-import { commandLine } from './commandLine';
 
 export function escapeHandler(vimState: HelixState): void {
   const editor = vscode.window.activeTextEditor;
@@ -21,6 +21,7 @@ export function escapeHandler(vimState: HelixState): void {
 
     enterNormalMode(vimState);
     setModeCursorStyle(vimState.mode, editor);
+    setRelativeLineNumbers(vimState.mode, editor);
     addTypeSubscription(vimState, typeHandler);
   } else if (vimState.mode === Mode.Normal) {
     // Clear multiple cursors
@@ -37,6 +38,7 @@ export function escapeHandler(vimState: HelixState): void {
 
     enterNormalMode(vimState);
     setModeCursorStyle(vimState.mode, editor);
+    setRelativeLineNumbers(vimState.mode, editor);
   } else if (vimState.mode === Mode.VisualLine) {
     editor.selections = editor.selections.map((selection) => {
       const newPosition = selection.active.with({
@@ -47,6 +49,7 @@ export function escapeHandler(vimState: HelixState): void {
 
     enterNormalMode(vimState);
     setModeCursorStyle(vimState.mode, editor);
+    setRelativeLineNumbers(vimState.mode, editor);
   } else if (vimState.mode === Mode.SearchInProgress || vimState.mode === Mode.Select) {
     enterNormalMode(vimState);
     vimState.searchState.clearSearchString(vimState);
@@ -62,8 +65,8 @@ export function escapeHandler(vimState: HelixState): void {
       );
     }
   } else if (vimState.mode === Mode.View || vimState.mode === Mode.CommandlineInProgress) {
-      commandLine.clearCommandString(vimState);
-      enterNormalMode(vimState);
+    commandLine.clearCommandString(vimState);
+    enterNormalMode(vimState);
   }
 
   vimState.keysPressed = [];

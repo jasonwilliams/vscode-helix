@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 
 import { Action } from '../action_types';
 import { HelixState } from '../helix_state_types';
-import { enterNormalMode, setModeCursorStyle } from '../modes';
+import { enterNormalMode, setModeCursorStyle, setRelativeLineNumbers } from '../modes';
 import { Mode } from '../modes_types';
 import { parseKeysOperator } from '../parse_keys';
 import { operatorRanges } from './operator_ranges';
@@ -18,6 +18,7 @@ export const operators: Action[] = [
     if (vimState.mode === Mode.Visual || vimState.mode === Mode.VisualLine) {
       enterNormalMode(vimState);
       setModeCursorStyle(vimState.mode, editor);
+      setRelativeLineNumbers(vimState.mode, editor);
     }
   }),
 
@@ -36,8 +37,8 @@ export const operators: Action[] = [
         return editor.selections[i];
       }
     });
-
     setModeCursorStyle(vimState.mode, editor);
+    setRelativeLineNumbers(vimState.mode, editor);
   }),
 
   parseKeysOperator(['q'], operatorRanges, (vimState, editor, ranges, _linewise) => {
@@ -72,7 +73,7 @@ function cursorsToRangesStart(editor: vscode.TextEditor, ranges: readonly (vscod
   });
 }
 
-export function delete_(editor: vscode.TextEditor, ranges: (vscode.Range | undefined)[], linewise: boolean) {
+export function delete_(editor: vscode.TextEditor, ranges: readonly (vscode.Range | undefined)[], linewise: boolean) {
   if (ranges.length === 1 && ranges[0] && isEmptyRange(ranges[0])) {
     vscode.commands.executeCommand('deleteRight');
     return;

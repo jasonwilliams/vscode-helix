@@ -300,6 +300,11 @@
           "type": "string",
           "default": "#F8F3AB",
           "description": "Background color that flashes to show the range when yanking."
+        },
+        "helixKeymap.toggleRelativeLineNumbers": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable toggling relative line numbers based on editor mode. When enabled, relative line numbers are shown in all modes except Insert mode, where they toggle to absolute line numbers."
         }
       }
     }

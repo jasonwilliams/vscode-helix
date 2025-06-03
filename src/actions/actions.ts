@@ -2,14 +2,15 @@ import * as vscode from 'vscode';
 import { Action } from '../action_types';
 import { HelixState } from '../helix_state_types';
 import {
+  enterCommandMode,
   enterInsertMode,
   enterNormalMode,
   enterSearchMode,
-  enterCommandMode,
   enterSelectMode,
   enterVisualLineMode,
   enterVisualMode,
   setModeCursorStyle,
+  setRelativeLineNumbers,
 } from '../modes';
 import { Mode } from '../modes_types';
 import { parseKeysExact, parseKeysRegex } from '../parse_keys';
@@ -139,6 +140,7 @@ export const actions: Action[] = [
     (vimState, editor) => {
       enterInsertMode(vimState);
       setModeCursorStyle(vimState.mode, editor);
+      setRelativeLineNumbers(vimState.mode, editor);
       removeTypeSubscription(vimState);
     },
   ),
@@ -152,12 +154,14 @@ export const actions: Action[] = [
 
     enterInsertMode(vimState);
     setModeCursorStyle(vimState.mode, editor);
+    setRelativeLineNumbers(vimState.mode, editor);
     removeTypeSubscription(vimState);
   }),
 
   parseKeysExact(['a'], [Mode.Normal], (vimState, editor) => {
     enterInsertMode(vimState, false);
     setModeCursorStyle(vimState.mode, editor);
+    setRelativeLineNumbers(vimState.mode, editor);
     removeTypeSubscription(vimState);
   }),
 
@@ -170,12 +174,14 @@ export const actions: Action[] = [
 
     enterInsertMode(vimState);
     setModeCursorStyle(vimState.mode, editor);
+    setRelativeLineNumbers(vimState.mode, editor);
     removeTypeSubscription(vimState);
   }),
 
   parseKeysExact(['v'], [Mode.Normal, Mode.VisualLine], (vimState, editor) => {
     enterVisualMode(vimState);
     setModeCursorStyle(vimState.mode, editor);
+    setRelativeLineNumbers(vimState.mode, editor);
   }),
 
   parseKeysExact(['x'], [Mode.Normal, Mode.Visual], () => {
@@ -186,6 +192,7 @@ export const actions: Action[] = [
     enterInsertMode(vimState);
     vscode.commands.executeCommand('editor.action.insertLineAfter');
     setModeCursorStyle(vimState.mode, editor);
+    setRelativeLineNumbers(vimState.mode, editor);
     removeTypeSubscription(vimState);
   }),
 
@@ -193,6 +200,7 @@ export const actions: Action[] = [
     enterInsertMode(vimState);
     vscode.commands.executeCommand('editor.action.insertLineBefore');
     setModeCursorStyle(vimState.mode, editor);
+    setRelativeLineNumbers(vimState.mode, editor);
     removeTypeSubscription(vimState);
   }),
 
@@ -281,6 +289,7 @@ export const actions: Action[] = [
 
     enterInsertMode(vimState);
     setModeCursorStyle(vimState.mode, editor);
+    setRelativeLineNumbers(vimState.mode, editor);
     removeTypeSubscription(vimState);
   }),
 
@@ -288,6 +297,7 @@ export const actions: Action[] = [
     vscode.commands.executeCommand('deleteAllRight');
     enterInsertMode(vimState);
     setModeCursorStyle(vimState.mode, editor);
+    setRelativeLineNumbers(vimState.mode, editor);
     removeTypeSubscription(vimState);
   }),
 
@@ -341,6 +351,7 @@ export const actions: Action[] = [
 
     enterVisualLineMode(vimState);
     setModeCursorStyle(vimState.mode, editor);
+    setRelativeLineNumbers(vimState.mode, editor);
   }),
 
   parseKeysExact(['S'], [Mode.Normal], (vimState, editor) => {
@@ -350,6 +361,7 @@ export const actions: Action[] = [
 
     enterVisualMode(vimState);
     setModeCursorStyle(vimState.mode, editor);
+    setRelativeLineNumbers(vimState.mode, editor);
   }),
 
   // parseKeysExact(['h'], [Mode.Normal], (vimState, editor) => {

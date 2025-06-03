@@ -32,9 +32,8 @@ export function enterSearchMode(helixState: HelixState): void {
 
 export function enterCommandMode(helixState: HelixState): void {
   helixState.mode = Mode.CommandlineInProgress;
-  setModeContext('extension.helixKeymap.commandMode')
+  setModeContext('extension.helixKeymap.commandMode');
   helixState.commandLine.setText('', helixState);
-
 }
 
 export function enterSelectMode(helixState: HelixState): void {
@@ -69,6 +68,7 @@ export function enterViewMode(helixState: HelixState): void {
 export function enterDisabledMode(helixState: HelixState): void {
   helixState.mode = Mode.Disabled;
   setModeCursorStyle(helixState.mode, helixState.editorState.activeEditor!);
+  setRelativeLineNumbers(helixState.mode, helixState.editorState.activeEditor!);
   removeTypeSubscription(helixState);
   setModeContext('extension.helixKeymap.disabledMode');
   helixState.commandLine.setText('', helixState);
@@ -84,7 +84,7 @@ function setModeContext(key: string) {
     'extension.helixKeymap.selectMode',
     'extension.helixKeymap.viewMode',
     'extension.helixKeymap.disabledMode',
-    'extension.helixKeymap.commandMode'
+    'extension.helixKeymap.commandMode',
   ];
 
   modeKeys.forEach((modeKey) => {
@@ -99,5 +99,20 @@ export function setModeCursorStyle(mode: Mode, editor: vscode.TextEditor): void 
     editor.options.cursorStyle = vscode.TextEditorCursorStyle.Block;
   } else if (mode === Mode.Visual || mode === Mode.VisualLine) {
     editor.options.cursorStyle = vscode.TextEditorCursorStyle.Block;
+  }
+}
+
+export function setRelativeLineNumbers(mode: Mode, editor: vscode.TextEditor): void {
+  const config = vscode.workspace.getConfiguration('helixKeymap');
+  const isEnabledToggleRelativeLineNumbers = config.get<boolean>('toggleRelativeLineNumbers', false);
+
+  if (!isEnabledToggleRelativeLineNumbers) {
+    return;
+  }
+
+  if (mode === Mode.Insert) {
+    editor.options.lineNumbers = vscode.TextEditorLineNumbersStyle.On;
+  } else {
+    editor.options.lineNumbers = vscode.TextEditorLineNumbersStyle.Relative;
   }
 }
