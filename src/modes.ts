@@ -103,6 +103,13 @@ export function setModeCursorStyle(mode: Mode, editor: vscode.TextEditor): void 
 }
 
 export function setRelativeLineNumbers(mode: Mode, editor: vscode.TextEditor): void {
+  const config = vscode.workspace.getConfiguration('helixKeymap');
+  const isEnabledToggleRelativeLineNumbers = config.get<boolean>('toggleRelativeLineNumbers', false);
+
+  if (!isEnabledToggleRelativeLineNumbers) {
+    return;
+  }
+
   if (mode === Mode.Insert) {
     editor.options.lineNumbers = vscode.TextEditorLineNumbersStyle.On;
   } else {
