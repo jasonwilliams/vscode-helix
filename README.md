@@ -70,6 +70,21 @@ Most of the differences will be related to the fact VSCode doesn't have TreeSitt
 | `alt + d` | Add selection to next match (same as ctrl+d)  |
 | `alt + m` | Move selection to next match (same as ctrl+k) |
 
+### Line Number Toggle
+
+The extension includes a line number toggle feature that automatically switches between relative and absolute line numbers based on the current editor mode:
+
+- **Normal, Visual, and Visual Line modes**: Shows relative line numbers for easier navigation with motions like `10j` or `5k`
+- **Insert mode**: Shows absolute line numbers for clearer positioning context
+
+To enable this feature, add the following setting to your VS Code configuration:
+
+```json
+"helixKeymap.toggleRelativeLineNumbers": true
+```
+
+This behaviour matches Helix's approach to line numbers, helping you take advantage of relative line numbers for efficient movement commands while providing absolute numbers when editing text.
+
 ## Outstanding
 
 Feel free to pick up any of these if you wanted to contribute.
