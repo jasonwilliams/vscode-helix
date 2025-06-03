@@ -6,7 +6,14 @@ import { commandLine } from './commandLine';
 import { escapeHandler } from './escape_handler';
 import { onDidChangeActiveTextEditor, onDidChangeTextDocument } from './eventHandlers';
 import { HelixState } from './helix_state_types';
-import { enterDisabledMode, enterNormalMode, enterSearchMode, enterWindowMode, setModeCursorStyle } from './modes';
+import {
+  enterDisabledMode,
+  enterNormalMode,
+  enterSearchMode,
+  enterWindowMode,
+  setModeCursorStyle,
+  setRelativeLineNumbers,
+} from './modes';
 import { Mode } from './modes_types';
 import * as scrollCommands from './scroll_commands';
 import { searchState } from './search';
@@ -78,6 +85,7 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand('extension.helixKeymap.enableHelix', () => {
       enterNormalMode(globalhelixState);
       setModeCursorStyle(globalhelixState.mode, vscode.window.activeTextEditor!);
+      setRelativeLineNumbers(globalhelixState.mode, vscode.window.activeTextEditor!);
       addTypeSubscription(globalhelixState, typeHandler);
     }),
     vscode.commands.registerCommand('extension.helixKeymap.flipSelection', () => {
@@ -107,6 +115,7 @@ export function activate(context: vscode.ExtensionContext): void {
 
   if (vscode.window.activeTextEditor) {
     setModeCursorStyle(globalhelixState.mode, vscode.window.activeTextEditor);
+    setRelativeLineNumbers(globalhelixState.mode, vscode.window.activeTextEditor);
     onDidChangeActiveTextEditor(globalhelixState, vscode.window.activeTextEditor);
   }
 }
