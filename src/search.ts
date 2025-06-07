@@ -15,6 +15,8 @@ export class SearchState {
   selectModeActive: boolean = false;
   /** Last active position before search */
   lastActivePosition: vscode.Position | undefined;
+  /** Initial position when search started */
+  initialSearchPosition: vscode.Position | undefined;
 
   // https://github.com/helix-editor/helix/issues/4978
   getFlags(): string {
@@ -52,6 +54,7 @@ export class SearchState {
     // If we've just started a search, set a marker where we were so we can go back on escape
     if (this.searchString === '') {
       this.lastActivePosition = helixState.editorState.activeEditor?.selection.active;
+      this.initialSearchPosition = this.lastActivePosition;
     }
 
     this.searchString += char;
@@ -67,6 +70,7 @@ export class SearchState {
     // If we've just started a search, set a marker where we were so we can go back on escape
     if (this.searchString === '') {
       this.lastActivePosition = helixState.editorState.activeEditor?.selection.active;
+      this.initialSearchPosition = this.lastActivePosition;
     }
 
     this.searchString += text;
@@ -93,6 +97,7 @@ export class SearchState {
   enter(helixState: HelixState): void {
     this.searchHistory.push(this.searchString);
     this.searchString = '';
+    this.initialSearchPosition = undefined;
     helixState.commandLine.setText(this.searchString, helixState);
 
     // Upstream Bug
@@ -123,12 +128,24 @@ export class SearchState {
       const document = editor.document;
       const flags = this.getFlags();
       const searchRegex = new RegExp(this.getNormalisedSearchString(), flags);
-      const match = searchRegex.exec(document.getText());
+      const searchStartPosition = this.initialSearchPosition || editor.selection.active;
+      const textFromCursor = document.getText().slice(document.offsetAt(searchStartPosition));
+      const matchAfterCursor = searchRegex.exec(textFromCursor);
+      const matchInDocument = searchRegex.exec(document.getText());
       let startPos: vscode.Position | undefined;
       let endPos: vscode.Position | undefined;
-      if (match) {
-        startPos = document.positionAt(match.index);
-        endPos = document.positionAt(match.index + match[0].length);
+      if (matchAfterCursor) {
+        const matchStartOffset = document.offsetAt(searchStartPosition) + matchAfterCursor.index;
+        const matchEndOffset = matchStartOffset + matchAfterCursor[0].length;
+        startPos = document.positionAt(matchStartOffset);
+        endPos = document.positionAt(matchEndOffset);
+        editor.selection = new vscode.Selection(startPos, endPos);
+        // We should also move the viewport to our match if there is one
+        editor.revealRange(new vscode.Range(startPos, endPos));
+      } else if (matchInDocument) {
+        // If no match after cursor has been found, search entire document.
+        startPos = document.positionAt(matchInDocument.index);
+        endPos = document.positionAt(matchInDocument.index + matchInDocument[0].length);
         editor.selection = new vscode.Selection(startPos, endPos);
         // We should also move the viewport to our match if there is one
         editor.revealRange(new vscode.Range(startPos, endPos));
