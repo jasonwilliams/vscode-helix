@@ -13,7 +13,7 @@ It is a work in progress, feel free to raise issues or contribute on the issue t
 
 ## Installation
 
-You can find the extension on the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=jasew.vscode-helix-emulation).
+You can install the extension from the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=jasew.vscode-helix-emulation) or [Open VSX](https://open-vsx.org/extension/jasew/vscode-helix-emulation).
 
 ## Commands
 
