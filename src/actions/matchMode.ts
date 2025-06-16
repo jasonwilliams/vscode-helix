@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { Action } from '../action_types';
-import { enterInsertMode, setModeCursorStyle } from '../modes';
+import { enterInsertMode, setModeCursorStyle, setRelativeLineNumbers } from '../modes';
 import { Mode } from '../modes_types';
 import { parseKeysExact, parseKeysRegex } from '../parse_keys';
 import { searchBackwardBracket, searchForwardBracket } from '../search_utils';
@@ -30,6 +30,7 @@ export const matchActions: Action[] = [
     delete_(editor, ranges, false);
     enterInsertMode(helixState);
     setModeCursorStyle(helixState.mode, editor);
+    setRelativeLineNumbers(helixState.mode, editor);
     removeTypeSubscription(helixState);
   }),
 
