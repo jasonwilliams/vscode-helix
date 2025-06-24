@@ -16,7 +16,7 @@ import { addTypeSubscription, removeTypeSubscription } from './type_subscription
 
 const globalhelixState: HelixState = {
   typeSubscription: undefined,
-  mode: Mode.Insert,
+  mode: Mode.Normal,
   keysPressed: [],
   numbersPressed: [],
   resolveCount: function () {
