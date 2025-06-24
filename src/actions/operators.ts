@@ -72,7 +72,7 @@ function cursorsToRangesStart(editor: vscode.TextEditor, ranges: readonly (vscod
   });
 }
 
-export function delete_(editor: vscode.TextEditor, ranges: (vscode.Range | undefined)[], linewise: boolean) {
+export function delete_(editor: vscode.TextEditor, ranges: readonly (vscode.Range | undefined)[], linewise: boolean) {
   if (ranges.length === 1 && ranges[0] && isEmptyRange(ranges[0])) {
     vscode.commands.executeCommand('deleteRight');
     return;
