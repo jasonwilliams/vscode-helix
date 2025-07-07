@@ -294,14 +294,18 @@ export const actions: Action[] = [
   }),
 
   parseKeysExact(['C'], [Mode.Normal], (vimState, editor) => {
-    // Add cursor on next suitable line (Helix behavior)
-    const currentSelection = editor.selection;
-    const currentLine = currentSelection.active.line;
-    const currentCharacter = currentSelection.active.character;
+    // Add one cursor on next suitable line (Helix behavior)
+    // Find the lowest line number from all existing cursors to search from
+    const lowestLine = Math.max(...editor.selections.map(sel => sel.active.line));
+    const referenceSelection = editor.selections.find(sel => sel.active.line === lowestLine);
+    
+    if (!referenceSelection) return;
+    
+    const currentCharacter = referenceSelection.active.character;
 
     // Find the next line that has enough characters to place cursor at same column
     let nextSuitableLine = -1;
-    for (let lineNum = currentLine + 1; lineNum < editor.document.lineCount; lineNum++) {
+    for (let lineNum = lowestLine + 1; lineNum < editor.document.lineCount; lineNum++) {
       const line = editor.document.lineAt(lineNum);
       if (line.text.length >= currentCharacter) {
         nextSuitableLine = lineNum;
