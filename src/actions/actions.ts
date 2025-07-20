@@ -285,10 +285,26 @@ export const actions: Action[] = [
   }),
 
   parseKeysExact(['C'], [Mode.Normal], (vimState, editor) => {
-    vscode.commands.executeCommand('deleteAllRight');
-    enterInsertMode(vimState);
-    setModeCursorStyle(vimState.mode, editor);
-    removeTypeSubscription(vimState);
+    // Add cursor on next suitable line (Helix behavior)
+    const currentSelection = editor.selection;
+    const currentLine = currentSelection.active.line;
+    const currentCharacter = currentSelection.active.character;
+
+    // Find the next line that has enough characters to place cursor at same column
+    let nextSuitableLine = -1;
+    for (let lineNum = currentLine + 1; lineNum < editor.document.lineCount; lineNum++) {
+      const line = editor.document.lineAt(lineNum);
+      if (line.text.length >= currentCharacter) {
+        nextSuitableLine = lineNum;
+        break;
+      }
+    }
+
+    if (nextSuitableLine !== -1) {
+      const newPosition = new vscode.Position(nextSuitableLine, currentCharacter);
+      const newSelection = new vscode.Selection(newPosition, newPosition);
+      editor.selections = [...editor.selections, newSelection];
+    }
   }),
 
   parseKeysExact(['y', 'y'], [Mode.Normal], (vimState, editor) => {
