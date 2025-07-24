@@ -1,7 +1,7 @@
 import type { TextDocumentChangeEvent, TextEditor, TextEditorSelectionChangeEvent } from 'vscode';
 import { TextEditorSelectionChangeKind } from 'vscode';
 import { HelixState } from './helix_state_types';
-import { enterNormalMode, enterVisualMode, setModeCursorStyle } from './modes';
+import { enterNormalMode, enterVisualMode, setModeCursorStyle, setRelativeLineNumbers } from './modes';
 import { Mode } from './modes_types';
 
 /** Currently this handler is used for implementing "g", "m" (go to last modified file) */
@@ -37,6 +37,7 @@ export function onSelectionChange(helixState: HelixState, e: TextEditorSelection
     ) {
       enterNormalMode(helixState);
       setModeCursorStyle(helixState.mode, e.textEditor);
+      setRelativeLineNumbers(helixState.mode, e.textEditor);
     }
   } else {
     if (helixState.mode === Mode.Normal) {
