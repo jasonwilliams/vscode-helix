@@ -15,8 +15,8 @@ export function escapeHandler(vimState: HelixState): void {
 
   if (vimState.mode === Mode.Insert || vimState.mode === Mode.Occurrence) {
     editor.selections = editor.selections.map((selection) => {
-      const newPosition = positionUtils.left(selection.active);
-      return new vscode.Selection(newPosition, newPosition);
+      return new vscode.Selection(selection.active, selection.active);
+
     });
 
     enterNormalMode(vimState);
