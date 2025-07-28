@@ -10,7 +10,15 @@ export function enterInsertMode(helixState: HelixState, before = true): void {
   const editor = helixState.editorState.activeEditor!;
   
   editor.selections = editor.selections.map((selection) => {
-    const position = before ? selection.start : selection.end;
+    let position = before ? selection.start : selection.end;
+    
+    // For 'a' key (before = false), move cursor one position right (append after)
+    if (!before) {
+      const line = editor.document.lineAt(position.line);
+      const newChar = Math.min(position.character + 1, line.text.length);
+      position = position.with({ character: newChar });
+    }
+    
     return new vscode.Selection(position, position);
   });
 
