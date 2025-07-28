@@ -290,6 +290,16 @@
         "key": "ctrl+x",
         "command": "extension.helixKeymap.decrement",
         "when": "editorTextFocus && (extension.helixKeymap.normalMode || extension.helixKeymap.visualMode)"
+      },
+      {
+        "key": "ctrl+c",
+        "command": "-editor.action.clipboardCopyAction",
+        "when": "editorTextFocus && (extension.helixKeymap.normalMode || extension.helixKeymap.visualMode)"
+      },
+      {
+        "key": "ctrl+c",
+        "command": "editor.action.commentLine",
+        "when": "editorTextFocus && (extension.helixKeymap.normalMode || extension.helixKeymap.visualMode)"
       }
     ],
     "configuration": {
