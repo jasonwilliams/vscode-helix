@@ -96,14 +96,44 @@ export const motions: Action[] = [
     });
   }),
 
-  parseKeysExact(['w'], [Mode.Normal, Mode.Visual], createWordForwardHandler(wordRanges)),
-  parseKeysExact(['W'], [Mode.Normal, Mode.Visual], createWordForwardHandler(whitespaceWordRanges)),
+  parseKeysExact(['w'], [Mode.Normal, Mode.Visual], (vimState, editor) => {
+    const count = vimState.resolveCount();
+    for (let i = 0; i < count; i++) {
+      createWordForwardHandler(wordRanges)(vimState, editor);
+    }
+  }),
+  parseKeysExact(['W'], [Mode.Normal, Mode.Visual], (vimState, editor) => {
+    const count = vimState.resolveCount();
+    for (let i = 0; i < count; i++) {
+      createWordForwardHandler(whitespaceWordRanges)(vimState, editor);
+    }
+  }),
 
-  parseKeysExact(['b'], [Mode.Normal, Mode.Visual], createWordBackwardHandler(wordRanges)),
-  parseKeysExact(['B'], [Mode.Normal, Mode.Visual], createWordBackwardHandler(whitespaceWordRanges)),
+  parseKeysExact(['b'], [Mode.Normal, Mode.Visual], (vimState, editor) => {
+    const count = vimState.resolveCount();
+    for (let i = 0; i < count; i++) {
+      createWordBackwardHandler(wordRanges)(vimState, editor);
+    }
+  }),
+  parseKeysExact(['B'], [Mode.Normal, Mode.Visual], (vimState, editor) => {
+    const count = vimState.resolveCount();
+    for (let i = 0; i < count; i++) {
+      createWordBackwardHandler(whitespaceWordRanges)(vimState, editor);
+    }
+  }),
 
-  parseKeysExact(['e'], [Mode.Normal, Mode.Visual], createWordEndHandler(wordRanges)),
-  parseKeysExact(['E'], [Mode.Normal, Mode.Visual], createWordEndHandler(whitespaceWordRanges)),
+  parseKeysExact(['e'], [Mode.Normal, Mode.Visual], (vimState, editor) => {
+    const count = vimState.resolveCount();
+    for (let i = 0; i < count; i++) {
+      createWordEndHandler(wordRanges)(vimState, editor);
+    }
+  }),
+  parseKeysExact(['E'], [Mode.Normal, Mode.Visual], (vimState, editor) => {
+    const count = vimState.resolveCount();
+    for (let i = 0; i < count; i++) {
+      createWordEndHandler(whitespaceWordRanges)(vimState, editor);
+    }
+  }),
 
   parseKeysRegex(/^f(.)$/, /^(f|f.)$/, [Mode.Normal, Mode.Visual], (vimState, editor, match) => {
     findForward(vimState, editor, match);
