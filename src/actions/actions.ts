@@ -183,9 +183,11 @@ export const actions: Action[] = [
     setModeCursorStyle(vimState.mode, editor);
     setRelativeLineNumbers(vimState.mode, editor);
   }),
-
-  parseKeysExact(['x'], [Mode.Normal, Mode.Visual], () => {
-    vscode.commands.executeCommand('expandLineSelection');
+  parseKeysExact(['x'], [Mode.Normal, Mode.Visual, Mode.VisualLine], (helixState) => {
+    const count = helixState.resolveCount();
+    for (let i = 0; i < count; i++) {
+      vscode.commands.executeCommand('expandLineSelection');
+    }
   }),
 
   parseKeysExact([KeyMap.Actions.NewLineBelow], [Mode.Normal], (vimState, editor) => {
